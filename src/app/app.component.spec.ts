@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'wishapp'`, () => {
+  it(`should have as title 'blood_bridge'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('wishapp');
+    expect(app.title).toEqual('blood_bridge');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('wishapp app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('blood_bridge app is running!');
   });
 });
