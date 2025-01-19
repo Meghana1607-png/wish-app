@@ -6,6 +6,7 @@ import { DonorComponent } from './donor.component';
 import { DonorFormComponent } from './donor-form/donor-form.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,7 +18,9 @@ import { ProfileComponent } from './profile/profile.component';
   ],
   imports: [
     CommonModule,
-    DonorRoutingModule
+    DonorRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class DonorModule { }

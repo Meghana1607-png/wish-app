@@ -7,6 +7,7 @@ import { DonorModule } from './donor/donor.module';
 import { OrgnizationModule } from './orgnization/orgnization.module';
 import { ReceiverModule } from './receiver/receiver.module';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,9 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
     AppRoutingModule,
     DonorModule,
     OrgnizationModule,
-    ReceiverModule
+    ReceiverModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,11 +1,15 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
+
 
   is_slidebar: boolean;
   isclick:boolean=false;
@@ -60,7 +64,9 @@ export class DashboardComponent {
     //   console.log(this.det)
     // });
   // }
-
+  switchRole(){
+    console.log("button clicked!")
+  }
   isRoleCardVisible = false;
 
   toggleRoleCard() {

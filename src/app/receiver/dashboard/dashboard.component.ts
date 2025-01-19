@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -7,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DashboardComponent {
 
-  is_slidebar: boolean;
+ is_slidebar: boolean;
   isclick:boolean=false;
   selectedPage = 'Blood-Hub'
   roles: any[];
@@ -49,6 +51,9 @@ export class DashboardComponent {
   hide_slidebar() {
     this.is_slidebar = false;
   }
+  switchRole(){
+    console.log("Button clicked!")
+  }
   // fetchuser(){
   //   console.log('called')
   //  const id= localStorage.getItem('userid');
@@ -61,16 +66,5 @@ export class DashboardComponent {
     // });
   // }
 
-  isRoleCardVisible = false;
-
-  toggleRoleCard() {
-    this.isRoleCardVisible = !this.isRoleCardVisible;
-  }
-
-  selectRole(role: string) {
-    console.log(`${role} selected`);
-    // Handle role selection logic
-    this.isRoleCardVisible = false; // Close the card after selecting a role
-  }
-
 }
+
