@@ -4,7 +4,7 @@ import { ReceiverComponent } from './receiver.component';
 import { ProfileComponent } from './profile/profile.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
-const routes: Routes = [{ path: 'receiver', component: ReceiverComponent },
+const routes: Routes = [{ path: '', component: ReceiverComponent },
   {
     path:'rprofile',
     component:ProfileComponent

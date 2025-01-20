@@ -1,129 +1,126 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full bg-white shadow-lg rounded-lg px-8 py-6">
-      <h2 class="text-2xl font-bold text-center text-gray-800">Blood Donation Form</h2>
-      <form [formGroup]="bloodForm" (ngSubmit)="onSubmit()" novalidate>
-        <!-- Name -->
-        <div class="mt-4">
-          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-          <input
-            id="name"
-            type="text"
-            formControlName="name"
-            placeholder="Enter your name"
-            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-          />
-          <div *ngIf="submitted && bloodForm.controls['name'].invalid" class="text-red-500 text-xs mt-1">
-            Name is required.
-          </div>
+  <div class="max-w-md w-full bg-white shadow-lg rounded-lg px-8 py-6">
+    <h2 class="text-2xl font-bold text-center text-gray-800">Blood Donation Form</h2>
+    <form [formGroup]="bloodForm" (ngSubmit)="submitForm()" novalidate>
+      <!-- Name -->
+      <div class="mt-4">
+        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Enter your name"
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+        />
+        <div *ngIf="submitted && bloodForm.get('name')?.invalid" class="text-red-500 text-xs mt-1">
+          Name is required.
         </div>
-  
-        <!-- Email -->
-        <div class="mt-4">
-          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-          <input
-            id="email"
-            type="email"
-            formControlName="email"
-            placeholder="Enter your email"
-            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-          />
-          <div *ngIf="submitted && bloodForm.controls['email'].invalid" class="text-red-500 text-xs mt-1">
-            <div *ngIf="bloodForm.controls['email'].errors?.['required']">Email is required.</div>
-            <div *ngIf="bloodForm.controls['email'].errors?.['email']">Enter a valid email address.</div>
-          </div>
+      </div>
+
+      <!-- Email -->
+      <div class="mt-4">
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+        />
+        <div *ngIf="submitted && bloodForm.get('email')?.invalid" class="text-red-500 text-xs mt-1">
+          <div *ngIf="bloodForm.get('email')?.hasError('required')">Email is required.</div>
+          <div *ngIf="bloodForm.get('email')?.hasError('email')">Enter a valid email address.</div>
         </div>
-  
-        <!-- Phone Number -->
-        <div class="mt-4">
-          <label for="phno" class="block text-sm font-medium text-gray-700">Phone Number</label>
-          <input
-            id="phno"
-            type="text"
-            formControlName="phno"
-            placeholder="Enter your phone number"
-            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-          />
-          <div *ngIf="submitted && bloodForm.controls['phno'].invalid" class="text-red-500 text-xs mt-1">
-            <div *ngIf="bloodForm.controls['phno'].errors?.['required']">Phone number is required.</div>
-            <div *ngIf="bloodForm.controls['phno'].errors?.['pattern']">Enter a valid 10-digit phone number.</div>
-          </div>
+      </div>
+
+      <!-- Phone Number -->
+      <div class="mt-4">
+        <label for="phno" class="block text-sm font-medium text-gray-700">Phone Number</label>
+        <input
+          id="phno"
+          type="text"
+          formControlName="phno"
+          placeholder="Enter your phone number"
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+        />
+        <div *ngIf="submitted && bloodForm.get('phno')?.invalid" class="text-red-500 text-xs mt-1">
+          <div *ngIf="bloodForm.get('phno')?.hasError('required')">Phone number is required.</div>
+          <div *ngIf="bloodForm.get('phno')?.hasError('pattern')">Enter a valid 10-digit phone number.</div>
         </div>
-  
-        <!-- Address -->
-        <div class="mt-4">
-          <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-          <textarea
-            id="address"
-            formControlName="address"
-            rows="3"
-            placeholder="Enter your address"
-            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-          ></textarea>
-          <div *ngIf="submitted && bloodForm.controls['address'].invalid" class="text-red-500 text-xs mt-1">
-            Address is required.
-          </div>
+      </div>
+
+      <!-- Address -->
+      <div class="mt-4">
+        <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+        <textarea
+          id="address"
+          formControlName="address"
+          rows="3"
+          placeholder="Enter your address"
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+        ></textarea>
+        <div *ngIf="submitted && bloodForm.get('address')?.invalid" class="text-red-500 text-xs mt-1">
+          Address is required.
         </div>
-  
-        <!-- Blood Group -->
-        <div class="mt-4">
-          <label for="bloodgroup" class="block text-sm font-medium text-gray-700">Blood Group</label>
-          <select
-            id="bloodgroup"
-            formControlName="bloodgroup"
-            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-          >
-            <option value="" disabled>Select your blood group</option>
-            <option *ngFor="let group of ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']" [value]="group">{{ group }}</option>
-          </select>
-          <div *ngIf="submitted && bloodForm.controls['bloodgroup'].invalid" class="text-red-500 text-xs mt-1">
-            Blood group is required.
-          </div>
+      </div>
+
+      <!-- Blood Group -->
+      <div class="mt-4">
+        <label for="bloodgroup" class="block text-sm font-medium text-gray-700">Blood Group</label>
+        <select
+          id="bloodgroup"
+          formControlName="bloodgroup"
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+        >
+          <option value="" disabled>Select your blood group</option>
+          <option *ngFor="let group of bloodGroups" [value]="group">{{ group }}</option>
+        </select>
+        <div *ngIf="submitted && bloodForm.get('bloodgroup')?.invalid" class="text-red-500 text-xs mt-1">
+          Blood group is required.
         </div>
-  
-        <!-- Health Issues -->
-        <div class="mt-4">
-          <label class="block text-sm font-medium text-gray-700">Health Issues</label>
-          <div class="mt-2 flex items-center space-x-4">
-            <label class="inline-flex items-center">
-              <input
-                type="radio"
-                formControlName="healthIssues"
-                value="Yes"
-                class="form-radio text-red-500 focus:ring-red-500"
-                (change)="onHealthChange()"
-              />
-              <span class="ml-2">Yes</span>
-            </label>
-            <label class="inline-flex items-center">
-              <input
-                type="radio"
-                formControlName="healthIssues"
-                value="No"
-                class="form-radio text-red-500 focus:ring-red-500"
-                (change)="onHealthChange()"
-              />
-              <span class="ml-2">No</span>
-            </label>
-          </div>
-          <div *ngIf="submitted && bloodForm.controls['healthIssues'].invalid" class="text-red-500 text-xs mt-1">
-            Health issue selection is required.
-          </div>
-          <div *ngIf="healthIssueIsYes" class="text-red-600 text-sm mt-2">
-            You are not eligible to donate blood due to health issues.
-          </div>
+      </div>
+
+      <!-- Health Issues -->
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700">Health Issues</label>
+        <div class="mt-2 flex items-center space-x-4">
+          <label class="inline-flex items-center">
+            <input
+              type="radio"
+              formControlName="healthIssues"
+              value="Yes"
+              class="form-radio text-red-500 focus:ring-red-500"
+            />
+            <span class="ml-2">Yes</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input
+              type="radio"
+              formControlName="healthIssues"
+              value="No"
+              class="form-radio text-red-500 focus:ring-red-500"
+            />
+            <span class="ml-2">No</span>
+          </label>
         </div>
-  
-        <!-- Submit Button -->
-        <div class="mt-6">
-          <button
-            type="submit"
-            [disabled]="!bloodForm.valid || healthIssueIsYes"
-            class="w-full bg-red-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed focus:outline-none focus:ring focus:ring-red-200"
-          >
-            Submit
-          </button>
+        <div *ngIf="submitted && bloodForm.get('healthIssues')?.invalid" class="text-red-500 text-xs mt-1">
+          Health issue selection is required.
         </div>
-      </form>
-    </div>
+        <div *ngIf="healthIssueIsYes" class="text-red-600 text-sm mt-2">
+          You are not eligible to donate blood due to health issues.
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="mt-6">
+        <button
+          type="submit"
+          [disabled]="!bloodForm.valid || healthIssueIsYes"
+          class="w-full bg-red-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed focus:outline-none focus:ring focus:ring-red-200"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
   </div>
-  
+</div>
