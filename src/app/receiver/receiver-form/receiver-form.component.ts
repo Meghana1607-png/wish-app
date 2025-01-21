@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { OrgService } from 'src/app/org.service';
 import { ReceiverService } from 'src/app/receiver.service';
 
 
@@ -10,9 +11,11 @@ import { ReceiverService } from 'src/app/receiver.service';
 })
 export class ReceiverFormComponent {
 
+  organizations: any[] = [];
+
   patientForm: FormGroup;
 
-  constructor(private fb: FormBuilder,private receiverFormService:ReceiverService) {
+  constructor(private fb: FormBuilder,private receiverFormService:ReceiverService,private orgform:OrgService) {
     this.patientForm = this.fb.group({
       lastDate: ['', [Validators.required]],
       purpose: ['', [Validators.required]],
@@ -40,4 +43,35 @@ export class ReceiverFormComponent {
       });
     }
   }
+
+// orgdetails(){
+//   this.orgform.fetchorgform().subscribe({
+//    next: (response) => {
+   
+//       console.error('error fetching data:',response);
+//     },
+//     else{
+//       this.organizations= response.data;
+//       console.log('orfanization fetched:', this.organizations);
+//     }
+//    }
+  //  if(error) =>{
+  //   console.error('unexpected error:',error)
+  //  }
+  // }
+  // );
+orgdetails(){
+  this.orgform.fetchorgform().subscribe({
+    next: (response) => {
+      console.log('Donor added successfully', response);
+    },
+    error: (error) => {
+      console.error('Error adding donor:', error);
+      if (error.status === 500) {
+        console.error('Internal Server Error. Check the backend for details.');
+      }
+    },
+  });
 }
+}
+
