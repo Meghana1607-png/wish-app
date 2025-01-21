@@ -14,7 +14,7 @@ export class DashboardComponent {
  is_slidebar: boolean;
   isclick:boolean=false;
   selectedPage = 'Blood-Hub'
-  roles: any[];
+  // roles: any[];
   det:any=[];
   c_role:any;
   menu = [
@@ -28,9 +28,9 @@ export class DashboardComponent {
 
   constructor(private router: Router, private activeroute: ActivatedRoute ) {
     this.is_slidebar = false;
-    this.roles = this.activeroute.snapshot.queryParams['roles']
-    console.log(this.roles)
-    this.c_role = this.activeroute.snapshot.queryParams['currentrole']
+    // this.roles = this.activeroute.snapshot.queryParams['roles']
+    // console.log(this.roles)
+    // this.c_role = this.activeroute.snapshot.queryParams['currentrole']
   }
   ngOnInit(): void {
     // this.fetchuser();

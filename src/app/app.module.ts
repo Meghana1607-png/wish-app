@@ -9,11 +9,13 @@ import { ReceiverModule } from './receiver/receiver.module';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { OrgListComponent } from './org-list/org-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingPageComponent,
+    OrgListComponent,
   ],
   imports: [
     BrowserModule,

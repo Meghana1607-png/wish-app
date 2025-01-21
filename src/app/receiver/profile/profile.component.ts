@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ReceiverService } from 'src/app/receiver.service';
+import { ProfileService } from 'src/app/profile.service';
 
 
 @Component({
@@ -11,8 +11,9 @@ import { ReceiverService } from 'src/app/receiver.service';
 })
 export class ProfileComponent {
  receiverForm: FormGroup;
+console: any;
  
-  constructor(private fb: FormBuilder, private receiverFormService:ReceiverService ,private router:Router) {
+  constructor(private fb: FormBuilder, private profile:ProfileService ,private router:Router) {
     this.receiverForm = this.fb.group({
       name: ['', Validators.required],
       gender: ['', Validators.required],
@@ -21,24 +22,32 @@ export class ProfileComponent {
       date: ['', Validators.required],
       purpose: [''],
       email: ['', [Validators.required, Validators.email]],
-      blood_group: [''],
-      health_issues: [''],
-      last_donated: [''],
+      // blood_group: [''],
+      // health_issues: [''],
+      // last_donated: [''],
     });
   }
  
   submitForm() {
+    console.log('Submit button clicked');
     if (this.receiverForm.valid) {
-      this.receiverFormService.submitReceiverForm(this.receiverForm.value).subscribe({
+      console.log('Form is valid');
+      this.profile.profileinsert(this.receiverForm.value).subscribe({
         next: (response) => {
+          console.log('API Response:', response);
           alert(response.message);
           this.receiverForm.reset();
         },
         error: (error) => {
-          console.error('Error submitting the form:', error.message);
-          alert('An error occurred while submitting the form.');
+          console.error('Error:', error);
+          alert('An error occurred.');
         },
       });
+    } else {
+      console.log('Form is invalid');
+      alert('Please fill out all required fields.');
     }
   }
+  
+  
  }
