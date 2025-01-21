@@ -5,18 +5,24 @@ import { ReceiverComponent } from './receiver.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ReceiverRoutingModule } from './receiver-routing.module';
+import { ReceiverFormComponent } from './receiver-form/receiver-form.component';
+import { RecAwarenessComponent } from './rec-awareness/rec-awareness.component';
 
 
 @NgModule({
   declarations: [
     ReceiverComponent,
     ProfileComponent,
-    DashboardComponent
+    DashboardComponent,
+    ReceiverFormComponent,
+    RecAwarenessComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    ReceiverRoutingModule
   ]
 })
 export class ReceiverModule { }

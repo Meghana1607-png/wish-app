@@ -1,0 +1,65 @@
+<div class="min-h-screen bg-gray-100 text-gray-800">
+    <!-- Hero Section -->
+    <div class="bg-red-500 text-white py-10 px-6 text-center">
+      <h1 class="text-4xl font-bold mb-4">Awareness</h1>
+      <p class="text-lg">
+        "Every two seconds, someone needs blood. Yet, millions of people face life-threatening
+        challenges due to blood shortages. Together, we can change that."
+      </p>
+    </div>
+  
+    <!-- Awareness for Donors Section -->
+    <div class="max-w-4xl mx-auto py-8 px-6">
+      <h2 class="text-2xl font-semibold mb-4 text-red-500">Who Can Donate</h2>
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h3 class="text-lg font-bold mb-2 text-gray-700">Eligibility Criteria</h3>
+        <ul class="list-disc list-inside text-gray-600">
+          <li><span class="font-medium">Age:</span> Typically 18-65 years (confirm local guidelines).</li>
+          <li><span class="font-medium">Weight:</span> Minimum weight requirement (e.g., 50 kg/110 lbs).</li>
+          <li><span class="font-medium">General Health:</span> Must be in good health and free of major illnesses.</li>
+        </ul>
+      </div>
+  
+      <!-- Common Misconceptions Section -->
+      <div class="bg-white shadow-md rounded-lg p-6 mt-6">
+        <h3 class="text-lg font-bold mb-2 text-gray-700">Common Misconceptions</h3>
+        <ul class="list-disc list-inside text-gray-600">
+          <li>
+            <span class="font-medium">"I can't donate if I have a tattoo."</span> You usually can after a waiting period.
+          </li>
+          <li>
+            <span class="font-medium">"Blood donation is unsafe."</span> Explain that sterile equipment is always used.
+          </li>
+        </ul>
+      </div>
+
+
+      <div class="min-h-screen bg-gray-100 text-gray-800">
+        
+        <!-- Blood Group Compatibility Table Section -->
+        <div class="max-w-4xl mx-auto py-8 px-6">
+          <h2 class="text-2xl font-semibold mb-4 text-red-500">Blood Group Compatibility</h2>
+          
+          <!-- Table -->
+          <div class="overflow-x-auto bg-white shadow-md rounded-lg p-6">
+            <table class="min-w-full table-auto">
+              <thead>
+                <tr class="bg-gray-200">
+                  <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Donor Blood Group</th>
+                  <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Receiver Blood Group</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let compatibility of bloodGroupCompatibility">
+                  <td class="px-6 py-4 text-sm text-gray-600">{{ compatibility.donor }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-600">{{ compatibility.receiver }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  

@@ -3,16 +3,25 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReceiverComponent } from './receiver.component';
 import { ProfileComponent } from './profile/profile.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ReceiverFormComponent } from './receiver-form/receiver-form.component';
+import { RecAwarenessComponent } from './rec-awareness/rec-awareness.component';
 
-const routes: Routes = [{ path: '', component: ReceiverComponent },
-  {
-    path:'rprofile',
-    component:ProfileComponent
-  },
-  {
-    path:'rec-dashboard',
-    component:DashboardComponent
-  }
+const routes: Routes = [{ path: 'r', component: ReceiverComponent },
+{
+  path: 'rprofile',
+  component: ProfileComponent
+},
+{
+  path: 'rec-dashboard',
+  component: DashboardComponent
+},
+{
+  path: 'rec-form',
+
+  component: ReceiverFormComponent
+},
+{ path: 'rec-awareness', component: RecAwarenessComponent }
+
 ];
 
 @NgModule({

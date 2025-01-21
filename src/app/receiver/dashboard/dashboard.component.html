@@ -1,6 +1,6 @@
 <div class="h-dvh w-dvh flex">
   <!-- Header -->
-  <div class="h-16 fixed top-0 z-50 bg-purple-700 text-white p-3 w-full flex items-center justify-between shadow-lg">
+  <div class="h-16 fixed top-0 z-50 bg-red-600 text-white p-3 w-full flex items-center justify-between shadow-lg">
     <div class="flex items-center">
       <button (click)="show_slidebar()"
         class="pi pi-bars cursor-pointer p-2 text-base flex items-center justify-center"></button>
@@ -20,20 +20,44 @@
           {{ c_role }}
         </p>
       </div>
-      <!-- Switch Role Button -->
+
+     <!-- switchRole -->
+     <div class="relative inline-block text-left">
       <button
-        class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors duration-300"
-        (click)="switchRole()">
+        class="px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-500 transition-colors duration-300"
+        (click)="toggleDropdown()"
+      >
         Switch Role
       </button>
+    
+      <!-- Dropdown Menu -->
+      <div
+        *ngIf="showDropdown"
+        class="absolute mt-2 w-40 bg-white rounded-lg shadow-lg z-10"
+      >
+        <button
+          class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 transition-colors duration-300"
+          (click)="selectRole('donors')"
+        >
+          Donors
+        </button>
+        <button
+          class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 transition-colors duration-300"
+          (click)="selectRole('org')"
+        >
+          Org
+        </button>
+      </div>
+    </div>
+    
     </div>
   </div>
 
   <!-- Sidebar -->
   <nav
-    class="fixed top-16 left-0 z-50 h-full bg-purple-700 text-white flex flex-col transition-all duration-300 w-14 hover:w-56 group">
+    class="fixed top-16 left-0 z-50 h-full bg-red-600 text-white flex flex-col transition-all duration-300 w-14 hover:w-56 group">
     <div *ngFor="let op of menu" (click)="NavToPage(op.path); onPageChange(op.label)"
-      class="h-16 px-4 flex items-center cursor-pointer hover:bg-purple-800 transition-colors duration-300">
+      class="h-16 px-4 flex items-center cursor-pointer hover:bg-red-500 transition-colors duration-300">
       <i [class]="op.icon + ' text-xl mr-4'"></i>
       <span
         class="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap capitalize">
@@ -41,7 +65,21 @@
       </span>
     </div>
   </nav>
+  <div
+  class="h-[6cm] w-[6cm] bg-white shadow-lg rounded-lg flex flex-col justify-center items-center p-4 ml-60 mt-20"
+>
+  <h2 class="text-center text-sm font-semibold text-gray-800">
+    Make Request to Org
+  </h2>
+  <button
+    class="mt-4 px-2 py-1 bg-red-700 text-white text-sm font-medium rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
+    routerLink="/rec-form"
+  >
+    Open
+  </button>
+</div>
+
+  
   <div class="mt-16 w-full ml-14 transition-all duration-300">
-    <!-- Content goes here -->
   </div>
 </div>

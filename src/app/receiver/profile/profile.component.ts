@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { ReceiverService } from 'src/app/receiver.service';
 
 
 @Component({
@@ -10,30 +10,35 @@ import { Router } from '@angular/router';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
-  receiverForm: FormGroup;
-
-  constructor(private fb: FormBuilder) {
+ receiverForm: FormGroup;
+ 
+  constructor(private fb: FormBuilder, private receiverFormService:ReceiverService ,private router:Router) {
     this.receiverForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
+      name: ['', Validators.required],
+      gender: ['', Validators.required],
+      ph_no: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      location: [''],
+      date: ['', Validators.required],
+      purpose: [''],
       email: ['', [Validators.required, Validators.email]],
-      bloodGroup: ['', Validators.required],
-      address: ['', [Validators.required, Validators.minLength(10)]],
-      phone: [
-        '',
-        [Validators.required, Validators.pattern('^[0-9]{10}$')],
-      ],
-      emergencyLevel: ['', Validators.required],
-      lastDate: ['', Validators.required],
+      blood_group: [''],
+      health_issues: [''],
+      last_donated: [''],
     });
   }
-
-  onSubmit() {
+ 
+  submitForm() {
     if (this.receiverForm.valid) {
-      console.log(this.receiverForm.value);
-      alert('Form submitted successfully!');
-    } else {
-      this.receiverForm.markAllAsTouched();
+      this.receiverFormService.submitReceiverForm(this.receiverForm.value).subscribe({
+        next: (response) => {
+          alert(response.message);
+          this.receiverForm.reset();
+        },
+        error: (error) => {
+          console.error('Error submitting the form:', error.message);
+          alert('An error occurred while submitting the form.');
+        },
+      });
     }
   }
-
-}
+ }

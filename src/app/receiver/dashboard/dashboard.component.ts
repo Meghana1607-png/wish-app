@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DashboardComponent {
 
+  showDropdown = false;
+
  is_slidebar: boolean;
   isclick:boolean=false;
   selectedPage = 'Blood-Hub'
@@ -17,11 +19,11 @@ export class DashboardComponent {
   c_role:any;
   menu = [
     { path: 'admin/dashboard', label: 'dashboard', icon: 'pi pi-home' },
-    { path: 'admin/org-tree', label: 'organisation tree', icon: 'pi pi-sitemap' },
-    { path: 'admin/user-table', label: 'users', icon: 'pi pi-user-plus' },
-    { path: 'admin/teams-table', label: 'teams', icon: 'pi pi-users' },
-    { path: 'admin/create-org', label: 'organisation', icon: 'pi pi-globe' },
-    { path: 'admin/profile', label: 'profile', icon: 'pi pi-id-card' },
+    { path: 'receiver/rec-awareness', label: 'awareness', icon: 'pi pi-sitemap' },
+    { path: 'receiver/rprofile', label: 'profile', icon: 'pi pi-user-plus' },
+    // { path: 'admin/teams-table', label: 'teams', icon: 'pi pi-users' },
+    // { path: 'admin/create-org', label: 'organisation', icon: 'pi pi-globe' },
+    // { path: 'admin/profile', label: 'profile', icon: 'pi pi-id-card' },
   ]
 
   constructor(private router: Router, private activeroute: ActivatedRoute ) {
@@ -53,6 +55,20 @@ export class DashboardComponent {
   }
   switchRole(){
     console.log("Button clicked!")
+  }
+
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  selectRole(role: string) {
+    console.log(`Selected role: ${role}`);
+
+    // Handle role selection logic here
+
+    this.showDropdown = false; 
+    // Close dropdown after selection
   }
   // fetchuser(){
   //   console.log('called')

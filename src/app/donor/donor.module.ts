@@ -6,13 +6,15 @@ import { DonorComponent } from './donor.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AwarenessComponent } from './awareness/awareness.component';
 
 
 @NgModule({
   declarations: [
     DonorComponent,
     DashboardComponent,
-    ProfileComponent
+    ProfileComponent,
+    AwarenessComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,112 @@
+<div class="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <h2 class="text-2xl font-bold mb-4 text-center text-red-600">Patient Details</h2>
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+      <!-- Last Date to Receive Blood -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="lastDate">
+          Last Date to Receive Blood
+        </label>
+        <input
+          type="date"
+          id="lastDate"
+          formControlName="lastDate"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+        <p *ngIf="f['lastDate'].touched && f['lastDate'].invalid" class="text-red-500 text-xs italic">
+          Last Date is required.
+        </p>
+      </div>
+  
+      <!-- Purpose -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="purpose">
+          Purpose
+        </label>
+        <input
+          type="text"
+          id="purpose"
+          formControlName="purpose"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+        
+        <p *ngIf="f['purpose'].touched && f['purpose'].invalid" class="text-red-500 text-xs italic">
+          Purpose is required.
+        </p>
+      </div>
+  
+      <!-- Blood Group -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="bloodGroup">
+          Blood Group
+        </label>
+        <select
+          id="bloodGroup"
+          formControlName="bloodGroup"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        >
+          <option value="">Select Blood Group</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+        </select>
+        <p *ngIf="f['bloodGroup'].touched && f['bloodGroup'].invalid" class="text-red-500 text-xs italic">
+          Blood Group is required.
+        </p>
+      </div>
+  
+      <!-- Blood Quantity Required -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="bloodQuantity">
+          Blood Quantity Required (ml)
+        </label>
+        <input
+          type="number"
+          id="bloodQuantity"
+          formControlName="bloodQuantity"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Enter quantity in ml"
+        />
+        <p *ngIf="f['bloodQuantity'].touched && f['bloodQuantity'].invalid" class="text-red-500 text-xs italic">
+          Valid Blood Quantity is required.
+        </p>
+      </div>
+  
+      <!-- Emergency Level -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="emergencyLevel">
+          Emergency Level
+        </label>
+        <select
+          id="emergencyLevel"
+          formControlName="emergencyLevel"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        >
+          <option value="">Select Emergency Level</option>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+          <option value="critical">Critical</option>
+        </select>
+        <p *ngIf="f['emergencyLevel'].touched && f['emergencyLevel'].invalid" class="text-red-500 text-xs italic">
+          Emergency Level is required.
+        </p>
+      </div>
+  
+      <!-- Submit Button -->
+      <div class="flex items-center justify-between">
+        <button
+          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-80"
+          type="submit"
+          [disabled]="patientForm.invalid"
+        >
+         Next
+        </button>
+      </div>
+    </form>
+  </div>
+  

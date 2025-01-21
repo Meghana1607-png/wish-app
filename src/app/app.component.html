@@ -1,7 +1,6 @@
-<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+ <!-- <div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
   <h1 class="text-2xl font-semibold text-center mb-4">Receiver Form</h1>
   <form (ngSubmit)="submitForm()" [formGroup]="receiverForm" novalidate>
-    <!-- Name -->
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Name:</label>
       <input
@@ -13,7 +12,6 @@
       <p *ngIf="receiverForm.controls['name'].hasError('required') && receiverForm.controls['name'].touched" class="text-red-500 text-sm">Name is required.</p>
     </div>
 
-    <!-- Gender -->
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Gender:</label>
       <select
@@ -28,7 +26,6 @@
       <p *ngIf="receiverForm.controls['gender'].hasError('required') && receiverForm.controls['gender'].touched" class="text-red-500 text-sm">Gender is required.</p>
     </div>
 
-    <!-- Phone Number -->
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Phone Number:</label>
       <input
@@ -40,7 +37,6 @@
       <p *ngIf="receiverForm.controls['ph_no'].hasError('pattern') && receiverForm.controls['ph_no'].touched" class="text-red-500 text-sm">Enter a valid phone number.</p>
     </div>
 
-    <!-- Location -->
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Location:</label>
       <input
@@ -51,7 +47,6 @@
       />
     </div>
 
-    <!-- Date -->
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Date:</label>
       <input
@@ -61,7 +56,6 @@
       />
     </div>
 
-    <!-- Purpose -->
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Purpose:</label>
       <textarea
@@ -71,7 +65,6 @@
       ></textarea>
     </div>
 
-    <!-- Email -->
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Email:</label>
       <input
@@ -83,7 +76,6 @@
       <p *ngIf="receiverForm.controls['email'].hasError('email') && receiverForm.controls['email'].touched" class="text-red-500 text-sm">Enter a valid email address.</p>
     </div>
 
-    <!-- Blood Group -->
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Blood Group:</label>
       <input
@@ -94,7 +86,6 @@
       />
     </div>
 
-    <!-- Health Issues -->
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Health Issues:</label>
       <textarea
@@ -104,7 +95,6 @@
       ></textarea>
     </div>
 
-    <!-- Last Donated -->
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Last Donated:</label>
       <input
@@ -122,4 +112,5 @@
       Submit
     </button>
   </form>
-</div>
+</div> -->
+<router-outlet></router-outlet> 

@@ -1,0 +1,94 @@
+<!-- blood-bank-awareness.component.html -->
+<div class="max-w-7xl mx-auto p-6 bg-red-50">
+    <h1 class="text-4xl font-bold text-center mb-8 text-red-600">Blood Bank Awareness</h1>
+    
+    <!-- Safety Section -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold text-red-700 mb-4">How the Blood Bank Ensures Safety</h2>
+      
+      <!-- Rigorous Testing -->
+      <div class="bg-white p-6 rounded-lg shadow-lg mb-6 border-l-4 border-red-500">
+        <h3 class="text-xl font-medium text-red-600 mb-2">Rigorous Testing for Diseases</h3>
+        <p class="text-gray-600">
+          All donated blood is tested for serious infectious diseases, including HIV, hepatitis B and C, syphilis, and other conditions.
+          This ensures that the blood is safe for transfusion and minimizes the risk of transmission.
+        </p>
+      </div>
+      
+      <!-- Proper Storage -->
+      <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-red-500">
+        <h3 class="text-xl font-medium text-red-600 mb-2">Proper Storage and Transportation Methods</h3>
+        <p class="text-gray-600">
+          Blood is stored in specialized refrigerators and freezers to maintain optimal temperature and preserve its quality. It is transported in temperature-controlled containers to ensure it remains safe and usable until it reaches the hospital or clinic.
+        </p>
+      </div>
+    </section>
+  
+    <!-- Blood Compatibility Section -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold text-red-700 mb-4">Understanding Blood Compatibility</h2>
+      
+      <!-- Blood Group Matching -->
+      <div class="bg-white p-6 rounded-lg shadow-lg mb-6 border-l-4 border-red-500">
+        <h3 class="text-xl font-medium text-red-600 mb-2">Blood Group Matching (ABO and Rh Factor)</h3>
+        <p class="text-gray-600">
+          Blood compatibility is determined by the ABO system (A, B, AB, O) and the Rh factor (positive or negative). A mismatch in blood type between the donor and receiver can cause serious complications during transfusion. For example:
+          <ul class="list-disc pl-5 text-gray-700">
+            <li>O- is a universal donor, while AB+ is a universal recipient.</li>
+            <li>O+ can donate to O+, A+, B+, and AB+ recipients.</li>
+            <li>The Rh factor must also match for safety (e.g., Rh- blood cannot be given to an Rh+ recipient).</li>
+          </ul>
+      </div>
+      
+      <!-- Why Compatibility is Critical -->
+      <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-red-500">
+        <h3 class="text-xl font-medium text-red-600 mb-2">Why Compatibility is Critical</h3>
+        <p class="text-gray-600">
+          Blood compatibility is critical because if incompatible blood is transfused, it can cause hemolysis, where the immune system attacks the donated blood, leading to dangerous reactions like fever, shock, and organ failure. Ensuring compatibility helps avoid these risks and ensures the safety of the receiver.
+        </p>
+      </div>
+    </section>
+  
+    <!-- Gratitude and Community Support Section -->
+    <section>
+      <h2 class="text-2xl font-semibold text-red-700 mb-4">Gratitude and Community Support</h2>
+      
+      <!-- How Receivers Can Thank Donors -->
+      <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-red-500">
+        <h3 class="text-xl font-medium text-red-600 mb-2">How Receivers Can Thank Donors</h3>
+        <p class="text-gray-600">
+          Blood receivers often express their gratitude by:
+          <ul class="list-disc pl-5 text-gray-700">
+            <li>Sending messages of appreciation to the donors, either directly through the blood bank or via social media platforms.</li>
+            <li>Participating in blood donation drives as a way to give back and encourage others to donate.</li>
+            <li>Sharing their recovery stories to inspire others to donate blood and make a difference.</li>
+          </ul>
+      </div>
+    </section>
+
+  
+    <!-- <div class="min-h-screen bg-gray-100 text-gray-800"> -->
+        
+        <!-- Blood Group Compatibility Table Section -->
+        <div class="max-w-4xl mx-auto py-8 px-6">
+          <h2 class="text-2xl font-semibold mb-4 text-red-500">Blood Group Compatibility</h2>
+          
+          <!-- Table -->
+          <div class="overflow-x-auto bg-white shadow-md rounded-lg p-6">
+            <table class="min-w-full table-auto">
+              <thead>
+                <tr class="bg-gray-200">
+                  <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Donor Blood Group</th>
+                  <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Receiver Blood Group</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let compatibility of bloodGroupCompatibilityReceiver">
+                  <td class="px-6 py-4 text-sm text-gray-600">{{ compatibility.donor }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-600">{{ compatibility.receiver }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+  
+    </div>
