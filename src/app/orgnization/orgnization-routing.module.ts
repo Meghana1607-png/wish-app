@@ -4,6 +4,7 @@ import { OrgnizationComponent } from './orgnization.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { OrgCardComponent } from './org-card/org-card.component';
 import { ViewOrgFormComponent } from './view-org-form/view-org-form.component';
+import { OrgListComponent } from '../org-list/org-list.component';
 
 const routes: Routes = [{ path: '', component: OrgnizationComponent },
   {
@@ -15,6 +16,7 @@ const routes: Routes = [{ path: '', component: OrgnizationComponent },
   //   component:OrgCardComponent
 
   // },
+  {path:'org-list',component:OrgListComponent},
   {path:'view_org',component:ViewOrgFormComponent}
   
 ];

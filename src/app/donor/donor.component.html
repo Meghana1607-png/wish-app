@@ -1,1 +1,76 @@
-<p>donor works!</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donor Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #e74c3c;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Blood Donor Form</h1>
+        <form action="#" method="POST">
+            <label for="blood group">blood group</label>
+            <input type="text" id="blood group" name="blood group" placeholder="Enter your blood group" required>
+
+            <label for="health codination">health codination</label>
+                <input type="radio" name="plan" value="basic" class="hidden peer">
+                <div class="w-6 h-6 border-2 border-gray-300 rounded-full peer-checked:border-blue-600 peer-checked:bg-blue-600"></div>
+                <span class="ml-3 text-gray-700">Basic Plan</span>
+
+                <input type="radio" name="plan" value="pro" class="hidden peer">
+                <div class="w-6 h-6 border-2 border-gray-300 rounded-full peer-checked:border-green-600 peer-checked:bg-green-600"></div>
+                <span class="ml-3 text-gray-700">Pro Plan</span>
+
+            
+            
+
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+                
+
