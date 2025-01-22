@@ -16,6 +16,8 @@ console: any;
   constructor(private fb: FormBuilder, private profile:ProfileService ,private router:Router) {
     this.receiverForm = this.fb.group({
       name: ['', Validators.required],
+      password: ['', Validators.required],
+
       gender: ['', Validators.required],
       ph_no: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       location: [''],

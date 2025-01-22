@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { OrgCardComponent } from './org-card/org-card.component';
 import { ViewOrgFormComponent } from './view-org-form/view-org-form.component';
+import { RequestsComponent } from './requests/requests.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { ViewOrgFormComponent } from './view-org-form/view-org-form.component';
     OrgnizationComponent,
     DashboardComponent,
     OrgCardComponent,
-    ViewOrgFormComponent
+    ViewOrgFormComponent,
+    RequestsComponent
   ],
   imports: [
     CommonModule,

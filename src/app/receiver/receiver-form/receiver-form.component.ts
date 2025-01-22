@@ -12,6 +12,7 @@ import { ReceiverService } from 'src/app/receiver.service';
 export class ReceiverFormComponent {
 
   organizations: any[] = [];
+  data1:any
 
   patientForm: FormGroup;
 
@@ -61,7 +62,7 @@ export class ReceiverFormComponent {
   // }
   // );
 orgdetails(){
-  this.orgform.fetchorgform().subscribe({
+  this.orgform.orgfetch(this.data1).subscribe({
     next: (response) => {
       console.log('Donor added successfully', response);
     },

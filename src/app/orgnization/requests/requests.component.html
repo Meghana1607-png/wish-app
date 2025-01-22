@@ -1,0 +1,29 @@
+<div>
+    <h2 class="text-xl font-bold mb-4">User List</h2>
+    <div *ngFor="let user of users" class="flex items-center justify-between mb-2">
+      <span>{{ user.name }}</span>
+      <button
+        class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+        (click)="handleRequest(user)"
+      >
+        Request
+      </button>
+    </div>
+  
+    <h2 class="text-xl font-bold mt-8 mb-4">Requested Users</h2>
+    <table class="table-auto border-collapse border border-gray-400 w-full">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border border-gray-400 px-4 py-2">#</th>
+          <th class="border border-gray-400 px-4 py-2">Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of orgSubmissions; index as i">
+          <td class="border border-gray-400 px-4 py-2">{{ i + 1 }}</td>
+          <td class="border border-gray-400 px-4 py-2">{{ request.name }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

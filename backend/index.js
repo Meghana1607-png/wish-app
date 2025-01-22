@@ -248,7 +248,7 @@ app.post("/orgforminsert", async (req, res) => {
 app.post("/userforminsert", async (req, res) => {
   console.log("API called with body:", req.body);
 
-  const { gender, ph_no, name, location, blood_quantity, date, purpose, email, blood_group, health_issues, last_donated, emergency } = req.body;
+  const { gender, ph_no, name, location, blood_quantity,password, date, purpose, email, blood_group, health_issues, last_donated, emergency } = req.body;
 
   try {
     console.log("Inserting into Supabase...");
@@ -257,14 +257,14 @@ app.post("/userforminsert", async (req, res) => {
       ph_no,
       name,
       location,
-      blood_quantity,
       date,
       purpose,
       email,
-      blood_group,
-      health_issues,
-      last_donated,
-      emergency,
+      password
+      // blood_group,
+      // health_issues,
+      // last_donated,
+      // emergency,
     });
 
     if (error) {
@@ -280,6 +280,32 @@ app.post("/userforminsert", async (req, res) => {
   }
 });
 
+
+app.post('/orgformfetch', async (req, res) => {
+  const { orgId } = req.body; 
+
+  try {
+    const { data, error } = await supabase
+      .from('organization') 
+      .select('*')
+      .eq('id', orgId); 
+      console.log(data)
+
+    if (error) {
+      console.error('Error fetching organization:', error.message);
+      return res.status(400).json({ error: error.message });
+    }
+
+    if (data.length === 0) {
+      return res.status(404).json({ message: 'Organization not found' });
+    }
+
+    res.status(200).json(data[0]); 
+  } catch (err) {
+    console.error('Unexpected error:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 app.listen(PORT, () => {
 

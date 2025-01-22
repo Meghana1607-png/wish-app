@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { OrgService } from 'src/app/org.service';
 
 @Component({
   selector: 'app-view-org-form',
@@ -7,24 +8,40 @@ import { Component } from '@angular/core';
 })
 export class ViewOrgFormComponent {
 
+  orgDetails:any
+  data1:any
 
-  orgDetails = {
-    id: 1,
-    name: 'LifeCare Blood Bank',
-    email: 'contact@lifecare.com',
-    phone: '+123456789',
-    address: '123 Health Street, Wellness City',
-    bloodDetails: [
-      { group: 'A+', quantity: 1500 },
-      { group: 'B+', quantity: 1200 },
-      { group: 'O+', quantity: 3000 },
-      { group: 'AB+', quantity: 800 }
-    ]
+  constructor(private orgform:OrgService){
+
+  //   this.orgform.fetchorgform().subscribe({
+  //     next: (data) => {
+  //       this.orgDetails=data;
+  //     },
+  // });
+  this.orgform.orgfetch(this.data1).subscribe({
+    next:(response:any) =>{
+      alert(response.message);
+    },
+    error: () =>{
+      console.error('Error submitting the form:');
+      alert('An error occurred while submitting the form.');
+    }
+  });
+
+  }
+  
+  orginfo = {
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    bloodDetails: []
   };
 
-  requestBlood(orgId: number) {
-    alert(`Blood requested from organization ID: ${orgId}`);
-    // Add your logic for handling blood requests here
+  requestBlood() {
+    alert(`Blood requested from organization ID: `);
   }
+  
+
 
 }
