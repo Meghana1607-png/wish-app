@@ -5,6 +5,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReceiverFormComponent } from './receiver-form/receiver-form.component';
 import { RecAwarenessComponent } from './rec-awareness/rec-awareness.component';
+import { ViewProfileComponent } from './view-profile/view-profile.component';
 
 const routes: Routes = [{ path: 'r', component: ReceiverComponent },
 {
@@ -20,6 +21,7 @@ const routes: Routes = [{ path: 'r', component: ReceiverComponent },
 
   component: ReceiverFormComponent
 },
+{path:'view-profile',component:ViewProfileComponent},
 { path: 'rec-awareness', component: RecAwarenessComponent }
 
 ];

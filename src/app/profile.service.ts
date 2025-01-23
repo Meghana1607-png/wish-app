@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { Observable } from 'rxjs';
+import { Observable,from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,4 +22,14 @@ export class ProfileService {
 
     return this.http.post(this.apiurl, data);
   }
+  async form(): Promise<any> {
+    const { data, error } = await this.supabase.from('users').select('*');
+    if (error) {
+      console.error('Error fetching users:', error.message);
+      return null;
+    }
+    console.log('Fetched users:', data);
+    return data;
+  }
+  
 }

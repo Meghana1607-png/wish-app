@@ -1,0 +1,30 @@
+<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+  <h1 class="text-2xl font-semibold text-center mb-4">User Details</h1>
+
+  <!-- Check if there are users to display -->
+  <div *ngIf="users.length > 0; else noUsers">
+    <table class="min-w-full border-collapse border border-gray-200">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="border border-gray-300 px-4 py-2">Name</th>
+          <th class="border border-gray-300 px-4 py-2">Email</th>
+          <th class="border border-gray-300 px-4 py-2">Phone</th>
+          <th class="border border-gray-300 px-4 py-2">Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td class="border border-gray-300 px-4 py-2">{{ user.name }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ user.email }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ user.ph_no }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ user.location }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Fallback if there are no users -->
+  <ng-template #noUsers>
+    <p class="text-center text-gray-500">No user details available.</p>
+  </ng-template>
+</div>

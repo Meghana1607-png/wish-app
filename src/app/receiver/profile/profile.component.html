@@ -14,11 +14,11 @@
     <label class="block text-sm font-medium mb-1">password:</label>
     <input
       formControlName="password"
-      type="number"
+      type="text"
       class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       placeholder="Enter password"
     />
-    <p *ngIf="receiverForm.controls['pasword'].hasError('required') && receiverForm.controls['password'].touched" class="text-red-500 text-sm">password is required.</p>
+    <p *ngIf="receiverForm.controls['password'].hasError('required') && receiverForm.controls['password'].touched" class="text-red-500 text-sm">password is required.</p>
 
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Gender:</label>
@@ -37,21 +37,21 @@
     <div class="mb-4">
       <label class="block text-sm font-medium mb-1">Phone Number:</label>
       <input
-        formControlName="ph_no"
+        formControlName="phno"
         type="tel"
         class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         placeholder="Enter your phone number"
       />
-      <p *ngIf="receiverForm.controls['ph_no'].hasError('pattern') && receiverForm.controls['ph_no'].touched" class="text-red-500 text-sm">Enter a valid phone number.</p>
+      <p *ngIf="receiverForm.controls['phno'].hasError('pattern') && receiverForm.controls['phno'].touched" class="text-red-500 text-sm">Enter a valid phone number.</p>
     </div>
 
     <div class="mb-4">
-      <label class="block text-sm font-medium mb-1">Location:</label>
+      <label class="block text-sm font-medium mb-1">address:</label>
       <input
-        formControlName="location"
+        formControlName="address"
         type="text"
         class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Enter your location"
+        placeholder="Enter your address"
       />
     </div>
 
@@ -68,7 +68,6 @@
 
     <button
       type="submit"
-      [disabled]="receiverForm.invalid"
       (click)="submitForm()"
 
       class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
@@ -77,3 +76,4 @@
     </button>
   </form>
 </div> 
+<!-- [disabled]="receiverForm.invalid" -->

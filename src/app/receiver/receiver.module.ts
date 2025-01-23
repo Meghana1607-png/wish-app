@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReceiverRoutingModule } from './receiver-routing.module';
 import { ReceiverFormComponent } from './receiver-form/receiver-form.component';
 import { RecAwarenessComponent } from './rec-awareness/rec-awareness.component';
+import { ViewProfileComponent } from './view-profile/view-profile.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { RecAwarenessComponent } from './rec-awareness/rec-awareness.component';
     ProfileComponent,
     DashboardComponent,
     ReceiverFormComponent,
-    RecAwarenessComponent
+    RecAwarenessComponent,
+    ViewProfileComponent
   ],
   imports: [
     CommonModule,

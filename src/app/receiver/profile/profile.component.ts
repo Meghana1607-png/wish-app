@@ -17,17 +17,11 @@ console: any;
     this.receiverForm = this.fb.group({
       name: ['', Validators.required],
       password: ['', Validators.required],
-
       gender: ['', Validators.required],
-      ph_no: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      location: [''],
-      date: ['', Validators.required],
-      purpose: [''],
+      phno: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      address: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      // blood_group: [''],
-      // health_issues: [''],
-      // last_donated: [''],
-    });
+    })
   }
  
   submitForm() {

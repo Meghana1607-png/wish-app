@@ -248,23 +248,19 @@ app.post("/orgforminsert", async (req, res) => {
 app.post("/userforminsert", async (req, res) => {
   console.log("API called with body:", req.body);
 
-  const { gender, ph_no, name, location, blood_quantity,password, date, purpose, email, blood_group, health_issues, last_donated, emergency } = req.body;
-
+  const { gender, phno, name, address, blood_quantity,password, date, purpose, email, blood_group, health_issues, last_donated, emergency } = req.body;
   try {
     console.log("Inserting into Supabase...");
     const { data, error } = await supabase.from('users').insert({
       gender,
-      ph_no,
+      phno,
       name,
-      location,
+      address,
       date,
       purpose,
       email,
       password
-      // blood_group,
-      // health_issues,
-      // last_donated,
-      // emergency,
+    
     });
 
     if (error) {
