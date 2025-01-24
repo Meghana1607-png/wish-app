@@ -3,21 +3,23 @@
 
   <!-- Check if there are users to display -->
   <div *ngIf="users.length > 0; else noUsers">
-    <table class="min-w-full border-collapse border border-gray-200">
+    <table class="min-w-full border-collapse border border-red-200">
       <thead>
-        <tr class="bg-gray-100">
-          <th class="border border-gray-300 px-4 py-2">Name</th>
-          <th class="border border-gray-300 px-4 py-2">Email</th>
-          <th class="border border-gray-300 px-4 py-2">Phone</th>
-          <th class="border border-gray-300 px-4 py-2">Location</th>
+        <tr class="bg-red-100">
+          <th class="border border-red-300 px-4 py-2">Name</th>
+          <th class="border border-red-300 px-4 py-2">Email</th>
+          <th class="border border-red-300 px-4 py-2">Phone</th>
+          <th class="border border-red-300 px-4 py-2">Location</th>
+          <th class="border border-red-300 px-4 py-2">gender:</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let user of users">
-          <td class="border border-gray-300 px-4 py-2">{{ user.name }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ user.email }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ user.ph_no }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ user.location }}</td>
+          <td class="border border-red-300 px-4 py-2">{{ user.name }}</td>
+          <td class="border border-red-300 px-4 py-2">{{ user.email }}</td>
+          <td class="border border-red-300 px-4 py-2">{{ user.phno }}</td>
+          <td class="border border-red-300 px-4 py-2">{{ user.address }}</td>
+          <td class="border border-red-100 px-4 py-2">{{user.gender}}</td>
         </tr>
       </tbody>
     </table>

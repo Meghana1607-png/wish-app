@@ -13,6 +13,7 @@ export class ReceiverFormComponent {
 
   organizations: any[] = [];
   data1:any
+  org:any
 
   patientForm: FormGroup;
 
@@ -45,34 +46,18 @@ export class ReceiverFormComponent {
     }
   }
 
-// orgdetails(){
-//   this.orgform.fetchorgform().subscribe({
-//    next: (response) => {
-   
-//       console.error('error fetching data:',response);
-//     },
-//     else{
-//       this.organizations= response.data;
-//       console.log('orfanization fetched:', this.organizations);
-//     }
-//    }
-  //  if(error) =>{
-  //   console.error('unexpected error:',error)
-  //  }
-  // }
-  // );
-orgdetails(){
-  this.orgform.orgfetch(this.data1).subscribe({
-    next: (response) => {
-      console.log('Donor added successfully', response);
-    },
-    error: (error) => {
-      console.error('Error adding donor:', error);
-      if (error.status === 500) {
-        console.error('Internal Server Error. Check the backend for details.');
-      }
-    },
-  });
-}
+
+async orgdetails() : Promise<any>{
+  try{
+  const data2= this.orgform.fetchorgform()
+  this.org=data2;
+  console.log("fetch org ",this.org)
+  }
+  catch(error){
+    console.log("failed to fetcch",error)
+  }
+  
+    }
+  
 }
 

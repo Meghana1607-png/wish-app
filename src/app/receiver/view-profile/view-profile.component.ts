@@ -12,8 +12,10 @@ export class ViewProfileComponent {
   profile1 = {
     name: '',
     email: '',
-    phone: '',
+    phno: '',
     address: '',
+    gender:'',
+
   };
 
   constructor(private profile:ProfileService){
