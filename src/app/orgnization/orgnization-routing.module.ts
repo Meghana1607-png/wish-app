@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { OrgCardComponent } from './org-card/org-card.component';
 import { ViewOrgFormComponent } from './view-org-form/view-org-form.component';
 import { RequestsComponent } from './requests/requests.component';
+import { OrgRequestsComponent } from './org-requests/org-requests.component';
 
 const routes: Routes = [{ path: '', component: OrgnizationComponent },
   {
@@ -17,7 +18,9 @@ const routes: Routes = [{ path: '', component: OrgnizationComponent },
 
   // },
   {path:'view_org',component:ViewOrgFormComponent},
-  {path:'req',component:RequestsComponent}
+  {path:'req',component:RequestsComponent},
+
+  {path:'org-request',component:OrgRequestsComponent}
 ];
 
 @NgModule({

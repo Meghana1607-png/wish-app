@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { OrgCardComponent } from './org-card/org-card.component';
 import { ViewOrgFormComponent } from './view-org-form/view-org-form.component';
 import { RequestsComponent } from './requests/requests.component';
+import { OrgRequestsComponent } from './org-requests/org-requests.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { RequestsComponent } from './requests/requests.component';
     DashboardComponent,
     OrgCardComponent,
     ViewOrgFormComponent,
-    RequestsComponent
+    RequestsComponent,
+    OrgRequestsComponent
   ],
   imports: [
     CommonModule,
