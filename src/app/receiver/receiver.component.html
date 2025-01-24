@@ -1,1 +1,118 @@
-<p>receiver works!</p>
+<!-- <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="w-full max-w-md p-6 bg-white shadow-md rounded-lg">
+      <div *ngIf="step === 1">
+        <h2 class="text-xl font-bold mb-4">Personal Details</h2>
+        <form [formGroup]="personalForm">
+          <div class="mb-4">
+            <label for="name" class="block text-sm font-medium">Name</label>
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              [ngClass]="{'border-red-500': personalForm.controls['name'].invalid && personalForm.controls['name'].touched}"
+            />
+            <small class="text-red-500" *ngIf="personalForm.controls['name']?.invalid && personalForm.controls['name']?.touched">
+              Name is required.
+            </small>
+          </div>
+          <div class="mb-4">
+            <label for="email" class="block text-sm font-medium">Email</label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              [ngClass]="{'border-red-500': personalForm.controls['email'].invalid && personalForm.controls['email'].touched}"
+            />
+            <small class="text-red-500" *ngIf="personalForm.controls['email'].invalid && personalForm.controls['email'].touched">
+              Enter a valid email.
+            </small>
+          </div>
+          <div class="mb-4">
+            <label for="password" class="block text-sm font-medium">Password</label>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              [ngClass]="{'border-red-500': personalForm.controls['password'].invalid && personalForm.controls['password'].touched}"
+            />
+            <small class="text-red-500" *ngIf="personalForm.controls['password'].invalid && personalForm.controls['password'].touched">
+              Password is required.
+            </small>
+          </div>
+          <button
+            type="button"
+            class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg"
+            [disabled]="personalForm.invalid"
+            (click)="nextStep()"
+          >
+            Next
+          </button>
+        </form>
+      </div>
+  
+      <div *ngIf="step === 2">
+        <h2 class="text-xl font-bold mb-4">Additional Details</h2>
+        <form [formGroup]="additionalForm">
+          <div class="mb-4">
+            <label for="address" class="block text-sm font-medium">Address</label>
+            <input
+              id="address"
+              type="text"
+              formControlName="address"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              [ngClass]="{'border-red-500': additionalForm.controls['address'].invalid && additionalForm.controls['addres'].touched}"
+            />
+            <small class="text-red-500" *ngIf="additionalForm.controls['address'].invalid && additionalForm.controls['address'].touched">
+              Address is required.
+            </small>
+          </div>
+          <div class="mb-4">
+            <label for="phno" class="block text-sm font-medium">Phone Number</label>
+            <input
+              id="phno"
+              type="text"
+              formControlName="phno"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              [ngClass]="{'border-red-500': additionalForm.controls['phno'].invalid && additionalForm.controls['phno'].touched}"
+            />
+            <small class="text-red-500" *ngIf="additionalForm.controls['phno'].invalid && additionalForm.controls['phno'].touched">
+              Enter a valid phno number.
+            </small>
+          </div>
+          <div class="mb-4">
+            <label for="gender" class="block text-sm font-medium">Gender</label>
+            <select
+              id="gender"
+              formControlName="gender"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              <option value="">Select</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label for="age" class="block text-sm font-medium">Age</label>
+            <input
+              id="age"
+              type="number"
+              formControlName="age"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <button
+            type="button"
+            class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg"
+            [disabled]="additionalForm.invalid"
+            (click)="submitForm()"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+   -->

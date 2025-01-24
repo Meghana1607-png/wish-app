@@ -7,7 +7,7 @@ import { ReceiverFormComponent } from './receiver-form/receiver-form.component';
 import { RecAwarenessComponent } from './rec-awareness/rec-awareness.component';
 import { ViewProfileComponent } from './view-profile/view-profile.component';
 
-const routes: Routes = [{ path: 'r', component: ReceiverComponent },
+const routes: Routes = [{ path: '', component: ReceiverComponent },
 {
   path: 'rprofile',
   component: ProfileComponent
