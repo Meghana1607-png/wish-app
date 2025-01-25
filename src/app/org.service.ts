@@ -10,9 +10,6 @@ export class OrgService {
   private supabase: SupabaseClient;
 
   private apiurl= 'http://localhost:3000/orgforminsert';
-  
-  // private api= 'http://localhost:3000/orgformfetch';
-  private apiurl = 'http://localhost:3000/orgforminsert';
   private api = 'http://localhost:3000/orgformfetch';
 
   constructor(private http: HttpClient) {
@@ -43,12 +40,12 @@ export class OrgService {
 
   //   return this.http.post(this.api,data1);
   // }
-
-}
-
-
   orgfetch(data1: any): Observable<any> {
     console.log('Sending data to API:', data1);
     return this.http.post(this.api, data1);
   }
+
 }
+
+
+  

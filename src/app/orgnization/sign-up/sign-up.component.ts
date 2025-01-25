@@ -4,18 +4,18 @@ import { OrgService } from '../../org.service';
 
 @Component({
   selector: 'app-sign-up',
-  templateUrl: './sign-up.component.html', // Corrected template URL
-  styleUrls: ['./sign-up.component.css'] // Corrected style URL
+  templateUrl: './sign-up.component.html',
+  styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent {
   orgForm: FormGroup;
+  currentStep: number = 1; // Initialize currentStep to 1
 
   constructor(private fb: FormBuilder, private orgform: OrgService) {
     this.orgForm = this.fb.group({
       orgName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       bloodGroups: this.fb.array([]),
     });
@@ -51,5 +51,17 @@ export class SignUpComponent {
         }
       });
     }
+  }
+
+  goToNextStep() {
+    if (this.orgForm.get('orgName')?.valid && this.orgForm.get('email')?.valid) {
+      this.currentStep = 2; // Move to the next step
+    } else {
+      alert('Please fill in all required fields before proceeding.');
+    }
+  }
+
+  goToPreviousStep() {
+    this.currentStep = 1; // Move back to the previous step
   }
 }
