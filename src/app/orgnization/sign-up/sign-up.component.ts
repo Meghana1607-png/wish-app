@@ -1,21 +1,22 @@
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { OrgService } from '../org.service';
+import { OrgService } from '../../org.service';
 
 @Component({
-  selector: 'app-orgnization',
-  templateUrl: './orgnization.component.html',
-  styleUrls: ['./orgnization.component.css']
+  selector: 'app-sign-up',
+  templateUrl: './sign-up.component.html', // Corrected template URL
+  styleUrls: ['./sign-up.component.css'] // Corrected style URL
 })
-export class OrgnizationComponent {
-
+export class SignUpComponent {
   orgForm: FormGroup;
 
-  constructor(private fb: FormBuilder,private orgform: OrgService) {
+  constructor(private fb: FormBuilder, private orgform: OrgService) {
     this.orgForm = this.fb.group({
       orgName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       bloodGroups: this.fb.array([]),
     });
   }
@@ -40,17 +41,15 @@ export class OrgnizationComponent {
     if (this.orgForm.valid) {
       console.log(this.orgForm.value);
       this.orgform.Orginsert(this.orgForm.value).subscribe({
-        next:(response) =>{
+        next: (response) => {
           alert(response.message);
           this.orgForm.reset();
         },
-        error: (error) =>{
+        error: (error) => {
           console.error('Error submitting the form:', error.message);
           alert('An error occurred while submitting the form.');
         }
       });
     }
   }
-
-
 }
