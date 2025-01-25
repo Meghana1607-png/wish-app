@@ -18,16 +18,18 @@ export class ViewOrgFormComponent {
   //       this.orgDetails=data;
   //     },
   // });
-  this.orgform.orgfetch(this.data1).subscribe({
-    next:(response:any) =>{
-      alert(response.message);
-    },
-    error: () =>{
-      console.error('Error submitting the form:');
-      alert('An error occurred while submitting the form.');
-    }
-  });
+ 
+  }
+  async func(): Promise<any>{
+    const data= this.orgform.fetchorgform();
+    try{
+      this.data1=data;
+      console.log("fecth details success",data);
 
+    }
+    catch(error){
+      console.log("fetch failed",error)
+    }
   }
   
   orginfo = {

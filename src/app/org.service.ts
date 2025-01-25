@@ -8,6 +8,10 @@ import { from, Observable } from 'rxjs';
 })
 export class OrgService {
   private supabase: SupabaseClient;
+
+  private apiurl= 'http://localhost:3000/orgforminsert';
+  
+  // private api= 'http://localhost:3000/orgformfetch';
   private apiurl = 'http://localhost:3000/orgforminsert';
   private api = 'http://localhost:3000/orgformfetch';
 
@@ -23,6 +27,25 @@ export class OrgService {
     console.log('Sending data to API:', org);
     return this.http.post(this.apiurl, org);
   }
+  async fetchorgform(): Promise<any>{
+    const {data,error}= await this.supabase.from('organization')
+    .select('name,email')
+    // .eq('org_id', '9e41a25c-e9e2-4d85-af34-16aa103a50b7');
+    if(data){
+      console.log("fetched org",data);
+      return data;
+    }
+    console.log("error fetching org",error)
+    return null;
+  }
+  // orgfetch(data1:any): Observable<any> {
+  //   console.log('Sending data to API:',data1 ); 
+
+  //   return this.http.post(this.api,data1);
+  // }
+
+}
+
 
   orgfetch(data1: any): Observable<any> {
     console.log('Sending data to API:', data1);

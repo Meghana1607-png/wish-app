@@ -1,79 +1,108 @@
-<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-  <h1 class="text-2xl font-semibold text-center mb-4">Receiver Form</h1>
-  <form (ngSubmit)="submitForm()" [formGroup]="receiverForm" novalidate>
-    <div class="mb-4">
-      <label class="block text-sm font-medium mb-1">Name:</label>
-      <input
-        formControlName="name"
-        type="text"
-        class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Enter your name"
-      />
-      <p *ngIf="receiverForm.controls['name'].hasError('required') && receiverForm.controls['name'].touched" class="text-red-500 text-sm">Name is required.</p>
-    </div>
-    <label class="block text-sm font-medium mb-1">password:</label>
-    <input
-      formControlName="password"
-      type="text"
-      class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-      placeholder="Enter password"
-    />
-    <p *ngIf="receiverForm.controls['password'].hasError('required') && receiverForm.controls['password'].touched" class="text-red-500 text-sm">password is required.</p>
 
-    <div class="mb-4">
-      <label class="block text-sm font-medium mb-1">Gender:</label>
-      <select
-        formControlName="gender"
-        class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+  <h1 class="text-3xl font-semibold text-center text-red-600 mb-6">Receiver Form</h1>
+
+  <!-- Card 1: Name, Email, Password -->
+  <div *ngIf="currentStep === 1" class="bg-red-50 p-6 rounded-lg shadow-md mb-6">
+    <form [formGroup]="receiverForm" novalidate>
+      <!-- Name Field -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Name:</label>
+        <input
+          formControlName="name"
+          type="text"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          placeholder="Enter your name"
+        />
+        <p *ngIf="receiverForm.controls['name'].hasError('required') && receiverForm.controls['name'].touched" class="text-red-500 text-sm">Name is required.</p>
+      </div>
+
+      <!-- Email Field -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Email:</label>
+        <input
+          formControlName="email"
+          type="email"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          placeholder="Enter your email"
+        />
+        <p *ngIf="receiverForm.controls['email'].hasError('required') && receiverForm.controls['email'].touched" class="text-red-500 text-sm">Enter a valid email address.</p>
+      </div>
+
+      <!-- Password Field -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Password:</label>
+        <input
+          formControlName="password"
+          type="password"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          placeholder="Enter password"
+        />
+        <p *ngIf="receiverForm.controls['password'].hasError('required') && receiverForm.controls['password'].touched" class="text-red-500 text-sm">Password is required.</p>
+      </div>
+
+      <!-- Next Button -->
+      <button
+        type="button"
+        (click)="goToNextStep()"
+        [disabled]="!isStepValid(1)"
+        class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 disabled:bg-red-300"
       >
-        <option value="" disabled>Select gender</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Other">Other</option>
-      </select>
-      <p *ngIf="receiverForm.controls['gender'].hasError('required') && receiverForm.controls['gender'].touched" class="text-red-500 text-sm">Gender is required.</p>
-    </div>
+        Next
+      </button>
+    </form>
+  </div>
 
-    <div class="mb-4">
-      <label class="block text-sm font-medium mb-1">Phone Number:</label>
-      <input
-        formControlName="phno"
-        type="tel"
-        class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Enter your phone number"
-      />
-      <p *ngIf="receiverForm.controls['phno'].hasError('pattern') && receiverForm.controls['phno'].touched" class="text-red-500 text-sm">Enter a valid phone number.</p>
-    </div>
+  <!-- Card 2: Gender, Phone, Address -->
+  <div *ngIf="currentStep === 2" class="bg-red-50 p-6 rounded-lg shadow-md mb-6">
+    <form [formGroup]="receiverForm" novalidate>
+      <!-- Gender Field -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Gender:</label>
+        <select
+          formControlName="gender"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+        >
+          <option value="" disabled>Select gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        <p *ngIf="receiverForm.controls['gender'].hasError('required') && receiverForm.controls['gender'].touched" class="text-red-500 text-sm">Gender is required.</p>
+      </div>
 
-    <div class="mb-4">
-      <label class="block text-sm font-medium mb-1">address:</label>
-      <input
-        formControlName="address"
-        type="text"
-        class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Enter your address"
-      />
-    </div>
+      <!-- Phone Field -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Phone Number:</label>
+        <input
+          formControlName="phno"
+          type="tel"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          placeholder="Enter your phone number"
+        />
+        <p *ngIf="receiverForm.controls['phno'].hasError('pattern') && receiverForm.controls['phno'].touched" class="text-red-500 text-sm">Enter a valid phone number.</p>
+      </div>
 
-    <div class="mb-4">
-      <label class="block text-sm font-medium mb-1">Email:</label>
-      <input
-        formControlName="email"
-        type="email"
-        class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Enter your email"
-      />
-      <p *ngIf="receiverForm.controls['email'].hasError('email') && receiverForm.controls['email'].touched" class="text-red-500 text-sm">Enter a valid email address.</p>
-    </div>
+      <!-- Address Field -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Address:</label>
+        <input
+          formControlName="address"
+          type="text"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          placeholder="Enter your address"
+        />
+      </div>
 
-    <button
-      type="submit"
-      (click)="submitForm()"
-
-      class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-    >
-      Submit
-    </button>
-  </form>
-</div> 
-<!-- [disabled]="receiverForm.invalid" -->
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        (click)="submitForm()"
+        [disabled]="receiverForm.invalid"
+        class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 disabled:bg-red-300"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
