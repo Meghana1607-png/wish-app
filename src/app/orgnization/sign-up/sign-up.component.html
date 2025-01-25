@@ -1,37 +1,37 @@
-<div class="pb-10">
-  <form [formGroup]="orgForm" (ngSubmit)="onSubmit()" class="max-w-xl mx-auto p-6 bg-white shadow-md rounded-lg mt-6">
+<div class="max-w-xl mx-auto p-6 bg-white shadow-md rounded-lg mt-6">
+  <h2 class="text-3xl font-semibold text-center text-red-600 mb-6">Sign Up</h2>
+  <div class="bg-red-50 p-6 rounded-lg shadow-md mb-6">
+  <form [formGroup]="orgForm" (ngSubmit)="onSubmit()" novalidate>
     <div *ngIf="currentStep === 1">
       <!-- Organization Name -->
-      <div class="mb-4 w-full">
-        <label class="block text-lg font-semibold text-gray-800">Organization Name</label>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Organization Name:</label>
         <input 
           type="text" 
           formControlName="orgName" 
-          class="border-2 border-black p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:shadow-lg"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" 
+          placeholder="Enter organization name"
         />
-        <p *ngIf="orgForm.get('orgName')?.invalid && orgForm.get('orgName')?.touched" class="text-red-600 text-sm">
-          Organization Name is required.
-        </p>
+        <p *ngIf="orgForm.get('orgName')?.invalid && orgForm.get('orgName')?.touched" class="text-red-500 text-sm">Organization Name is required.</p>
       </div>
-      
+
       <!-- Official Email -->
-      <div class="mb-4 w-full">
-        <label class="block text-lg font-semibold text-gray-800">Official Email</label>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Official Email:</label>
         <input 
           type="email" 
           formControlName="email" 
-          class="border-2 border-black p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:shadow-lg"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" 
+          placeholder="Enter official email"
         />
-        <p *ngIf="orgForm.get('email')?.invalid && orgForm.get('email')?.touched" class="text-red-600 text-sm">
-          A valid email is required.
-        </p>
+        <p *ngIf="orgForm.get('email')?.invalid && orgForm.get('email')?.touched" class="text-red-500 text-sm">A valid email is required.</p>
       </div>
 
       <!-- Next Button -->
       <button 
         type="button" 
         (click)="goToNextStep()" 
-        class="bg-red-600 text-white p-2 rounded-lg mt-2 hover:bg-red-700"
+        class="bg-red-600 text-white p-2 w-full rounded-lg mt-2 hover:bg-red-700"
       >
         Next
       </button>
@@ -39,60 +39,56 @@
 
     <div *ngIf="currentStep === 2">
       <!-- Password -->
-      <div class="mb-4 w-full">
-        <label class="block text-lg font-semibold text-gray-800">Password</label>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Password:</label>
         <input 
           type="password" 
           formControlName="password" 
-          class="border-2 border-black p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:shadow-lg"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" 
+          placeholder="Enter password"
         />
-        <p *ngIf="orgForm.get('password')?.invalid && orgForm.get('password')?.touched" class="text-red-600 text-sm">
-          Password is required.
-        </p>
+        <p *ngIf="orgForm.get('password')?.invalid && orgForm.get('password')?.touched" class="text-red-500 text-sm">Password is required.</p>
       </div>
 
       <!-- Phone Number -->
-      <div class="mb-4 w-full">
-        <label class="block text-lg font-semibold text-gray-800">Phone Number</label>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Phone Number:</label>
         <input 
           type="tel" 
           formControlName="phone" 
-          class="border-2 border-black p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:shadow-lg"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" 
+          placeholder="Enter phone number"
         />
-        <p *ngIf="orgForm.get('phone')?.invalid && orgForm.get('phone')?.touched" class="text-red-600 text-sm">
-          A valid 10-digit phone number is required.
-        </p>
+        <p *ngIf="orgForm.get('phone')?.invalid && orgForm.get('phone')?.touched" class="text-red-500 text-sm">A valid phone number is required.</p>
       </div>
 
       <!-- Address -->
-      <div class="mb-4 w-full">
-        <label class="block text-lg font-semibold text-gray-800">Address</label>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Address:</label>
         <textarea 
           formControlName="address" 
           rows="3" 
-          class="border-2 border-black p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:shadow-lg"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" 
           placeholder="Enter the organization's address"
         ></textarea>
-        <p *ngIf="orgForm.get('address')?.invalid && orgForm.get('address')?.touched" class="text-red-600 text-sm">
-          Address is required.
-        </p>
+        <p *ngIf="orgForm.get('address')?.invalid && orgForm.get('address')?.touched" class="text-red-500 text-sm">Address is required.</p>
       </div>
 
       <!-- Blood Groups -->
-      <div formArrayName="bloodGroups" class="mb-4 w-full">
-        <label class="block text-lg font-semibold text-gray-800">Blood Groups</label>
+      <div formArrayName="bloodGroups" class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Blood Groups</label>
         <div *ngFor="let group of bloodGroups.controls; let i = index" [formGroupName]="i" class="flex gap-2 mb-2">
           <input 
             type="text" 
             formControlName="bloodGroup" 
             placeholder="Blood Group" 
-            class="border-2 border-black p-2 w-1/2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:shadow-lg"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
           />
           <input 
             type="number" 
             formControlName="quantity" 
             placeholder="Quantity (ml)" 
-            class="border-2 border-black p-2 w-1/3 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:shadow-lg"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
           />
           <button 
             type="button" 
@@ -106,7 +102,7 @@
           type="button" 
           (click)="addBloodGroup()" 
           [disabled]="!bloodGroups.valid" 
-          class="bg-red-600 text-white p-2 rounded-lg mt-2 hover:bg-red-700"
+          class="bg-red-600 text-white p-2 rounded-lg mt-2 hover:bg-red-700 m-2"
         >
           Add Blood Group
         </button>
@@ -117,18 +113,19 @@
         <button 
           type="button" 
           (click)="goToPreviousStep()" 
-          class="bg-gray-600 text-white p-2 rounded-lg hover:bg-gray-700"
+          class="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 w-2/3 m-2"
         >
           Previous
         </button>
 
         <button 
           type="submit" 
-          class="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700"
+          class="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 w-2/3 m-2"
         >
           Submit
         </button>
       </div>
     </div>
   </form>
+  </div>
 </div>
