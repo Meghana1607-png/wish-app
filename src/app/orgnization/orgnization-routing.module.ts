@@ -20,7 +20,10 @@ const routes: Routes = [{ path: '', component: OrgnizationComponent },
   {path:'view_org',component:ViewOrgFormComponent},
   {path:'req',component:RequestsComponent},
 
-  {path:'org-request',component:OrgRequestsComponent}
+  {path:'org-request',component:OrgRequestsComponent},
+  {
+    path:'org-form',component:ViewOrgFormComponent
+  }
 ];
 
 @NgModule({

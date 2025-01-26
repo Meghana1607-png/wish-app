@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { OrgService } from 'src/app/org.service';
 import { ProfileService } from 'src/app/profile.service';
 
 @Component({
@@ -18,28 +19,50 @@ export class ViewProfileComponent {
 
   };
 
-  constructor(private profile:ProfileService){
+  constructor(private profile:ProfileService,private org:OrgService){
 
     this.fetchUsers();
     }
     async fetchUsers(): Promise<void> {
-      try {
-        const data = await this.profile.form();
+    try {
+         const data = await this.profile.form();
         this.users = data;
-        console.log('Fetched users:', this.users);
-      } catch (error) {
-        console.error('Error fetching users:', error);
+    console.log('Fetched users:', this.users);
+   } catch (error) {
+       console.error('Error fetching users:', error);
       }
+   }
+    // fetchUsers(): void {
+    //   this.loading = true; // Show loader
+    //   this.profile.fetch().subscribe({
+    //     next: (data) => {
+    //       this.users = data;
+    //       this.loading = false; // Hide loader
+    //     },
+    //     error: (err) => {
+    //       console.error('Error fetching users:', err);
+    //       this.loading = false;
+    //     },
+    //   });
+    func(): void {
+      this.org.fetchorgform().subscribe({
+        next: (data) => {
+          this.users = data;
+        },
+        error: (err) => {
+          console.error('Error fetching users:', err);
+        },
+      });
     }
   
-  onSubmit(form: any): void {
-    if (form.valid) {
-      console.log('Profile Data:', this.profile);
-      alert('Profile submitted successfully!');
-      // Perform additional actions (e.g., API call to save data)
-    } else {
-      alert('Please fill in all required fields.');
-    }
-  }
+  // onSubmit(form: any): void {
+  //   if (form.valid) {
+  //     console.log('Profile Data:', this.profile);
+  //     alert('Profile submitted successfully!');
+  //     // Perform additional actions (e.g., API call to save data)
+  //   } else {
+  //     alert('Please fill in all required fields.');
+  //   }
+  // }}
 
 }

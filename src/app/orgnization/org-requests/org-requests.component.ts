@@ -15,11 +15,9 @@ export class OrgRequestsComponent {
 
   acceptUser(user: any) {
     console.log('Accepted:', user);
-    // Add your logic for accepting a user
   }
 
   rejectUser(user: any) {
     console.log('Rejected:', user);
-    // Add your logic for rejecting a user
   }
 }

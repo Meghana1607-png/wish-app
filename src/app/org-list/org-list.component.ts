@@ -55,15 +55,17 @@ export class OrgListComponent {
   //   });
 
   // }
-  async fetchorg(): Promise<any>{
-    try{
-      const data= this.supabase.fetchorgform();
-      this.dta=data;
-      console.log("fetch organizations",this.dta);
-    }
-    catch(error){
-      console.log("failed to fetch organizations",error)
-    }
+   fetchorg(){
+   
+      this.supabase.fetchorgform().subscribe({
+        next:(data) =>{
+          this.dta=data;
+          console.log("fetch organizations",this.dta);
+        },
+        error(error){
+          console.log("failed to fetch organizations",error)
+        }
+      })
   }
 
   viewDetails(org: any): void {

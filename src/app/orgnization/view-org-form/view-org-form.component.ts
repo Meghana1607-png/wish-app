@@ -20,7 +20,7 @@ export class ViewOrgFormComponent {
   // });
  
   }
-  async func(): Promise<any>{
+  async func(){
     const data= this.orgform.fetchorgform();
     try{
       this.data1=data;
