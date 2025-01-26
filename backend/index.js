@@ -14,35 +14,35 @@ const supabase = createClient("https://esuzqpwibfnycwmeirtg.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzdXpxcHdpYmZueWN3bWVpcnRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5NjA1MTQsImV4cCI6MjA1MDUzNjUxNH0.FUL9viBXkN2Q44hhdFKPj8uKBT0SkJqcSfbjPV2oExc"
 );
 
-app.post("/signup", async (req, res) => {
-const { email, password } = req.body;
-console.log("Received email:", email);
-console.log("Received password:", password);
+// app.post("/signup", async (req, res) => {
+// const { email, password } = req.body;
+// console.log("Received email:", email);
+// console.log("Received password:", password);
 
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email and password are required" });
-  }
+//   if (!email || !password) {
+//     return res.status(400).json({ message: "Email and password are required" });
+//   }
 
-  try {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+//   try {
+//     const { data, error } = await supabase.auth.signUp({
+//       email,
+//       password,
+//     });
 
-    if (error) {
-      console.error("Supabase error:", error);
-      throw error;
-    }
+//     if (error) {
+//       console.error("Supabase error:", error);
+//       throw error;
+//     }
 
-    res.status(200).json({
-      message: "Account created successfully!",
-      data,
-    });
-  } catch (error) {
-    console.error("Error during signup:", error);
-    res.status(500).json({ message: error.message });
-  }
-});
+//     res.status(200).json({
+//       message: "Account created successfully!",
+//       data,
+//     });
+//   } catch (error) {
+//     console.error("Error during signup:", error);
+//     res.status(500).json({ message: error.message });
+//   }
+// });
 
 app.post("/signin", async (req,res)=>{
   const{email, password }= req.body;
@@ -182,26 +182,11 @@ res.status(500).json({message : error.message});
 });
 
 
-// app.post("/orgforminsert",async (req,res)=>{
-//   console.log("request body", req.body);
 
-// const {name,email,phone,address,blood_group,blood_quantity} = req.body;
-// console.log("body",req.body)
-// try{ 
-// console.log("xcvbnm",email);
-// const {data, error} = await supabase.from('orgnization').insert(
-//   {
-//     name: name,
-//     email: email,
-//     blood_group: blood_group,
-//     phone:phone,
-//     // address:address,
-//     blood_quantity: blood_quantity
-//   }
 app.post("/orgforminsert", async (req, res) => {
   console.log("Request Body:", req.body);
 
-  const { orgName, email, phone, bloodGroups } = req.body;
+  const { orgName, email, phone, bloodGroups ,password} = req.body;
 
   if (!orgName || !email || !phone || !bloodGroups || bloodGroups.length === 0) {
     return res.status(400).json({ message: "Missing required fields" });
@@ -217,6 +202,7 @@ app.post("/orgforminsert", async (req, res) => {
       phone,
       blood_group,
       blood_quantity,
+      password
     });
 
     const { data, error } = await supabase.from('organization').insert([
@@ -226,6 +212,7 @@ app.post("/orgforminsert", async (req, res) => {
         phone: phone,
         blood_group: bloodGroups[0]?.bloodGroup,
         blood_quantity: bloodGroups[0]?.quantity,
+        password: password
       },
     ]);
 

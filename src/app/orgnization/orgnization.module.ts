@@ -9,7 +9,8 @@ import { OrgCardComponent } from './org-card/org-card.component';
 import { ViewOrgFormComponent } from './view-org-form/view-org-form.component';
 import { RequestsComponent } from './requests/requests.component';
 import { OrgRequestsComponent } from './org-requests/org-requests.component';
-
+import { SignupComponent } from './signup/signup.component';
+import { SigninComponent } from './signin/signin.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,9 @@ import { OrgRequestsComponent } from './org-requests/org-requests.component';
     OrgCardComponent,
     ViewOrgFormComponent,
     RequestsComponent,
-    OrgRequestsComponent
+    OrgRequestsComponent,
+    SignupComponent,
+    SigninComponent
   ],
   imports: [
     CommonModule,

@@ -12,7 +12,7 @@ const routes: Routes = [
   {path:'receiver',loadChildren:() => import('./receiver/receiver.module').then(m => m.ReceiverModule)},
   {path:'app',component:AppComponent },
   {path:'landing',component:LandingPageComponent},
-{path:'org-list',component:OrgListComponent}
+{path:'org-list',component:OrgListComponent},
 
   ];
 
