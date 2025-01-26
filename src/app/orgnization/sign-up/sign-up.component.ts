@@ -14,9 +14,10 @@ export class SignUpComponent {
   constructor(private fb: FormBuilder, private orgform: OrgService) {
     this.orgForm = this.fb.group({
       orgName: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      address: ['', Validators.required], // Added address control
       bloodGroups: this.fb.array([]),
     });
   }

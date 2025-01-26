@@ -24,6 +24,7 @@ export class OrgService {
     console.log('Sending data to API:', org);
     return this.http.post(this.apiurl, org);
   }
+  
   async fetchorgform(): Promise<any>{
     const {data,error}= await this.supabase.from('organization')
     .select('name,email')
@@ -35,11 +36,7 @@ export class OrgService {
     console.log("error fetching org",error)
     return null;
   }
-  // orgfetch(data1:any): Observable<any> {
-  //   console.log('Sending data to API:',data1 ); 
 
-  //   return this.http.post(this.api,data1);
-  // }
   orgfetch(data1: any): Observable<any> {
     console.log('Sending data to API:', data1);
     return this.http.post(this.api, data1);
