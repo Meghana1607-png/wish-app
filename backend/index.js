@@ -143,49 +143,55 @@ app.post("/profileinsert", async (req, res) => {
 app.post("/receiverforminsert", async (req, res) => {
   console.log("request body", req.body);
 
-const {gender,ph_no,name,location,blood_quantity,date,purpose,email,blood_group, health_issues,last_donated,emergency} = req.body;
-console.log("body",req.body)
-try{ 
-console.log("xcvbnm",name);
-const {data, error} = await supabase.from('receivers').insert(
-  {
-    // gender: gender,
-    // ph_no: ph_no,
-    // health_issues: health_issues,
-    // last_donated: last_donated,
-    // location:location,
-    // name: name,
-    // email: email,
-    purpose:purpose,
-    blood_group: blood_group,
-    date:date,
-    emergency:emergency
+  const {
+    gender,
+    ph_no,
+    name,
+    location,
+    blood_quantity,
+    date,
+    purpose,
+    email,
+    blood_group,
+    health_issues,
+    last_donated,
+    emergency,
+  } = req.body;
+  console.log("body", req.body);
+  try {
+    console.log("xcvbnm", name);
+    const { data, error } = await supabase.from("receivers").insert({
+      // gender: gender,
+      // ph_no: ph_no,
+      // health_issues: health_issues,
+      // last_donated: last_donated,
+      // location:location,
+      // name: name,
+      // email: email,
+      purpose: purpose,
+      blood_group: blood_group,
+      date: date,
+      emergency: emergency,
+    });
+    if (error) {
+      console.log("supabase error", error.message);
+      throw error;
+    } else {
+      res.status(200).json({
+        message: "receiverform submitted ",
+        data,
+      });
+    }
+  } catch (error) {
+    console.error("error during receiver form submission", error);
+    res.status(500).json({ message: error.message });
   }
-);
-  if(error)
-{
-  console.log ("supabase error", error.message);
-  throw error;
-}
-else{
-res.status(200).json({
-  message : "receiverform submitted ",
-  data
-});}
-}
-catch (error){
-console.error("error during receiver form submission",error);
-res.status(500).json({message : error.message});
-
-}
 });
-
-
 
 app.post("/orgforminsert", async (req, res) => {
   console.log("Request Body:", req.body);
 
-  const { orgName, email, phone, bloodGroups ,password} = req.body;
+  const { orgName, email, phone, bloodGroups, password, address } = req.body;
 
   if (
     !orgName ||
@@ -193,6 +199,7 @@ app.post("/orgforminsert", async (req, res) => {
     !email ||
     !phone ||
     !bloodGroups ||
+    !address ||
     bloodGroups.length === 0
   ) {
     return res.status(400).json({ message: "Missing required fields" });
@@ -209,7 +216,7 @@ app.post("/orgforminsert", async (req, res) => {
       phone,
       blood_group,
       blood_quantity,
-      password
+      address,
     });
 
     const { data, error } = await supabase.from("organization").insert([
@@ -220,7 +227,7 @@ app.post("/orgforminsert", async (req, res) => {
         phone: phone,
         blood_group: bloodGroups[0]?.bloodGroup,
         blood_quantity: bloodGroups[0]?.quantity,
-        password: password
+        address: address,
       },
     ]);
 
@@ -254,7 +261,6 @@ app.post("/userforminsert", async (req, res) => {
     date,
     purpose,
     email,
-    
   } = req.body;
   try {
     console.log("Inserting into Supabase...");
@@ -310,4 +316,4 @@ app.post("/orgformfetch", async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-})
+});
