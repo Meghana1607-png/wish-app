@@ -14,6 +14,7 @@ const routes: Routes = [
   {path:'landing',component:LandingPageComponent},
 {path:'org-list',component:OrgListComponent},
 
+  {path:'org-list',component:OrgListComponent}
   ];
 
 @NgModule({

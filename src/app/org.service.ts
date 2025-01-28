@@ -1,18 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { createClient ,SupabaseClient} from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrgService {
-
   private supabase: SupabaseClient;
 
   private apiurl= 'http://localhost:3000/orgforminsert';
+  private api = 'http://localhost:3000/orgformfetch';
+
   
-  // private api= 'http://localhost:3000/orgformfetch';
 
   constructor(private http:HttpClient) { 
     auth: {
@@ -25,8 +25,7 @@ export class OrgService {
   }
 
   Orginsert(org: any): Observable<any> {
-    console.log('Sending data to API:', org); 
-
+    console.log('Sending data to API:', org);
     return this.http.post(this.apiurl, org);
   }
   // async fetchorgform(): Promise<any>{
@@ -52,3 +51,5 @@ export class OrgService {
   
 }
 
+
+  
