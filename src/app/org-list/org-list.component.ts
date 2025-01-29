@@ -9,66 +9,33 @@ import { OrgService } from '../org.service';
 export class OrgListComponent {
 
   dta:any
-  constructor(private supabase:OrgService){}
-  organizations :any[]= []
-  //   {
-  //     id: 1,
-  //     name: 'Tech Innovators',
-  //     email: 'contact@techinnovators.com',
-  //     logo: 'https://via.placeholder.com/50/0f0f0f/FFFFFF?text=TI',
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'Green Planet',
-  //     email: 'hello@greenplanet.org',
-  //     logo: 'https://via.placeholder.com/50/00ff00/FFFFFF?text=GP',
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'EduSpark',
-  //     email: 'info@eduspark.edu',
-  //     logo: 'https://via.placeholder.com/50/0000ff/FFFFFF?text=ES',
-  //   },
-  
-  //   {
-  //     id: 1,
-  //     name: 'Tech Innovators',
-  //     email: 'contact@techinnovators.com',
-  //     logo: 'https://via.placeholder.com/50/0f0f0f/FFFFFF?text=TI',
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'EduSpark',
-  //     email: 'info@eduspark.edu',
-  //     logo: 'https://via.placeholder.com/50/0000ff/FFFFFF?text=ES',
-  //   },
-  // ];
-  // getOrganizations(): void {
-  //   this.supabase.fetchorgform().subscribe({
-  //     next: (response:any) => {
-  //       console.log('Fetched data:', response);
-  //       this.organizations = response.data || []; 
-  //     },
-  //     error: (error:any) => {
-  //       console.error('Error fetching organizations:', error);
-  //     },
-  //   });
+  constructor(private supabase:OrgService){
 
-  // }
-   fetchorg(){
-   
-      this.supabase.fetchorgform().subscribe({
-        next:(data) =>{
-          this.dta=data;
-          console.log("fetch organizations",this.dta);
-        },
-        error(error){
-          console.log("failed to fetch organizations",error)
-        }
-      })
+    this.fetchorg();
   }
+  organizations :any[]= []
+    fetchorg() {
+    this.supabase.fetchorgform('').subscribe({
+      next: (response) => {
+        if (response.error) {
+          console.error('Error fetching organizations:', response.error);
+        } else if (response.data) {
+          console.log(response.data)
+          this.organizations = response.data;
+          console.log('Organizations fetched successfully:', this.organizations);
+        } else {
+          console.warn('No data received');
+        }
+      },
+      // error: (error) => {
+      //   console.error('Failed to fetch organizations:', error);
+      // },
+    });
+  }
+  
+  
 
   viewDetails(org: any): void {
-    alert(`Viewing details for ${org.name}`);
+    // alert(`Viewing details for ${org.name}`);
   }
 }
