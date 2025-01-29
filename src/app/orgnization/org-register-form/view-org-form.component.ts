@@ -9,27 +9,38 @@ import { OrgService } from 'src/app/org.service';
 export class ViewOrgFormComponent {
 
   orgDetails:any
+  organization:any
   data1:any
 
-  constructor(private orgform:OrgService){
+  constructor(private supabase:OrgService){
 
   //   this.orgform.fetchorgform().subscribe({
   //     next: (data) => {
   //       this.orgDetails=data;
   //     },
   // });
+  this.fetchorg();
  
   }
-  async func(){
-    const data= this.orgform.fetchorgform();
-    try{
-      this.data1=data;
-      console.log("fecth details success",data);
-
-    }
-    catch(error){
-      console.log("fetch failed",error)
-    }
+  id:any
+  fetchorg() {
+  
+    this.supabase.fetchorgform(this.id).subscribe({
+      next: (response) => {
+        if (response.error) {
+          console.error('Error fetching organization:', response.error);
+        } else if (response.data) {
+          console.log(response.data)
+          this.organization = response.data;
+          console.log('Organizations fetched successfully:', this.organization);
+        } else {
+          console.warn('No data received');
+        }
+      },
+      // error: (error) => {
+      //   console.error('Failed to fetch organization:', error);
+      // },
+    });
   }
   
   orginfo = {

@@ -1,0 +1,10 @@
+ <div class="chat-container p-4 max-h-96 overflow-y-auto">
+    <div *ngFor="let requests of request" class="chat-item mb-4">
+      <div [ngClass]="requests.sent ? 'bg-green-200 self-end' : 'bg-gray-200 self-start'"
+           class="message max-w-xs p-3 rounded-lg">
+        <p class="text-sm">{{ requests.message }}</p>
+        <span class="text-xs text-gray-500">{{ requests.time }}</span>
+      </div>
+    </div>
+  </div> 
+   

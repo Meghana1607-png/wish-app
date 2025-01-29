@@ -43,14 +43,16 @@ export class OrgService {
   //   console.log("error fetching org",error)
   //   return null;
   // }
-
-  fetchorgform() : Observable<any>{
-    const res = this.supabase.from('organization')
-    .select('*')
-    // .eq('orgid','9e41a25c-e9e2-4d85-af34-16aa103a50b7')
-    console.log('supabase query ',res)
-    return from(res)
-
+  fetchorgform(id:any): Observable<any> {
+    return from(
+      this.supabase
+        .from('organization')
+        .select().eq('id',id)
+        .then((response) => {
+          console.log('Supabase Response:', response);
+          return response;
+        })
+    );
   }
   
 }
