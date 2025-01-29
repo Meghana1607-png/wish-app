@@ -10,10 +10,9 @@ export class OrgService {
   private supabase: SupabaseClient;
 
   private apiurl= 'http://localhost:3000/orgforminsert';
-  private api = 'http://localhost:3000/orgformfetch';
-
+  // private api = 'http://localhost:3000/orgformfetch';
+  private api = 'http://localhost:3000/orgSignIn';
   
-
   constructor(private http:HttpClient) { 
     auth: {
       persistSession: false
@@ -27,6 +26,11 @@ export class OrgService {
   Orginsert(org: any): Observable<any> {
     console.log('Sending data to API:', org);
     return this.http.post(this.apiurl, org);
+  }
+
+  OrgSignIn(data: any): Observable<any> {
+    console.log('Sending data to API:', data);
+    return this.http.post(this.api, data);
   }
   // async fetchorgform(): Promise<any>{
   //   const {data,error}= await this.supabase.from('organization')
