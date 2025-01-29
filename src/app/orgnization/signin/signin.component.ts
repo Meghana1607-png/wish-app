@@ -3,9 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OrgService } from '../../org.service';
 import { Router } from '@angular/router';
 
-
-
-
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
@@ -17,21 +14,26 @@ signInForm: FormGroup;
 
   constructor(private fb: FormBuilder, private orgService: OrgService, private router: Router) { // Inject OrgService and Router
     this.signInForm = this.fb.group({
-      orgName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
   onSubmit() {
     if (this.signInForm.valid) {
-      this.orgService.Orginsert(this.signInForm.value)
+      this.orgService.OrgSignIn(this.signInForm.value)
       .subscribe({
         next: (response) => {
-          console.log(response);
-          this.router.navigate(['/org']); 
+          console.log("response", response);
+          if(response.data){
+            this.router.navigate(['/org-dashboard']); 
+          }
+          else{
+            alert('Invalid Email or Password');
+          }
         },
-        error: (error) => {
-          console.error('Sign-in error:', error);
+        error:(error)=>{
+          alert('Invalid Email or Password');
         }
       });
     }

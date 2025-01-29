@@ -161,13 +161,6 @@ app.post("/receiverforminsert", async (req, res) => {
   try {
     console.log("xcvbnm", name);
     const { data, error } = await supabase.from("receivers").insert({
-      // gender: gender,
-      // ph_no: ph_no,
-      // health_issues: health_issues,
-      // last_donated: last_donated,
-      // location:location,
-      // name: name,
-      // email: email,
       purpose: purpose,
       blood_group: blood_group,
       date: date,
@@ -188,14 +181,37 @@ app.post("/receiverforminsert", async (req, res) => {
   }
 });
 
+app.post("/orgSignIn", async (req, res) => {
+  console.log("Request Body:", req.body);
+
+  const { email, password } = req.body;
+
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (data.user) {
+      console.log("sign in successfully");
+      res.send({ data: data });
+    } else {
+      console.log("sign in failed");
+      res.send({ error: error });
+    }
+  } catch (error) {
+    console.error("sign in failed", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.post("/orgforminsert", async (req, res) => {
   console.log("Request Body:", req.body);
 
-  const { orgName, email, phone, bloodGroups, password, address } = req.body;
+  const { orgName, email, phone, bloodGroups, address, password } = req.body;
 
   if (
     !orgName ||
-    !password ||
     !email ||
     !phone ||
     !bloodGroups ||
@@ -211,35 +227,48 @@ app.post("/orgforminsert", async (req, res) => {
 
     console.log("Inserting data into orgnization table:", {
       orgName,
-      password,
       email,
       phone,
       blood_group,
       blood_quantity,
       address,
+      password,
     });
 
-    const { data, error } = await supabase.from("organization").insert([
-      {
-        name: orgName,
-        password: password,
-        email: email,
-        phone: phone,
-        blood_group: bloodGroups[0]?.bloodGroup,
-        blood_quantity: bloodGroups[0]?.quantity,
-        address: address,
-      },
-    ]);
+    const data1 = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
 
-    if (error) {
-      console.error("Supabase Error Details:", error);
-      throw new Error(error.message || "Unknown Supabase Error");
+    console.log("data 1", data1);
+
+    if (data1.data) {
+      const { data, error } = await supabase.from("organization").insert([
+        {
+          name: orgName,
+          email: email,
+          phone: phone,
+          blood_group: bloodGroups[0]?.bloodGroup,
+          blood_quantity: bloodGroups[0]?.quantity,
+          address: address,
+        },
+      ]);
+
+      if (error) {
+        console.error("Supabase Error Details:", error);
+        throw new Error(error.message || "Unknown Supabase Error");
+      }
+
+      res.status(200).json({
+        message: "Organization submitted successfully",
+        data,
+      });
+    } else {
+      if (error) {
+        console.log("Supabase Error Details:", error);
+        throw new Error(error.message || "Unknown Supabase Error");
+      }
     }
-
-    res.status(200).json({
-      message: "Organization submitted successfully",
-      data,
-    });
   } catch (error) {
     console.error("Error during organization form submission:", error);
     res
