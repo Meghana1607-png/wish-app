@@ -1,29 +1,33 @@
-<div class="p-4">
-    <div class="space-y-4">
-      <div
-        *ngFor="let user of users"
-        class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md"
-      >
-        <div>
-          <h4 class="text-lg font-medium text-gray-800">{{ user.name }}</h4>
-          <p class="text-sm text-gray-500">{{ user.email }}</p>
-        </div>
-  
-        <div class="flex space-x-4">
+<div class="container mx-auto p-4">
+  <h2 class="text-lg font-semibold mb-4">Pending Requests</h2>
+
+  <table class="min-w-full border border-gray-200">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="border px-4 py-2">User Email</th>
+        <th class="border px-4 py-2">Status</th>
+        <th class="border px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let req of requests">
+        <td class="border px-4 py-2">{{ req.users.email }}</td>
+        <td class="border px-4 py-2">{{ req.status }}</td>
+        <td class="border px-4 py-2">
           <button
-            (click)="acceptUser(user)"
-            class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+            class="bg-green-500 text-white px-3 py-1 rounded mr-2"
+            (click)="updateStatus(req.id, 'approved')"
           >
             Accept
           </button>
           <button
-            (click)="rejectUser(user)"
-            class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+            class="bg-red-500 text-white px-3 py-1 rounded"
+            (click)="updateStatus(req.id, 'rejected')"
           >
             Reject
           </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

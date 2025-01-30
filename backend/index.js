@@ -317,31 +317,85 @@ app.post("/userforminsert", async (req, res) => {
   }
 });
 
-app.post("/orgformfetch", async (req, res) => {
-  const { orgId } = req.body;
+// app.post("/orgformfetch", async (req, res) => {
+//   const { orgId } = req.body;
 
-  try {
-    const { data, error } = await supabase
-      .from("organization")
-      .select("*")
-      .eq("id", orgId);
-    console.log(data);
+//   try {
+//     const { data, error } = await supabase
+//       .from("organization")
+//       .select("*")
+//       .eq("id", orgId);
+//     console.log(data);
 
-    if (error) {
-      console.error("Error fetching organization:", error.message);
-      return res.status(400).json({ error: error.message });
-    }
+//     if (error) {
+//       console.error("Error fetching organization:", error.message);
+//       return res.status(400).json({ error: error.message });
+//     }
 
-    if (data.length === 0) {
-      return res.status(404).json({ message: "Organization not found" });
-    }
+//     if (data.length === 0) {
+//       return res.status(404).json({ message: "Organization not found" });
+//     }
 
-    res.status(200).json(data[0]);
-  } catch (err) {
-    console.error("Unexpected error:", err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//     res.status(200).json(data[0]);
+//   } catch (err) {
+//     console.error("Unexpected error:", err);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
+
+// app.post("/requests", async (req, res) => {
+//   const { userid, org_id } = req.body;
+//   try{
+
+//   const { data, error } = await supabase
+//     .from("request")
+//     .insert([{ userid, org_id, status: "pending" }]);
+
+//     if (error) {
+//       console.error("Error fetching organization:", error.message);
+//       return res.status(400).json({ error: error.message });
+//     }
+
+//     if (data.length === 0) {
+//       return res.status(404).json({ message: "Organization not found" });
+//     }
+
+//     res.status(200).json(data[0]);
+//   }catch (err) {
+//     console.error("Unexpected error:", err);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+
+// });
+
+// app.get("/requests/:org_id", async (req, res) => {
+//   const { org_id } = req.body;
+
+//   const { data, error } = await supabase
+//     .from("request")
+//     .select("id, userid, status, users(email)")
+//     .eq("org_id", org_id)
+//     .eq("status", "pending")
+//     .innerJoin("users", "request.userid", "users.id");
+
+//   if (error) return res.status(500).json(error);
+//   res.json(data);
+// });
+
+// app.put("/requests/:id", async (req, res) => {
+//   const { id,status } = req.body;
+
+//   const { data, error } = await supabase
+//     .from("request")
+//     .update({ status })
+//     .eq("id", id);
+
+//   if (error) return res.status(500).json(error);
+//   res.json(data);
+// });
+
+
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
