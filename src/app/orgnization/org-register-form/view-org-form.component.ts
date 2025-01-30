@@ -25,7 +25,7 @@ export class ViewOrgFormComponent {
   id:any
   fetchorg() {
   
-    this.supabase.fetchorgform(this.id).subscribe({
+    this.supabase.fetchorgform().subscribe({
       next: (response) => {
         if (response.error) {
           console.error('Error fetching organization:', response.error);

@@ -45,7 +45,7 @@ export class ViewProfileComponent {
     //     },
     //   });
     func(): void {
-      this.org.fetchorgform('id').subscribe({
+      this.org.fetchorgform().subscribe({
         next: (data) => {
           this.users = data;
         },
