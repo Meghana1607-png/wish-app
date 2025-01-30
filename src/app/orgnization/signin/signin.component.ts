@@ -26,13 +26,16 @@ signInForm: FormGroup;
         next: (response) => {
           console.log("response", response);
           if(response.data){
+            this.signInForm.reset();
             this.router.navigate(['/org-dashboard']); 
           }
           else{
+            this.signInForm.reset();
             alert('Invalid Email or Password');
           }
         },
         error:(error)=>{
+          this.signInForm.reset();
           alert('Invalid Email or Password');
         }
       });

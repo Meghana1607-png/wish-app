@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OrgService } from 'src/app/org.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -8,11 +9,10 @@ import { OrgService } from 'src/app/org.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent {
-
- orgForm: FormGroup;
+  orgForm: FormGroup;
   currentStep: number = 1; // Initialize currentStep to 1
 
-  constructor(private fb: FormBuilder, private orgform: OrgService,) {
+  constructor(private fb: FormBuilder, private orgform: OrgService, private router: Router) {
     this.orgForm = this.fb.group({
       orgName: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -41,15 +41,34 @@ export class SignupComponent {
 
   onSubmit() {
     if (this.orgForm.valid) {
-      console.log(this.orgForm.value);
-      this.orgform.Orginsert(this.orgForm.value).subscribe({
-        next: (response:any) => {
-          alert(response.message);
-          this.orgForm.reset();
-        },
-        error: (error:any) => {
-          console.error('Error submitting the form:', error.message);
-          alert('An error occurred while submitting the form.');
+      const formData = this.orgForm.value;
+      const bloodGroupsData = formData.bloodGroups.map((group: { bloodGroup: string; quantity: number }) => ({
+
+        bloodGroup: group.bloodGroup,
+        quantity: group.quantity
+      }));
+
+      // Include blood groups in the data sent to the backend
+      const dataToSend = {
+        orgName: formData.orgName,
+        password: formData.password,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        bloodGroups: bloodGroupsData // Send all blood groups
+      };
+
+      const res = this.orgform.Orginsert(dataToSend).subscribe({
+        next: (response: any) => {
+          console.log("response.data", response);
+          if (response.error) {
+            alert("User already registered with the email.");
+            this.orgForm.reset();
+            this.currentStep = 1;
+          } else {
+            this.orgForm.reset();
+            this.router.navigate(['/org-dashboard']);
+          }
         }
       });
     }
@@ -67,4 +86,3 @@ export class SignupComponent {
     this.currentStep = 1; // Move back to the previous step
   }
 }
-
