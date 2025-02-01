@@ -9,7 +9,6 @@ import { RequestsComponent } from './requests/requests.component';
 import { OrgRequestsComponent } from './org-requests/org-requests.component';
 import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
-
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -18,7 +17,7 @@ import { SigninComponent } from './signin/signin.component';
     RequestsComponent,
     OrgRequestsComponent,
     SignupComponent,
-    SigninComponent
+    SigninComponent,
   ],
   imports: [
     CommonModule,

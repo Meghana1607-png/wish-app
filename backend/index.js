@@ -1,3 +1,77 @@
+// const express = require("express");
+// const bodyParser = require("body-parser");
+// const cors = require("cors");
+// const { createClient } = require("@supabase/supabase-js");
+
+// const app = express();
+// const PORT = 3000;
+
+// app.use(cors({}));
+// app.use(bodyParser.json());
+
+// const supabase = createClient(
+//   "https://esuzqpwibfnycwmeirtg.supabase.co",
+//   "your-supabase-api-key"
+// );
+
+// // Existing signup route
+// app.post("/signup", async (req, res) => {
+//   const { email, password } = req.body;
+//   if (!email || !password) {
+//     return res.status(400).json({ message: "Email and password are required" });
+//   }
+
+//   try {
+//     const { data, error } = await supabase.auth.signUp({
+//       email,
+//       password,
+//     });
+
+//     if (error) {
+//       console.error("Supabase error:", error);
+//       throw error;
+//     }
+
+//     res.status(200).json({
+//       message: "Account created successfully!",
+//       data,
+//     });
+//   } catch (error) {
+//     console.error("Error during signup:", error);
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
+// // Updated Sign-In Route for Organization
+// app.post("/orgSignIn", async (req, res) => {
+//   console.log("Request Body:", req.body);
+
+//   const { email, password } = req.body;
+
+//   try {
+//     const { data, error } = await supabase.auth.signInWithPassword({
+//       email,
+//       password,
+//     });
+
+//     if (error) {
+//       console.error("Sign in failed:", error);
+//       return res.status(401).json({ message: "Invalid email or password" });
+//     }
+
+//     res.status(200).json({ message: "Welcome!", data });
+//   } catch (error) {
+//     console.error("Sign in error:", error);
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
+// // Other existing routes...
+
+// app.listen(PORT, () => {
+//   console.log(`Server running on http://localhost:${PORT}`);
+// });
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -240,9 +314,12 @@ app.post("/orgforminsert", async (req, res) => {
       password: password,
     });
 
-    console.log("data 1", data1);
+    console.log("data 1:", data1);
 
-    if (data1.data) {
+    if (data1.error) {
+      console.error("Error during sign in:", data1.error);
+      return res.send({ error: "user already exists with this email" });
+    } else {
       const { data, error } = await supabase.from("organization").insert([
         {
           name: orgName,
@@ -261,13 +338,8 @@ app.post("/orgforminsert", async (req, res) => {
 
       res.status(200).json({
         message: "Organization submitted successfully",
-        data,
+        data1,
       });
-    } else {
-      if (error) {
-        console.log("Supabase Error Details:", error);
-        throw new Error(error.message || "Unknown Supabase Error");
-      }
     }
   } catch (error) {
     console.error("Error during organization form submission:", error);
