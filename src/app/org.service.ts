@@ -34,7 +34,19 @@ export class OrgService {
     return from(
       this.supabase
         .from('organization')
-        .select().eq('id', id)
+        .select().eq('id', '911cf22c-5e08-4279-aabd-5ac42d69f25a')
+        .then((response) => {
+          console.log('Supabase Response:', response);
+          return response;
+        })
+    );
+  }
+  fetchorg(id:any): Observable<any> {
+    return from(
+      this.supabase
+        .from('organization')
+        .select('*')
+        .eq('org_id','6323145f-303e-4fb6-a23e-d8b299eb85ae')
         .then((response) => {
           return response;
         })
@@ -49,3 +61,8 @@ export class OrgService {
     return this.http.post(this.bloodGroupApi, bloodGroupData); // Add blood group data
   }
 }
+
+}
+
+
+  
