@@ -12,6 +12,7 @@ export class OrgService {
   private apiurl= 'http://localhost:3000/orgforminsert';
   private api = 'http://localhost:3000/orgSignIn';
   private bloodGroupApi = 'http://localhost:3000/bloodgroups'; // Endpoint for blood groups
+  private profileFetchUrl = 'http://localhost:3000/api/organization'; 
   
   constructor(private http: HttpClient) { 
     auth: {
@@ -19,7 +20,7 @@ export class OrgService {
       //  Disables session persistence and lock
     }
     this.supabase = createClient("https://esuzqpwibfnycwmeirtg.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzdXpxcHdpYmZueWN3bWVpcnRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5NjA1MTQsImV4cCI6MjA1MDUzNjUxNH0.FUL9viBXkN2Q44hhdFKPj8uKBT0SkJqcSfbjPV2oExc")
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzdXpxcHdpYmZueWN3bWVpcnRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5NjA1MTQsImV4cCI6MjA1MDUzNjUxNH0.FUL9viBXkN2Q44hhdFKPj8uKBT0SkJqcSfbjPV2oExc");
   }
 
   Orginsert(org: any): Observable<any> {
@@ -34,14 +35,14 @@ export class OrgService {
     return from(
       this.supabase
         .from('organization')
-        .select()
-        // .eq('id', '911cf22c-5e08-4279-aabd-5ac42d69f25a')
+        .select().eq('id', id)
         .then((response) => {
           console.log('Supabase Response:', response);
           return response;
         })
     );
   }
+
   fetchorg(id:any): Observable<any> {
     return from(
       this.supabase
@@ -54,6 +55,9 @@ export class OrgService {
     );
   }
 
+  fetchProfileByOrg(orgId: string): Observable<any> {
+    return this.http.get(`${this.profileFetchUrl}/${orgId}`); // Call to backend API
+  }
   getBloodGroups(): Observable<any> {
     return this.http.get(this.bloodGroupApi); // Fetch blood group data
   }
@@ -61,8 +65,9 @@ export class OrgService {
   addBloodGroup(bloodGroupData: { name: string; units: number }): Observable<any> {
     return this.http.post(this.bloodGroupApi, bloodGroupData); // Add blood group data
   }
-
 }
+
+
 
 
   

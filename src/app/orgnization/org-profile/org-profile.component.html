@@ -1,0 +1,12 @@
+<div *ngIf="organizationProfile">
+  <h2>Organization Profile</h2>
+  <p><strong>Name:</strong> {{ this.organizationProfile.name }}</p>
+  <p><strong>Email:</strong> {{ this.organizationProfile.email }}</p>
+  <p><strong>Phone:</strong> {{ this.organizationProfile.phone }}</p>
+  <p><strong>Address:</strong> {{ this.organizationProfile.address }}</p>
+  <p><strong>Blood Group:</strong> {{ this.organizationProfile.blood_group }}</p>
+  <p><strong>Blood Quantity:</strong> {{ this.organizationProfile.blood_quantity }}</p>
+</div>
+<div *ngIf="!this.organizationProfile">
+  <p>Loading profile data...</p>
+</div>

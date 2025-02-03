@@ -27,7 +27,8 @@ signInForm: FormGroup;
           console.log("response", response);
           if(response.data){
             this.signInForm.reset();
-            this.router.navigate(['/org-dashboard']); 
+            localStorage.setItem('userId',response.data.user.id)
+            this.router.navigate(['/org-dashboard']);
           }
           else{
             this.signInForm.reset();

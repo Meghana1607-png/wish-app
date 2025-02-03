@@ -14,6 +14,9 @@ export class DashboardComponent implements OnInit {
   roles: any[];
   det: any = [];
   c_role: any;
+  userId : any;
+  organizations: any[] = []; 
+  organizationProfile: any; // Added property to store organization profile
   menu = [
     { path: 'org/dashboard', label: 'Blood Hub', icon: 'pi pi-users' },
     { path: 'org/teams-table', label: 'Donors list', icon: 'pi pi-users' },
@@ -36,10 +39,12 @@ export class DashboardComponent implements OnInit {
     this.is_slidebar = false;
     this.roles = this.activeroute.snapshot.queryParams['roles'];
     this.c_role = this.activeroute.snapshot.queryParams['currentrole'];
+    this.userId = localStorage.getItem('userId');
   }
   
   ngOnInit(): void {
     this.fetchBloodGroups(); // Fetch blood groups on initialization
+    this.fetchOrganizationProfile("userId"); // Call to fetch organization profile
   }
 
   fetchBloodGroups() {
@@ -58,14 +63,12 @@ export class DashboardComponent implements OnInit {
     
     this.orgService.addBloodGroup(newBloodGroupData).subscribe(
       (response: any) => {
-
         this.bloodGroups.push(newBloodGroupData); // Add to local array
         this.newBloodGroup = ''; // Clear input
         this.newUnits = 0; // Reset input
         this.feedbackMessage = 'Blood group added successfully!'; // Success message
       },
       (error: any) => {
-
         this.feedbackMessage = 'Failed to add blood group. Please try again.'; // Error message
       }
     );
@@ -97,5 +100,23 @@ export class DashboardComponent implements OnInit {
   selectRole(role: string) {
     console.log(`${role} selected`);
     this.isRoleCardVisible = false; // Close the card after selecting a role
+  }
+
+  openProfile(orgId: string): void {
+    this.fetchOrganizationProfile(orgId); // Call to fetch the profile for the selected organization
+  }
+
+  fetchOrganizationProfile(userId: string): void {
+    this.orgService.fetchProfileByOrg(userId).subscribe({
+      next: (data) => {
+        this.organizationProfile = data;
+        localStorage.setItem('userId', this.organizationProfile);
+        console.log('OrganizationProfile:', this.organizationProfile);
+        // this.router.navigate(['/org/Profile']); // Navigate to the profile page after fetching
+      },
+      error: (err) => {
+        console.error('Error fetching organization profile:', err);
+      }
+    });
   }
 }

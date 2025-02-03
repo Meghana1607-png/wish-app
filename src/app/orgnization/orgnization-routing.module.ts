@@ -6,6 +6,7 @@ import { RequestsComponent } from './requests/requests.component';
 import { OrgRequestsComponent } from './org-requests/org-requests.component';
 import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
+import { OrgProfileComponent } from './org-profile/org-profile.component';
 
 const routes: Routes = [
   {path:'signin',component:SigninComponent},
@@ -16,7 +17,7 @@ const routes: Routes = [
   {path:'signup',component:SignupComponent},
   {path:'view_org',component:ViewOrgFormComponent},
   {path:'req',component:RequestsComponent},
-
+  {path:'org/Profile',component:OrgProfileComponent},
   {path:'org-request',component:OrgRequestsComponent},
   {
     path:'org-form',component:ViewOrgFormComponent
