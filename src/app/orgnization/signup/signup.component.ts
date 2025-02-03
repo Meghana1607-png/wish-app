@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent {
+  userId : any;
   orgForm: FormGroup;
   currentStep: number = 1; // Initialize currentStep to 1
 
@@ -21,6 +22,7 @@ export class SignupComponent {
       address: ['', Validators.required], // Added address control
       bloodGroups: this.fb.array([]),
     });
+    this.userId = localStorage.getItem('userId');
   }
 
   get bloodGroups(): FormArray {
@@ -55,7 +57,8 @@ export class SignupComponent {
         email: formData.email,
         phone: formData.phone,
         address: formData.address,
-        bloodGroups: bloodGroupsData // Send all blood groups
+        bloodGroups: bloodGroupsData,
+        userId: this.userId // Send all blood groups
       };
 
       const res = this.orgform.Orginsert(dataToSend).subscribe({

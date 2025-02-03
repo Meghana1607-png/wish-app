@@ -282,7 +282,8 @@ app.post("/orgSignIn", async (req, res) => {
 app.post("/orgforminsert", async (req, res) => {
   console.log("Request Body:", req.body);
 
-  const { orgName, email, phone, bloodGroups, address, password } = req.body;
+  const { orgName, email, phone, bloodGroups, address, password, userId } =
+    req.body;
 
   if (
     !orgName ||
@@ -307,6 +308,7 @@ app.post("/orgforminsert", async (req, res) => {
       blood_quantity,
       address,
       password,
+      userId,
     });
 
     const data1 = await supabase.auth.signUp({
@@ -316,10 +318,7 @@ app.post("/orgforminsert", async (req, res) => {
 
     console.log("data 1:", data1);
 
-    if (data1.error) {
-      console.error("Error during sign in:", data1.error);
-      return res.send({ error: "user already exists with this email" });
-    } else {
+    if (data1.data.user) {
       const { data, error } = await supabase.from("organization").insert([
         {
           name: orgName,
@@ -328,6 +327,7 @@ app.post("/orgforminsert", async (req, res) => {
           blood_group: bloodGroups[0]?.bloodGroup,
           blood_quantity: bloodGroups[0]?.quantity,
           address: address,
+          userId: userId,
         },
       ]);
 
@@ -340,6 +340,9 @@ app.post("/orgforminsert", async (req, res) => {
         message: "Organization submitted successfully",
         data1,
       });
+    } else {
+      console.error("Error during sign in:", data1.error);
+      return res.send({ error: "user already exists with this email" });
     }
   } catch (error) {
     console.error("Error during organization form submission:", error);
@@ -415,7 +418,6 @@ app.post("/userforminsert", async (req, res) => {
 //   }
 // });
 
-
 // app.post("/requests", async (req, res) => {
 //   const { userid, org_id } = req.body;
 //   try{
@@ -467,7 +469,25 @@ app.post("/userforminsert", async (req, res) => {
 //   res.json(data);
 // });
 
+app.get("/api/organization/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id", id);
+    const { data, error } = await supabase
+      .from("organization")
+      .select("*")
+      .eq("userId", id);
 
+    if (error) {
+      console.log(error.error);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

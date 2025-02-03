@@ -8,14 +8,14 @@ import { OrgService } from '../org.service';
 })
 export class OrgListComponent {
 
-  dta:any
+  data:any
   constructor(private supabase:OrgService){
 
     this.fetchorg();
   }
   organizations :any[]= []
     fetchorg() {
-    this.supabase.fetchorgform().subscribe({
+    this.supabase.fetchorgform("1").subscribe({
       next: (response) => {
         if (response.error) {
           console.error('Error fetching organizations:', response.error);

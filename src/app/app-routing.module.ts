@@ -11,7 +11,7 @@ const routes: Routes = [
   {path: 'org', loadChildren: () => import('./orgnization/orgnization.module').then(m => m.OrgnizationModule) },
   {path:'receiver',loadChildren:() => import('./receiver/receiver.module').then(m => m.ReceiverModule)},
   {path:'app',component:AppComponent },
-  {path:'landing',component:LandingPageComponent},
+  {path:'',component:LandingPageComponent},
 {path:'org-list',component:OrgListComponent},
 
   {path:'org-list',component:OrgListComponent}
