@@ -1,60 +1,8 @@
-
 <div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-24">
   <h1 class="text-3xl font-semibold text-center text-red-600 mb-6">Receiver Form</h1>
 
-  <!-- Card 1: Name, Email, Password -->
-  <div *ngIf="currentStep === 1" class="bg-red-50 p-6 rounded-lg shadow-md">
-    <form [formGroup]="receiverForm" novalidate>
-      <!-- Name Field -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-2 text-red-700">Name:</label>
-        <input
-          formControlName="name"
-          type="text"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-          placeholder="Enter your name"
-        />
-        <p *ngIf="receiverForm.controls['name'].hasError('required') && receiverForm.controls['name'].touched" class="text-red-500 text-sm">Name is required.</p>
-      </div>
-
-      <!-- Email Field -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-2 text-red-700">Email:</label>
-        <input
-          formControlName="email"
-          type="email"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-          placeholder="Enter your email"
-        />
-        <p *ngIf="receiverForm.controls['email'].hasError('required') && receiverForm.controls['email'].touched" class="text-red-500 text-sm">Enter a valid email address.</p>
-      </div>
-
-      <!-- Password Field -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-2 text-red-700">Password:</label>
-        <input
-          formControlName="password"
-          type="password"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-          placeholder="Enter password"
-        />
-        <p *ngIf="receiverForm.controls['password'].hasError('required') && receiverForm.controls['password'].touched" class="text-red-500 text-sm">Password is required.</p>
-      </div>
-
-      <!-- Next Button -->
-      <button
-        type="button"
-        (click)="goToNextStep()"
-        [disabled]="!isStepValid(1)"
-        class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 disabled:bg-red-300"
-      >
-        Next
-      </button>
-    </form>
-  </div>
-
-  <!-- Card 2: Gender, Phone, Address -->
-  <div *ngIf="currentStep === 2" class="bg-red-50 p-6 rounded-lg shadow-md mb-6">
+  <!-- Card: Gender, Phone, Address -->
+  <div class="bg-red-50 p-6 rounded-lg shadow-md mb-6">
     <form [formGroup]="receiverForm" novalidate>
       <!-- Gender Field -->
       <div class="mb-4">

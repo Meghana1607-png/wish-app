@@ -30,11 +30,12 @@ export class OrgService {
     return this.http.post(this.api, data);
   }
 
-  fetchorgform(id: any): Observable<any> {
+  fetchorgform(): Observable<any> {
     return from(
       this.supabase
         .from('organization')
-        .select().eq('id', '911cf22c-5e08-4279-aabd-5ac42d69f25a')
+        .select()
+        // .eq('id', '911cf22c-5e08-4279-aabd-5ac42d69f25a')
         .then((response) => {
           console.log('Supabase Response:', response);
           return response;
@@ -60,7 +61,6 @@ export class OrgService {
   addBloodGroup(bloodGroupData: { name: string; units: number }): Observable<any> {
     return this.http.post(this.bloodGroupApi, bloodGroupData); // Add blood group data
   }
-}
 
 }
 

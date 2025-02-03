@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
-import { AwarenessComponent } from './donor/awareness/awareness.component';
 import { OrgListComponent } from './org-list/org-list.component';
+import { SignupComponent } from './signup/signup.component';
+import { SigninComponent } from './signin/signin.component';
 
 const routes: Routes = [
   {path: 'donor', loadChildren: () => import('./donor/donor.module').then(m => m.DonorModule) }, 
@@ -12,9 +13,9 @@ const routes: Routes = [
   {path:'receiver',loadChildren:() => import('./receiver/receiver.module').then(m => m.ReceiverModule)},
   {path:'app',component:AppComponent },
   {path:'landing',component:LandingPageComponent},
-{path:'org-list',component:OrgListComponent},
-
-  {path:'org-list',component:OrgListComponent}
+  {path:'org-list',component:OrgListComponent},
+  {path:'signup',component:SignupComponent},
+  {path:'signin',component:SigninComponent}
   ];
 
 @NgModule({
