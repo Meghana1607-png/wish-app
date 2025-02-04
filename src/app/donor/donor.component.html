@@ -1,1 +1,150 @@
-<p>donor works!</p>
+<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <h1 class="text-3xl font-semibold text-center text-red-600 mb-6">Donor Form</h1>
+  
+    <!-- Step 1: Username, Email, Password -->
+    <div *ngIf="currentStep === 1" class="bg-red-50 p-6 rounded-lg shadow-md mb-6">
+      <form [formGroup]="donorForm" novalidate>
+        <!-- Username -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2 text-red-700">Username:</label>
+          <input
+            formControlName="username"
+            type="text"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Enter your username"
+          />
+          <p *ngIf="donorForm.controls['username'].hasError('required') && donorForm.controls['username'].touched" class="text-red-500 text-sm">Username is required.</p>
+        </div>
+  
+        <!-- Email -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2 text-red-700">Email:</label>
+          <input
+            formControlName="email"
+            type="email"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Enter your email"
+          />
+          <p *ngIf="donorForm.controls['email'].hasError('required') && donorForm.controls['email'].touched" class="text-red-500 text-sm">Enter a valid email address.</p>
+        </div>
+  
+        <!-- Password -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2 text-red-700">Password:</label>
+          <input
+            formControlName="password"
+            type="password"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Enter password"
+          />
+          <p *ngIf="donorForm.controls['password'].hasError('required') && donorForm.controls['password'].touched" class="text-red-500 text-sm">Password is required.</p>
+        </div>
+  
+       
+    
+    <!-- Step 2: Mobile, Age,Gender, Address, Blood Group, Health Issues, Last Donated Date -->
+    <!-- <div *ngIf="currentStep === 1" class="bg-red-50 p-6 rounded-lg shadow-md mb-6"> -->
+        <!-- Mobile Number -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2 text-red-700">Mobile Number:</label>
+          <input
+            formControlName="mobile"
+            type="tel"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Enter your mobile number"
+          />
+                  <p *ngIf="donorForm.controls['mobile number'].hasError('required') && donorForm.controls['mobile number'].touched" class="text-red-500 text-sm">Enter a valid Mobile Number</p>
+        </div>
+        
+         <!-- Age -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2 text-red-700">Age:</label>
+          <input
+            formControlName="age"
+            type="number"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Enter your age"
+          />
+          <p *ngIf="donorForm.controls['Age'].hasError('required') && donorForm.controls['Age'].touched" class="text-red-500 text-sm">Age is required</p>
+        </div>
+        
+        <!-- Gender Field -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2 text-red-700">Gender:</label>
+          <select
+            formControlName="gender"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            <option value="" disabled>Select gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <p *ngIf="donorForm.controls['gender'].hasError('required') && donorForm.controls['gender'].touched" class="text-red-500 text-sm">Gender is required.</p>
+        </div>
+        
+        
+        <!-- Address -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2 text-red-700">Address:</label>
+          <input
+            formControlName="address"
+            type="text"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Enter your address"
+          />
+          <p *ngIf="donorForm.controls['address'].hasError('required') && donorForm.controls['address'].touched" class="text-red-500 text-sm">Address is required</p>
+        </div>
+  
+        <!-- Blood Group -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2 text-red-700">Blood Group:</label>
+                  <select
+            formControlName="gender"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            <option value="" disabled>Select Blood Group</option>
+            <option value="A positive">A+</option>
+            <option value="A negative">A-</option>
+            <option value="B positive">B+</option>
+            <option value="B negative">B-</option>
+            <option value="AB positive">AB+</option>
+            <option value="AB negative">AB-</option>
+            <option value="O positive">O+</option>
+            <option value="O negative">O-</option>
+            </select>
+          <p *ngIf="donorForm.controls['bloodgroup'].hasError('required') && donorForm.controls['bloodgroup'].touched" class="text-red-500 text-sm"> Select correct BloodGroup</p>
+        </div>
+  
+        <!-- Health Issues -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2 text-red-700">Health Issues:</label>
+          <input
+            formControlName="healthIssues"
+            type="text"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Mention any health issues"
+          />
+          <p *ngIf="donorForm.controls['healthissues'].hasError('required') && donorForm.controls['healthissues'].touched" class="text-red-500 text-sm">Mention required if any Health Isuues</p>
+        </div>
+  
+        <!-- Last Donated Date -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2 text-red-700">Last Donated Date:</label>
+          <input
+            formControlName="lastDonatedDate"
+            type="date"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <p *ngIf="donorForm.controls['lastdonateddate'].hasError('required') && donorForm.controls['lastdonateddate'].touched" class="text-red-500 text-sm">LastDonatedDate is required</p>
+        </div>
+  
+        <button
+          type="submit"
+          (click)="submitForm()"
+          [disabled]="donorForm.invalid"
+          class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 disabled:bg-red-300"
+        >
+          Submit
+        </button>
+  <!-- </div> -->
