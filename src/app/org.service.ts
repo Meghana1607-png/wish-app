@@ -11,6 +11,7 @@ export class OrgService {
 
   private apiurl= 'http://localhost:3000/orgforminsert';
   private api = 'http://localhost:3000/orgSignIn';
+  private signUpapi = 'http://localhost:3000/orgSignIn';
   private bloodGroupApi = 'http://localhost:3000/bloodgroups'; // Endpoint for blood groups
   private profileFetchUrl = 'http://localhost:3000/api/organization'; 
   
@@ -26,16 +27,21 @@ export class OrgService {
   Orginsert(org: any): Observable<any> {
     return this.http.post(this.apiurl, org);
   }
-
   OrgSignIn(data: any): Observable<any> {
     return this.http.post(this.api, data);
   }
+
+  OrgSignUp(data: any): Observable<any> {
+    return this.http.post(this.signUpapi, data);
+  }
+
 
   fetchorgform(): Observable<any> {
     return from(
       this.supabase
         .from('organization')
-        .select().eq('id', id)
+        .select()
+        // .eq('id', id)
         .then((response) => {
           console.log('Supabase Response:', response);
           return response;
@@ -43,17 +49,44 @@ export class OrgService {
     );
   }
 
-  fetchorg(id:any): Observable<any> {
-    return from(
-      this.supabase
-        .from('organization')
-        .select('*')
-        .eq('org_id','6323145f-303e-4fb6-a23e-d8b299eb85ae')
-        .then((response) => {
-          return response;
-        })
-    );
+  // fetchorg(id:any): Observable<any> {
+  //   return from(
+  //     this.supabase
+  //       .from('organization')
+  //       .select('*')
+  //       .eq('org_id','6323145f-303e-4fb6-a23e-d8b299eb85ae')
+  //       .then((response) => {
+  //         return response;
+  //       })
+  //   );
+  // }
+  async getAuthId(): Promise<string | null> {
+    const { data, error } = await this.supabase.auth.getUser();
+    if (error) {
+      console.error('Error fetching user:', error);
+      return null;
+    }
+    return data?.user?.id ?? null;
   }
+
+  async getOrgId(): Promise<string | null> {
+    const UID = await this.getAuthId();
+    if (!UID) return null;
+
+    const { data, error } = await this.supabase
+      .from('organization')
+      .select('org_id')
+      .eq('auth_id', UID)
+      .single(); // Assuming one org per user
+
+    if (error) {
+      console.error('Error fetching org_id:', error);
+      return null;
+    }
+
+    return data?.org_id ?? null;
+  }
+
 
   fetchProfileByOrg(orgId: string): Observable<any> {
     return this.http.get(`${this.profileFetchUrl}/${orgId}`); // Call to backend API

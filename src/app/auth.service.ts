@@ -38,4 +38,12 @@ signIn(email: string, password: string) {
   console.log(res);
   return from(res);
 }
+async getUser() {
+  const { data: user, error } = await this.supabase.auth.getUser();
+  if (error) {
+    console.error('Error fetching user:', error);
+    return null;
+  }
+  return user?.user?.id; // Returns the auth_id
+}
 }

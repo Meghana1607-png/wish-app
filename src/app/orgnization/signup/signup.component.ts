@@ -58,10 +58,35 @@ export class SignupComponent {
         phone: formData.phone,
         address: formData.address,
         bloodGroups: bloodGroupsData,
-        userId: this.userId // Send all blood groups
+        // userId: this.userId // Send all blood groups
       };
 
       const res = this.orgform.Orginsert(dataToSend).subscribe({
+        next: (response: any) => {
+          console.log("response.data", response);
+          if (response.error) {
+            alert("User already registered with the email.");
+            this.orgForm.reset();
+            this.currentStep = 1;
+          } else {
+            this.orgForm.reset();
+            //this.router.navigate(['/org-dashboard']);
+          }
+        }
+      });
+
+      const dataToInsert = {
+        orgName: formData.orgName,
+        password: formData.password,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        bloodGroups: bloodGroupsData,
+       userId: this.userId // Send all blood groups
+      };
+
+
+      const res1 = this.orgform.Orginsert(dataToInsert).subscribe({
         next: (response: any) => {
           console.log("response.data", response);
           if (response.error) {

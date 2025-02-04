@@ -16,6 +16,8 @@ export class ViewOrgFormComponent {
   data1:any
   userid: any = '';   
   org_id:any    // Store logged-in user ID
+  orgId: string | null = null;
+
 
 
   constructor(private supabase:OrgService,private receiver:ReceiverService, private user:ProfileService,private request:RequestsService){
@@ -25,28 +27,33 @@ export class ViewOrgFormComponent {
   //       this.orgDetails=data;
   //     },
   // });
-  this.fetchorg();
+  // this.fetchorg();
   // this.getUserId();
  
   }
-  id:any
-  fetchorg() {
-    this.supabase.fetchorg('6323145f-303e-4fb6-a23e-d8b299eb85ae').subscribe({
-      next: (response) => {
-        if (response.error) {
-          console.error('Error fetching organization:', response.error);
-        } else if (response.data && response.data.length > 0) {
-          this.organization = response.data[0];  // Assigning the first object
-          console.log('Organizations fetched successfully:', this.organization);
-        } else {
-          console.warn('No data received');
-        }
-      },
-      error: (error) => {
-        console.error('Failed to fetch organization:', error);
-      },
-    });
+
+  async ngOnInit() {
+    this.orgId = await this.supabase.getOrgId();
+    console.log('Fetched Org ID:', this.orgId);
   }
+  // id:any
+  // fetchorg() {
+  //   this.supabase.getOrgId().subscribe({
+  //     next: (response:any) => {
+  //       if (response.error) {
+  //         console.error('Error fetching organization:', response.error);
+  //       } else if (response.data && response.data.length > 0) {
+  //         this.organization = response.data[0];  // Assigning the first object
+  //         console.log('Organizations fetched successfully:', this.organization);
+  //       } else {
+  //         console.warn('No data received');
+  //       }
+  //     },
+  //     error: (error:any) => {
+  //       console.error('Failed to fetch organization:', error);
+  //     },
+  //   });
+  // }
   
       // error: (error) => {
       //   console.error('Failed to fetch organization:', error);

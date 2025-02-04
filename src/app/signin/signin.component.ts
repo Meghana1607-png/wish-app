@@ -29,6 +29,6 @@ export class SigninComponent {
   }
 
   navigateToSignup() {
-    this.router.navigate(['/signup']);
+    this.router.navigate(['/Sign-up']);
   }
 }
