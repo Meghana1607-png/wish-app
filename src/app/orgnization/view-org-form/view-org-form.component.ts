@@ -42,6 +42,4 @@ export class ViewOrgFormComponent {
     alert(`Blood requested from organization ID: `);
   }
   
-
-
 }
