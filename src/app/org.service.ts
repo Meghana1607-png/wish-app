@@ -7,11 +7,14 @@ import { from, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class OrgService {
+  from(arg0: string) {
+    throw new Error('Method not implemented.');
+  }
   private supabase: SupabaseClient;
 
   private apiurl= 'http://localhost:3000/orgforminsert';
   private api = 'http://localhost:3000/orgSignIn';
-  private signUpapi = 'http://localhost:3000/orgSignIn';
+  private signUpapi = 'http://localhost:3000/orgSignUp';
   private bloodGroupApi = 'http://localhost:3000/bloodgroups'; // Endpoint for blood groups
   private profileFetchUrl = 'http://localhost:3000/api/organization'; 
   
@@ -41,7 +44,6 @@ export class OrgService {
       this.supabase
         .from('organization')
         .select()
-        // .eq('id', id)
         .then((response) => {
           console.log('Supabase Response:', response);
           return response;
@@ -75,7 +77,7 @@ export class OrgService {
 
     const { data, error } = await this.supabase
       .from('organization')
-      .select('org_id')
+      .select()
       .eq('auth_id', UID)
       .single(); // Assuming one org per user
 
@@ -96,7 +98,8 @@ export class OrgService {
   }
 
   addBloodGroup(bloodGroupData: { name: string; units: number }): Observable<any> {
-    return this.http.post(this.bloodGroupApi, bloodGroupData); // Add blood group data
+    return this.http.post(this.bloodGroupApi, bloodGroupData);
+     // Add blood group data
   }
 }
 

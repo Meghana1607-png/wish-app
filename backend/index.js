@@ -264,9 +264,6 @@ app.post("/orgforminsert", async (req, res) => {
       userId,
     });
 
-    console.log("data 1:", data1);
-
-    if (data1.data.user) {
       const { data, error } = await supabase.from("organization").insert([
         {
           name: orgName,
@@ -278,11 +275,10 @@ app.post("/orgforminsert", async (req, res) => {
           userId: userId,
         },
       ]);
-    } else {
-      console.error("Error during sign in:", data1.error);
       return res.send({ error: "user already exists with this email" });
-    }
+
   } catch (error) {
+    console.error("Error during sign in:", data.error);
     console.error("Error during organization form submission:", error);
     res
       .status(500)

@@ -36,6 +36,7 @@ export class OrgListComponent {
   
 
   viewDetails(org: any): void {
-    // alert(`Viewing details for ${org.name}`);
+
+    this.fetchorg();
   }
 }
