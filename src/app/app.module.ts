@@ -29,7 +29,7 @@ import { SigninComponent } from './signin/signin.component';
     ReceiverModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
