@@ -7,7 +7,7 @@ import { OrgService } from '../../org.service'; // Correct import path as per us
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   is_slidebar: boolean;
   isclick: boolean = false;
   selectedPage = 'Blood Hub';
@@ -16,17 +16,21 @@ export class DashboardComponent implements OnInit {
   c_role: any;
   userId : any;
   organizations: any[] = []; 
-  organizationProfile: any; // Added property to store organization profile
+  approvedReceiver : any;
+  rejectedReceiver : any;
+  pendingReceiver : any;
+  allReceiver : any;
+
   menu = [
     { path: 'org/dashboard', label: 'Blood Hub', icon: 'pi pi-users' },
     { path: 'org/teams-table', label: 'Donors list', icon: 'pi pi-users' },
-    { path: 'org/teams-table', label: 'Receivers list', icon: 'pi pi-users' },
-    { path: 'org/teams-table', label: 'Donors pending list', icon: 'pi pi-users' },
-    { path: 'org/teams-table', label: 'Donors approved list', icon: 'pi pi-users' },
-    { path: 'org/teams-table', label: 'Donors rejected list', icon: 'pi pi-users' },
-    { path: 'org/teams-table', label: 'Receiver pending list', icon: 'pi pi-users' },
-    { path: 'org/teams-table', label: 'Receiver approved list', icon: 'pi pi-users' },
-    { path: 'org/teams-table', label: 'Receiver rejected list', icon: 'pi pi-users' },
+    { path: 'org/receiversList', label: 'Receivers list', icon: 'pi pi-users' },
+    { path: 'org/teams-table', label: 'Donor pending list', icon: 'pi pi-users' },
+    { path: 'org/teams-table', label: 'Donor approved list', icon: 'pi pi-users' },
+    { path: 'org/teams-table', label: 'Donor rejected list', icon: 'pi pi-users' },
+    { path: 'org/receiversList/pending', label: 'Receiver pending list', icon: 'pi pi-users' },
+    { path: 'org/receiversList/approved', label: 'Receiver approved list', icon: 'pi pi-users' },
+    { path: 'org/receiversList/rejected', label: 'Receiver rejected list', icon: 'pi pi-users' },
     { path: 'org/teams-table', label: 'feedbacks', icon: 'pi pi-users' },
   ];
   
@@ -42,10 +46,14 @@ export class DashboardComponent implements OnInit {
     this.userId = localStorage.getItem('userId');
   }
   
-  ngOnInit(): void {
-    this.fetchBloodGroups(); // Fetch blood groups on initialization
-    this.fetchOrganizationProfile("userId"); // Call to fetch organization profile
-  }
+  // ngOnInit(): void {
+  //   this.fetchBloodGroups(); // Fetch blood groups on initialization
+  //   this.fetchOrganizationProfile("userId"); // Call to fetch organization profile
+  //   this.fetchApprovedReceiver("userId");
+  //   this.fetchRejectedReceiver("userId");
+  //   this.fetchApprovedReceiver("userId");
+  //   this.fetchAllReceiver("userId");
+  // }
 
   fetchBloodGroups() {
     this.orgService.getBloodGroups().subscribe((data: any) => {
@@ -103,19 +111,18 @@ export class DashboardComponent implements OnInit {
   }
 
   openProfile(orgId: string): void {
-    this.fetchOrganizationProfile(orgId); // Call to fetch the profile for the selected organization
+    this.router.navigate(['/org/Profile']); 
   }
 
-  fetchOrganizationProfile(userId: string): void {
-    this.orgService.fetchProfileByOrg(userId).subscribe({
+  fetchRejectedReceiver(userId: string): void {
+    this.orgService.fetchRejectedReceivers(userId).subscribe({
       next: (data) => {
-        this.organizationProfile = data;
-        localStorage.setItem('userId', this.organizationProfile);
-        console.log('OrganizationProfile:', this.organizationProfile);
+        this.rejectedReceiver = data;
+        console.log('rejectedReceiver:', this.rejectedReceiver);
         // this.router.navigate(['/org/Profile']); // Navigate to the profile page after fetching
       },
       error: (err) => {
-        console.error('Error fetching organization profile:', err);
+        console.error('Error fetching rejected receivers:', err);
       }
     });
   }

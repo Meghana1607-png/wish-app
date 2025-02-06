@@ -11,9 +11,14 @@ export class OrgService {
 
   private apiurl= 'http://localhost:3000/orgforminsert';
   private api = 'http://localhost:3000/orgSignIn';
+  private apiSignUp = 'http://localhost:3000/orgSignUp';
   private bloodGroupApi = 'http://localhost:3000/bloodgroups'; // Endpoint for blood groups
   private profileFetchUrl = 'http://localhost:3000/api/organization'; 
-  
+  private fetchPendingReceiversApi = 'http://localhost:3000/org/receivers/pending';
+  private fetchApprovedReceiversApi = 'http://localhost:3000/org/receivers/approved';
+  private fetchRejectedReceiversApi = 'http://localhost:3000/org/receivers/rejected';
+  private fetchAllReceiversApi = 'http://localhost:3000/org/receivers';
+
   constructor(private http: HttpClient) { 
     auth: {
       persistSession: false
@@ -29,6 +34,10 @@ export class OrgService {
 
   OrgSignIn(data: any): Observable<any> {
     return this.http.post(this.api, data);
+  }
+
+  OrgSignUp(data: any): Observable<any> {
+    return this.http.post(this.apiSignUp, data);
   }
 
   fetchorgform(id: any): Observable<any> {
@@ -58,6 +67,24 @@ export class OrgService {
   fetchProfileByOrg(orgId: string): Observable<any> {
     return this.http.get(`${this.profileFetchUrl}/${orgId}`); // Call to backend API
   }
+
+  fetchPendingReceivers(orgId: string): Observable<any> {
+    return this.http.get(`${this.fetchPendingReceiversApi}/${orgId}`); // Call to backend API
+  }
+
+  fetchApprovedReceivers(orgId: string): Observable<any> {
+    return this.http.get(`${this.fetchApprovedReceiversApi}/${orgId}`); // Call to backend API
+  }
+
+  fetchRejectedReceivers(orgId: string): Observable<any> {
+    return this.http.get(`${this.fetchRejectedReceiversApi}/${orgId}`); // Call to backend API
+  }
+
+  fetchAllReceivers(orgId: string): Observable<any> 
+  {
+    return this.http.get(`${this.fetchAllReceiversApi}/${orgId}`); // Call to backend API
+  }
+
   getBloodGroups(): Observable<any> {
     return this.http.get(this.bloodGroupApi); // Fetch blood group data
   }

@@ -279,6 +279,30 @@ app.post("/orgSignIn", async (req, res) => {
   }
 });
 
+app.post("/orgSignUp", async (req, res) => {
+  console.log("Request Body:", req.body);
+
+  const { email, password } = req.body;
+
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
+
+    if (data.user) {
+      console.log("sign up successfully");
+      res.send({ data: data });
+    } else {
+      console.log("sign up failed");
+      res.send({ error: error });
+    }
+  } catch (error) {
+    console.error("sign up failed", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.post("/orgforminsert", async (req, res) => {
   console.log("Request Body:", req.body);
 
@@ -311,39 +335,30 @@ app.post("/orgforminsert", async (req, res) => {
       userId,
     });
 
-    const data1 = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
+    const { data, error } = await supabase.from("organization").insert([
+      {
+        name: orgName,
+        email: email,
+        phone: phone,
+        blood_group: blood_group,
+        blood_quantity: blood_quantity,
+        address: address,
+        userId: userId,
+      },
+    ]);
 
-    console.log("data 1:", data1);
+    console.log("data afetrghfh ", data);
+    console.log("data error ", error);
 
-    if (data1.data.user) {
-      const { data, error } = await supabase.from("organization").insert([
-        {
-          name: orgName,
-          email: email,
-          phone: phone,
-          blood_group: bloodGroups[0]?.bloodGroup,
-          blood_quantity: bloodGroups[0]?.quantity,
-          address: address,
-          userId: userId,
-        },
-      ]);
-
-      if (error) {
-        console.error("Supabase Error Details:", error);
-        throw new Error(error.message || "Unknown Supabase Error");
-      }
-
-      res.status(200).json({
-        message: "Organization submitted successfully",
-        data1,
-      });
-    } else {
-      console.error("Error during sign in:", data1.error);
-      return res.send({ error: "user already exists with this email" });
+    if (error) {
+      console.error("Supabase Error Details:", error);
+      throw new Error(error.message || "Unknown Supabase Error");
     }
+
+    res.status(200).json({
+      message: "Organization submitted successfully",
+      data,
+    });
   } catch (error) {
     console.error("Error during organization form submission:", error);
     res
@@ -469,6 +484,89 @@ app.post("/userforminsert", async (req, res) => {
 //   res.json(data);
 // });
 
+app.get("/org/receivers/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in all receivers - ", id);
+    const { data, error } = await supabase
+      .from("request")
+      .select("*")
+      .eq("auth_id", id);
+
+    if (error) {
+      console.log(error.error);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/receivers/approved/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id", id);
+    const { data, error } = await supabase
+      .from("request")
+      .select("*")
+      .eq("auth-id", id)
+      .eq("status", "approved");
+
+    if (error) {
+      console.log(error.error);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/receivers/rejected/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id", id);
+    const { data, error } = await supabase
+      .from("request")
+      .select("*")
+      .eq("auth-id", id)
+      .eq("status", "rejected");
+
+    if (error) {
+      console.log(error.error);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/receivers/pending/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id", id);
+    const { data, error } = await supabase
+      .from("request")
+      .select("*")
+      .eq("auth-id", id)
+      .eq("status", "pending");
+
+    if (error) {
+      console.log(error.error);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.get("/api/organization/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -479,10 +577,11 @@ app.get("/api/organization/:id", async (req, res) => {
       .eq("userId", id);
 
     if (error) {
-      console.log(error.error);
+      console.log(error);
       return res.status(400).json({ error: error.message });
     }
     res.json(data);
+    console.log("id", data);
   } catch (err) {
     console.error("Unexpected error:", err);
     res.status(500).json({ error: "Internal Server Error" });

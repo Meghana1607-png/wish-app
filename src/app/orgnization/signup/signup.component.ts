@@ -9,10 +9,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent {
-  userId : any;
+  userId: any;
   orgForm: FormGroup;
   currentStep: number = 1; // Initialize currentStep to 1
-
+  
   constructor(private fb: FormBuilder, private orgform: OrgService, private router: Router) {
     this.orgForm = this.fb.group({
       orgName: ['', Validators.required],
@@ -22,7 +22,7 @@ export class SignupComponent {
       address: ['', Validators.required], // Added address control
       bloodGroups: this.fb.array([]),
     });
-    this.userId = localStorage.getItem('userId');
+    this.userId = localStorage.getItem("userId");
   }
 
   get bloodGroups(): FormArray {
@@ -45,7 +45,6 @@ export class SignupComponent {
     if (this.orgForm.valid) {
       const formData = this.orgForm.value;
       const bloodGroupsData = formData.bloodGroups.map((group: { bloodGroup: string; quantity: number }) => ({
-
         bloodGroup: group.bloodGroup,
         quantity: group.quantity
       }));
@@ -58,10 +57,9 @@ export class SignupComponent {
         phone: formData.phone,
         address: formData.address,
         bloodGroups: bloodGroupsData,
-        userId: this.userId // Send all blood groups
       };
 
-      const res = this.orgform.Orginsert(dataToSend).subscribe({
+      const res = this.orgform.OrgSignUp(dataToSend).subscribe({
         next: (response: any) => {
           console.log("response.data", response);
           if (response.error) {
@@ -69,12 +67,40 @@ export class SignupComponent {
             this.orgForm.reset();
             this.currentStep = 1;
           } else {
-            this.orgForm.reset();
+            console.log("organisation signup response", response);
+            this.userId = response.data.user.id;
+            localStorage.setItem('userId', this.userId);
+            this.formInsert(formData, bloodGroupsData); 
             this.router.navigate(['/org-dashboard']);
           }
         }
       });
     }
+  }
+
+  formInsert(formData: any, bloodGroupsData: any) {
+    const dataToInsert = {
+      orgName: formData.orgName,
+      password: formData.password,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      bloodGroups: bloodGroupsData,
+      userId: this.userId, 
+    };
+
+    console.log("this.userId ", dataToInsert.userId);
+
+    const res1 = this.orgform.Orginsert(dataToInsert).subscribe({
+      next: (response: any) => {
+        console.log("organisation insert data", response);
+        if (response.error) {
+          console.log("User already registered with the email. or data not inserted properly");
+        } else {
+          this.orgForm.reset();
+        }
+      }
+    });
   }
 
   goToNextStep() {
