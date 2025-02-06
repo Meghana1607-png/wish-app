@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OrgService } from 'src/app/org.service';
 import { ProfileService } from 'src/app/profile.service';
 import { ReceiverService } from 'src/app/receiver.service';
@@ -16,50 +17,72 @@ export class ViewOrgFormComponent {
   data1:any
   userid: any = '';   
   org_id:any    // Store logged-in user ID
+  orgId: string | null = null;
+  orgData: any = {};
 
 
-  constructor(private supabase:OrgService,private receiver:ReceiverService, private user:ProfileService,private request:RequestsService){
+  constructor(private supabase:OrgService,private receiver:ReceiverService, private user:ProfileService,private request:RequestsService, private router:Router, private active:ActivatedRoute){
 
   //   this.orgform.fetchorgform().subscribe({
   //     next: (data) => {
   //       this.orgDetails=data;
   //     },
   // });
-  this.fetchorg();
+  // this.fetchorg();
   // this.getUserId();
  
   }
-  id:any
-  fetchorg() {
-    this.supabase.fetchorg('6323145f-303e-4fb6-a23e-d8b299eb85ae').subscribe({
-      next: (response) => {
-        if (response.error) {
-          console.error('Error fetching organization:', response.error);
-        } else if (response.data && response.data.length > 0) {
-          this.organization = response.data[0];  // Assigning the first object
-          console.log('Organizations fetched successfully:', this.organization);
-        } else {
-          console.warn('No data received');
-        }
-      },
-      error: (error) => {
-        console.error('Failed to fetch organization:', error);
-      },
+
+  async ngOnInit() {
+   
+    this.active.queryParams.subscribe((params) => {
+      this.organization = {org_id: params['org_id'] || '',
+        name: params['name'] || '',
+        email: params['email'] || '',
+        phone: params['phone'] || '',
+        address: params['address'] || '',
+        bloodDetails: params['bloodDetails'] ? JSON.parse(params['bloodDetails']) : [],
+ };
     });
   }
+  // id:any
+  // fetchorg() {
+  //   this.supabase.getOrgId().subscribe({
+  //     next: (response:any) => {
+  //       if (response.error) {
+  //         console.error('Error fetching organization:', response.error);
+  //       } else if (response.data && response.data.length > 0) {
+  //         this.organization = response.data[0];  // Assigning the first object
+  //         console.log('Organizations fetched successfully:', this.organization);
+  //       } else {
+  //         console.warn('No data received');
+  //       }
+  //     },
+  //     error: (error:any) => {
+  //       console.error('Failed to fetch organization:', error);
+  //     },
+  //   });
+  // }
   
       // error: (error) => {
       //   console.error('Failed to fetch organization:', error);
       // },
    
   
-  organization = {
-    org_id:'',
+  organization : {
+    org_id: string,
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    bloodDetails: any[];
+  } = {
+    org_id: '',
     name: '',
     email: '',
     phone: '',
     address: '',
-    bloodDetails: []
+    bloodDetails: [],
   };
   getUserId() {
     // Assume the user is already authenticated

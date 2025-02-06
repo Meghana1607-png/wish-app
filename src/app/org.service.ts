@@ -7,11 +7,18 @@ import { from, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class OrgService {
+  from(arg0: string) {
+    throw new Error('Method not implemented.');
+  }
   private supabase: SupabaseClient;
 
   private apiurl= 'http://localhost:3000/orgforminsert';
   private api = 'http://localhost:3000/orgSignIn';
+<<<<<<< HEAD
   private apiSignUp = 'http://localhost:3000/orgSignUp';
+=======
+  private signUpapi = 'http://localhost:3000/orgSignUp';
+>>>>>>> 9e4d55ee586b2b5dcf3e607709041862bf4eb13d
   private bloodGroupApi = 'http://localhost:3000/bloodgroups'; // Endpoint for blood groups
   private profileFetchUrl = 'http://localhost:3000/api/organization'; 
   private fetchPendingReceiversApi = 'http://localhost:3000/org/receivers/pending';
@@ -31,20 +38,27 @@ export class OrgService {
   Orginsert(org: any): Observable<any> {
     return this.http.post(this.apiurl, org);
   }
-
   OrgSignIn(data: any): Observable<any> {
     return this.http.post(this.api, data);
   }
 
   OrgSignUp(data: any): Observable<any> {
+<<<<<<< HEAD
     return this.http.post(this.apiSignUp, data);
   }
 
   fetchorgform(id: any): Observable<any> {
+=======
+    return this.http.post(this.signUpapi, data);
+  }
+
+
+  fetchorgform(): Observable<any> {
+>>>>>>> 9e4d55ee586b2b5dcf3e607709041862bf4eb13d
     return from(
       this.supabase
         .from('organization')
-        .select().eq('id', id)
+        .select()
         .then((response) => {
           console.log('Supabase Response:', response);
           return response;
@@ -52,17 +66,44 @@ export class OrgService {
     );
   }
 
-  fetchorg(id:any): Observable<any> {
-    return from(
-      this.supabase
-        .from('organization')
-        .select('*')
-        .eq('org_id','6323145f-303e-4fb6-a23e-d8b299eb85ae')
-        .then((response) => {
-          return response;
-        })
-    );
+  // fetchorg(id:any): Observable<any> {
+  //   return from(
+  //     this.supabase
+  //       .from('organization')
+  //       .select('*')
+  //       .eq('org_id','6323145f-303e-4fb6-a23e-d8b299eb85ae')
+  //       .then((response) => {
+  //         return response;
+  //       })
+  //   );
+  // }
+  async getAuthId(): Promise<string | null> {
+    const { data, error } = await this.supabase.auth.getUser();
+    if (error) {
+      console.error('Error fetching user:', error);
+      return null;
+    }
+    return data?.user?.id ?? null;
   }
+
+  async getOrgId(): Promise<string | null> {
+    const UID = await this.getAuthId();
+    if (!UID) return null;
+
+    const { data, error } = await this.supabase
+      .from('organization')
+      .select()
+      .eq('auth_id', UID)
+      .single(); // Assuming one org per user
+
+    if (error) {
+      console.error('Error fetching org_id:', error);
+      return null;
+    }
+
+    return data?.org_id ?? null;
+  }
+
 
   fetchProfileByOrg(orgId: string): Observable<any> {
     return this.http.get(`${this.profileFetchUrl}/${orgId}`); // Call to backend API
@@ -90,6 +131,12 @@ export class OrgService {
   }
 
   addBloodGroup(bloodGroupData: { name: string; units: number }): Observable<any> {
-    return this.http.post(this.bloodGroupApi, bloodGroupData); // Add blood group data
+    return this.http.post(this.bloodGroupApi, bloodGroupData);
+     // Add blood group data
   }
 }
+
+
+
+
+  

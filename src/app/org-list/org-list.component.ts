@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { OrgService } from '../org.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-org-list',
@@ -9,13 +10,13 @@ import { OrgService } from '../org.service';
 export class OrgListComponent {
 
   data:any
-  constructor(private supabase:OrgService){
+  constructor(private supabase:OrgService, private router:Router){
 
     this.fetchorg();
   }
   organizations :any[]= []
     fetchorg() {
-    this.supabase.fetchorgform("1").subscribe({
+    this.supabase.fetchorgform().subscribe({
       next: (response) => {
         if (response.error) {
           console.error('Error fetching organizations:', response.error);
@@ -27,15 +28,15 @@ export class OrgListComponent {
           console.warn('No data received');
         }
       },
-      // error: (error) => {
-      //   console.error('Failed to fetch organizations:', error);
-      // },
+      error: (error) => {
+        console.error('Failed to fetch organizations:', error);
+      },
     });
   }
   
-  
+  ngOnInit(){}
 
   viewDetails(org: any): void {
-    // alert(`Viewing details for ${org.name}`);
+this.router.navigate(['/view_org'], {queryParams:{id:org.id, email:org.email, phone:org.phone,name:org.name,address:org.address, gender:org.gender, age:org.age}})
   }
 }

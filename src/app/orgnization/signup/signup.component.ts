@@ -57,6 +57,10 @@ export class SignupComponent {
         phone: formData.phone,
         address: formData.address,
         bloodGroups: bloodGroupsData,
+<<<<<<< HEAD
+=======
+        // userId: this.userId // Send all blood groups
+>>>>>>> 9e4d55ee586b2b5dcf3e607709041862bf4eb13d
       };
 
       const res = this.orgform.OrgSignUp(dataToSend).subscribe({
@@ -67,10 +71,39 @@ export class SignupComponent {
             this.orgForm.reset();
             this.currentStep = 1;
           } else {
+<<<<<<< HEAD
             console.log("organisation signup response", response);
             this.userId = response.data.user.id;
             localStorage.setItem('userId', this.userId);
             this.formInsert(formData, bloodGroupsData); 
+=======
+            this.orgForm.reset();
+            //this.router.navigate(['/org-dashboard']);
+          }
+        }
+      });
+
+      const dataToInsert = {
+        orgName: formData.orgName,
+        password: formData.password,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        bloodGroups: bloodGroupsData,
+       userId: this.userId // Send all blood groups
+      };
+
+
+      const res1 = this.orgform.Orginsert(dataToInsert).subscribe({
+        next: (response: any) => {
+          console.log("response.data", response);
+          if (response.error) {
+            alert("User already registered with the email.");
+            this.orgForm.reset();
+            this.currentStep = 1;
+          } else {
+            this.orgForm.reset();
+>>>>>>> 9e4d55ee586b2b5dcf3e607709041862bf4eb13d
             this.router.navigate(['/org-dashboard']);
           }
         }
