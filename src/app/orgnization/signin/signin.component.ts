@@ -6,13 +6,19 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.css']
+  styleUrls: ['./signin.component.css'],
 })
 export class SigninComponent {
+  signInForm: FormGroup;
+  showPopup: boolean = false; // Declare showPopup variable
+  popupMessage: string = '';
 
-signInForm: FormGroup;
-
-  constructor(private fb: FormBuilder, private orgService: OrgService, private router: Router) { // Inject OrgService and Router
+  constructor(
+    private fb: FormBuilder,
+    private orgService: OrgService,
+    private router: Router
+  ) {
+    // Inject OrgService and Router
     this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -21,27 +27,34 @@ signInForm: FormGroup;
 
   onSubmit() {
     if (this.signInForm.valid) {
-      this.orgService.OrgSignIn(this.signInForm.value)
-      .subscribe({
+      this.orgService.OrgSignIn(this.signInForm.value).subscribe({
         next: (response) => {
-          console.log("response", response);
-          if(response.data){
+          console.log('response', response);
+          if (response.data) {
             this.signInForm.reset();
-            localStorage.setItem('userId',response.data.user.id)
-            console.log("userId"+response.data.user.id)
+            localStorage.setItem('userId', response.data.user.id);
+            console.log('userId' + response.data.user.id);
             this.router.navigate(['/org-dashboard']);
-          }
-          else{
+          } else {
             this.signInForm.reset();
-            alert('Invalid Email or Password');
+            this.showPopup = true;
+            this.popupMessage = `Invalid Email or Password.`;
+            setTimeout(() => {
+              this.showPopup = false;
+            }, 2500); // Hide popup after 2 seconds
+            return;
           }
         },
-        error:(error)=>{
+        error: (error) => {
           this.signInForm.reset();
-          alert('Invalid Email or Password');
-        }
+          this.showPopup = true;
+          this.popupMessage = `Invalid Email or Password.`;
+          setTimeout(() => {
+            this.showPopup = false;
+          }, 2500); // Hide popup after 2 seconds
+          return;
+        },
       });
     }
   }
 }
-

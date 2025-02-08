@@ -1,4 +1,3 @@
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -248,15 +247,13 @@ app.post("/orgforminsert", async (req, res) => {
   }
 
   try {
-    const blood_group = bloodGroups[0]?.bloodGroup;
-    const blood_quantity = bloodGroups[0]?.quantity;
+    const bloodGroupsJson = JSON.stringify(bloodGroups);
 
     console.log("Inserting data into orgnization table:", {
       orgName,
       email,
       phone,
-      blood_group,
-      blood_quantity,
+      bloodGroupsJson,
       address,
       password,
       userId,
@@ -267,8 +264,7 @@ app.post("/orgforminsert", async (req, res) => {
         name: orgName,
         email: email,
         phone: phone,
-        blood_group: blood_group,
-        blood_quantity: blood_quantity,
+        blood_groups: bloodGroupsJson,
         address: address,
         userId: userId,
       },
@@ -422,7 +418,7 @@ app.get("/org/receivers/:id", async (req, res) => {
       .eq("auth_id", id);
 
     if (error) {
-      console.log(error.error);
+      console.log(error);
       return res.status(400).json({ error: error.message });
     }
     res.json(data);
@@ -432,18 +428,101 @@ app.get("/org/receivers/:id", async (req, res) => {
   }
 });
 
-app.get("/receivers/approved/:id", async (req, res) => {
+app.get("/org/receivers/approved/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    console.log("id", id);
+    console.log("id in approved receivers - ", id);
     const { data, error } = await supabase
       .from("request")
+      .select("*")
+      .eq("auth_id", id)
+      .eq("status", "approved");
+
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/org/receivers/rejected/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in rejected receivers - ", id);
+    const { data, error } = await supabase
+      .from("request")
+      .select("*")
+      .eq("auth_id", id)
+      .eq("status", "rejected");
+
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/org/receivers/pending/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in pending receivers - ", id);
+    const { data, error } = await supabase
+      .from("request")
+      .select("*")
+      .eq("auth_id", id)
+      .eq("status", "pending");
+
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/org/donors/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in all donors - ", id);
+    const { data, error } = await supabase
+      .from("donorRequests")
+      .select("*")
+      .eq("auth-id", id);
+
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/org/donors/approved/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in approved donors - ", id);
+    const { data, error } = await supabase
+      .from("donorRequests")
       .select("*")
       .eq("auth-id", id)
       .eq("status", "approved");
 
     if (error) {
-      console.log(error.error);
+      console.log(error);
       return res.status(400).json({ error: error.message });
     }
     res.json(data);
@@ -453,18 +532,18 @@ app.get("/receivers/approved/:id", async (req, res) => {
   }
 });
 
-app.get("/receivers/rejected/:id", async (req, res) => {
+app.get("/org/donors/rejected/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    console.log("id", id);
+    console.log("id in rejected donors - ", id);
     const { data, error } = await supabase
-      .from("request")
+      .from("donorRequests")
       .select("*")
       .eq("auth-id", id)
       .eq("status", "rejected");
 
     if (error) {
-      console.log(error.error);
+      console.log(error);
       return res.status(400).json({ error: error.message });
     }
     res.json(data);
@@ -474,18 +553,18 @@ app.get("/receivers/rejected/:id", async (req, res) => {
   }
 });
 
-app.get("/receivers/pending/:id", async (req, res) => {
+app.get("/org/donors/pending/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    console.log("id", id);
+    console.log("id in pending donors - ", id);
     const { data, error } = await supabase
-      .from("request")
+      .from("donorRequests")
       .select("*")
       .eq("auth-id", id)
       .eq("status", "pending");
 
     if (error) {
-      console.log(error.error);
+      console.log(error);
       return res.status(400).json({ error: error.message });
     }
     res.json(data);

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OrgService } from '../../org.service';
+import { OrgService } from '../../../org.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -10,7 +10,6 @@ import { ActivatedRoute } from '@angular/router';
 export class AllReceiversListComponent {
 
   allReceiver : any;
- 
   userId : any;
 
   constructor(private orgService: OrgService, private route: ActivatedRoute) {
@@ -23,11 +22,11 @@ export class AllReceiversListComponent {
   
     fetchAllReceiver(userId: string): void {
       this.orgService.fetchAllReceivers(userId).subscribe({
-        next: (data) => {
+        next: (data : any) => {
           this.allReceiver = data;
           console.log('allReceiver:', this.allReceiver);
         },
-        error: (err) => {
+        error: (err : any) => {
           console.error('Error fetching all receivers:', err);
         }
       });

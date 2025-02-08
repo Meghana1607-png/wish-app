@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OrgService } from '../../org.service';
+import { OrgService } from '../../../org.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -8,26 +8,26 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./rejected-receivers.component.css']
 })
 export class RejectedReceiversComponent {
-  allReceiver:any;
+  rejectedReceiver:any;
 
   userId : any;
 
   constructor(private orgService: OrgService, private route: ActivatedRoute) {
-    this.userId = localStorage.getItem(this.userId);
+    this.userId = localStorage.getItem("userId");
   }
 
   ngOnInit(): void {
-    this.fetchAllReceiver("userId"); 
+    this.fetchRejectedReceiver(this.userId); 
   }
 
-  fetchAllReceiver(userId: string): void {
-    this.orgService.fetchAllReceivers(userId).subscribe({
+  fetchRejectedReceiver(userId: string): void {
+    this.orgService.fetchRejectedReceivers(userId).subscribe({
       next: (data) => {
-        this.allReceiver = data;
-        console.log('allReceiver:', this.allReceiver);
+        this.rejectedReceiver = data;
+        console.log('rejectedReceiver:', this.rejectedReceiver);
       },
       error: (err) => {
-        console.error('Error fetching all receivers:', err);
+        console.error('Error fetching rejected receivers:', err);
       }
     });
   }

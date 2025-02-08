@@ -14,17 +14,17 @@ export class OrgService {
 
   private apiurl= 'http://localhost:3000/orgforminsert';
   private api = 'http://localhost:3000/orgSignIn';
-<<<<<<< HEAD
   private apiSignUp = 'http://localhost:3000/orgSignUp';
-=======
-  private signUpapi = 'http://localhost:3000/orgSignUp';
->>>>>>> 9e4d55ee586b2b5dcf3e607709041862bf4eb13d
   private bloodGroupApi = 'http://localhost:3000/bloodgroups'; // Endpoint for blood groups
   private profileFetchUrl = 'http://localhost:3000/api/organization'; 
   private fetchPendingReceiversApi = 'http://localhost:3000/org/receivers/pending';
   private fetchApprovedReceiversApi = 'http://localhost:3000/org/receivers/approved';
   private fetchRejectedReceiversApi = 'http://localhost:3000/org/receivers/rejected';
   private fetchAllReceiversApi = 'http://localhost:3000/org/receivers';
+  private fetchPendingDonorsApi = 'http://localhost:3000/org/donors/pending';
+  private fetchApprovedDonorsApi = 'http://localhost:3000/org/donors/approved';
+  private fetchRejectedDonorsApi = 'http://localhost:3000/org/donors/rejected';
+  private fetchAllDonorsApi = 'http://localhost:3000/org/donors';
 
   constructor(private http: HttpClient) { 
     auth: {
@@ -43,18 +43,10 @@ export class OrgService {
   }
 
   OrgSignUp(data: any): Observable<any> {
-<<<<<<< HEAD
     return this.http.post(this.apiSignUp, data);
   }
 
   fetchorgform(id: any): Observable<any> {
-=======
-    return this.http.post(this.signUpapi, data);
-  }
-
-
-  fetchorgform(): Observable<any> {
->>>>>>> 9e4d55ee586b2b5dcf3e607709041862bf4eb13d
     return from(
       this.supabase
         .from('organization')
@@ -124,6 +116,23 @@ export class OrgService {
   fetchAllReceivers(orgId: string): Observable<any> 
   {
     return this.http.get(`${this.fetchAllReceiversApi}/${orgId}`); // Call to backend API
+  }
+
+  fetchPendingDonors(orgId: string): Observable<any> {
+    return this.http.get(`${this.fetchPendingDonorsApi}/${orgId}`); // Call to backend API
+  }
+
+  fetchApprovedDonors(orgId: string): Observable<any> {
+    return this.http.get(`${this.fetchApprovedDonorsApi}/${orgId}`); // Call to backend API
+  }
+
+  fetchRejectedDonors(orgId: string): Observable<any> {
+    return this.http.get(`${this.fetchRejectedDonorsApi}/${orgId}`); // Call to backend API
+  }
+
+  fetchAllDonors(orgId: string): Observable<any> 
+  {
+    return this.http.get(`${this.fetchAllDonorsApi}/${orgId}`); // Call to backend API
   }
 
   getBloodGroups(): Observable<any> {

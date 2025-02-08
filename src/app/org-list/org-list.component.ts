@@ -16,7 +16,7 @@ export class OrgListComponent {
   }
   organizations :any[]= []
     fetchorg() {
-    this.supabase.fetchorgform().subscribe({
+    this.supabase.fetchorgform(1).subscribe({
       next: (response) => {
         if (response.error) {
           console.error('Error fetching organizations:', response.error);

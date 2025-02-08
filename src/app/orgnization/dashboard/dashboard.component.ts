@@ -23,11 +23,11 @@ export class DashboardComponent {
 
   menu = [
     { path: 'org/dashboard', label: 'Blood Hub', icon: 'pi pi-users' },
-    { path: 'org/teams-table', label: 'Donors list', icon: 'pi pi-users' },
+    { path: 'org/donorsList', label: 'Donors list', icon: 'pi pi-users' },
     { path: 'org/receiversList', label: 'Receivers list', icon: 'pi pi-users' },
-    { path: 'org/teams-table', label: 'Donor pending list', icon: 'pi pi-users' },
-    { path: 'org/teams-table', label: 'Donor approved list', icon: 'pi pi-users' },
-    { path: 'org/teams-table', label: 'Donor rejected list', icon: 'pi pi-users' },
+    { path: 'org/donorsList/pending', label: 'Donor pending list', icon: 'pi pi-users' },
+    { path: 'org/donorsList/approved', label: 'Donor approved list', icon: 'pi pi-users' },
+    { path: 'org/donorsList/rejected', label: 'Donor rejected list', icon: 'pi pi-users' },
     { path: 'org/receiversList/pending', label: 'Receiver pending list', icon: 'pi pi-users' },
     { path: 'org/receiversList/approved', label: 'Receiver approved list', icon: 'pi pi-users' },
     { path: 'org/receiversList/rejected', label: 'Receiver rejected list', icon: 'pi pi-users' },

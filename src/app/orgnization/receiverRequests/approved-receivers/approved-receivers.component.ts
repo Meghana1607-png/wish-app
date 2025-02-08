@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OrgService } from '../../org.service';
+import { OrgService } from '../../../org.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -12,11 +12,11 @@ export class ApprovedReceiversComponent implements OnInit {
   userId : any;
 
   constructor(private orgService: OrgService, private route: ActivatedRoute) {
-    this.userId = localStorage.getItem(this.userId);
+    this.userId = localStorage.getItem("userId");
   }
 
   ngOnInit(): void {
-    this.fetchApprovedReceiver("userId"); 
+    this.fetchApprovedReceiver(this.userId); 
   }
 
   fetchApprovedReceiver(userId: string): void {

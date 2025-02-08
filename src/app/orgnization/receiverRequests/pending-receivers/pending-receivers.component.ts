@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OrgService } from '../../org.service';
+import { OrgService } from '../../../org.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -9,25 +9,25 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PendingReceiversComponent {
 
-  rejectedReceiver: any; 
+  pendingReceiver: any; 
   userId : any;
 
   constructor(private orgService: OrgService, private route: ActivatedRoute) {
-    this.userId = localStorage.getItem(this.userId);
+    this.userId = localStorage.getItem("userId");
   }
 
   ngOnInit(): void {
-    this.fetchPendingReceiver("userId"); 
+    this.fetchPendingReceiver(this.userId); 
   }
 
   fetchPendingReceiver(userId: string): void {
-    this.orgService.fetchRejectedReceivers(userId).subscribe({
-      next: (data) => {
-        this.rejectedReceiver = data;
-        console.log('rejectedReceiver:', this.rejectedReceiver);
+    this.orgService.fetchPendingReceivers(userId).subscribe({
+      next: (data : any) => {
+        this.pendingReceiver = data;
+        console.log('pendingReceiver:', this.pendingReceiver);
       },
-      error: (err) => {
-        console.error('Error fetching rejected receivers:', err);
+      error: (err : any) => {
+        console.error('Error fetching pending receivers:', err);
       }
     });
   }

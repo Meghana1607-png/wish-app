@@ -1,4 +1,8 @@
 <div class="max-w-xl mx-auto p-6 bg-white shadow-md rounded-lg mt-20">
+    <!-- Popup -->
+    <div class="fixed z-10 top-0 left-0 w-full py-2 bg-red-600 text-white text-center" *ngIf="showPopup">
+      {{ popupMessage }}
+      </div>        
     <h2 class="text-3xl font-semibold text-center text-red-600 mb-6">Sign In</h2>
     <div class="bg-red-50 p-6 rounded-lg shadow-md mb-6">
       <form [formGroup]="signInForm" (ngSubmit)="onSubmit()" class="max-w-md mx-auto p-2 rounded-lg mt-6">

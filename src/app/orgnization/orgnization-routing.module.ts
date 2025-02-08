@@ -7,10 +7,14 @@ import { OrgRequestsComponent } from './org-requests/org-requests.component';
 import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
 import { OrgProfileComponent } from './org-profile/org-profile.component';
-import { PendingReceiversComponent } from './pending-receivers/pending-receivers.component';
-import { ApprovedReceiversComponent } from './approved-receivers/approved-receivers.component';
-import { RejectedReceiversComponent } from './rejected-receivers/rejected-receivers.component';
-import { AllReceiversListComponent } from './all-receivers-list/all-receivers-list.component';
+import { PendingReceiversComponent } from './receiverRequests/pending-receivers/pending-receivers.component';
+import { ApprovedReceiversComponent } from './receiverRequests/approved-receivers/approved-receivers.component';
+import { RejectedReceiversComponent } from './receiverRequests/rejected-receivers/rejected-receivers.component';
+import { AllReceiversListComponent } from './receiverRequests/all-receivers-list/all-receivers-list.component';
+import { PendingDonorListComponent } from './donorRequests/pending-donor-list/pending-donor-list.component';
+import { ApprovedDonorListComponent } from './donorRequests/approved-donor-list/approved-donor-list.component';
+import { AllDonorListComponent } from './donorRequests/all-donor-list/all-donor-list.component';
+import { RejectedDonorsListComponent } from './donorRequests/rejected-donors-list/rejected-donors-list.component';
 
 const routes: Routes = [
   {path:'signin',component:SigninComponent},
@@ -28,6 +32,10 @@ const routes: Routes = [
   {path:'org/receiversList/approved',component:ApprovedReceiversComponent},
   {path:'org/receiversList/rejected',component:RejectedReceiversComponent},
   {path:'org/receiversList',component:AllReceiversListComponent},
+  {path:'org/donorsList/pending',component:PendingDonorListComponent},
+  {path:'org/donorsList/approved',component:ApprovedDonorListComponent},
+  {path:'org/donorsList/rejected',component:RejectedDonorsListComponent},
+  {path:'org/donorsList',component:AllDonorListComponent},
 ];
 
 @NgModule({

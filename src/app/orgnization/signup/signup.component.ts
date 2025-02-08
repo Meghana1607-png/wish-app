@@ -6,14 +6,30 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent {
   userId: any;
   orgForm: FormGroup;
   currentStep: number = 1; // Initialize currentStep to 1
-  
-  constructor(private fb: FormBuilder, private orgform: OrgService, private router: Router) {
+  validBloodGroups: string[] = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'AB+',
+    'AB-',
+    'O+',
+    'O-',
+  ]; // List of valid blood groups
+  showPopup: boolean = false; // Declare showPopup variable
+  popupMessage: string = '';
+
+  constructor(
+    private fb: FormBuilder,
+    private orgform: OrgService,
+    private router: Router
+  ) {
     this.orgForm = this.fb.group({
       orgName: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -22,7 +38,7 @@ export class SignupComponent {
       address: ['', Validators.required], // Added address control
       bloodGroups: this.fb.array([]),
     });
-    this.userId = localStorage.getItem("userId");
+    this.userId = localStorage.getItem('userId');
   }
 
   get bloodGroups(): FormArray {
@@ -42,12 +58,58 @@ export class SignupComponent {
   }
 
   onSubmit() {
+    // Validate blood groups
+    const bloodGroupEntries = this.bloodGroups.controls;
+    const invalidBloodGroups: string[] = [];
+    const duplicateBloodGroups: string[] = [];
+    const bloodGroupValues: string[] = [];
+    for (let group of bloodGroupEntries) {
+      const bloodGroupValue = group.get('bloodGroup')?.value;
+      if (!this.validBloodGroups.includes(bloodGroupValue.toUpperCase())) {
+        invalidBloodGroups.push(bloodGroupValue);
+      }
+      if (bloodGroupValues.includes(bloodGroupValue)) {
+        duplicateBloodGroups.push(bloodGroupValue);
+      }
+      bloodGroupValues.push(bloodGroupValue);
+    }
+    if (invalidBloodGroups.length > 0) {
+      this.showPopup = true;
+      this.popupMessage = `Invalid blood group: ${invalidBloodGroups.join(
+        ', '
+      )}.`;
+      setTimeout(() => {
+        this.showPopup = false;
+      }, 2500); // Hide popup after 2 seconds
+      return;
+    }
+    if (duplicateBloodGroups.length > 0) {
+      this.showPopup = true;
+      this.popupMessage = `Duplicate blood group: ${duplicateBloodGroups.join(
+        ', '
+      )}. Please remove duplicates.`;
+      setTimeout(() => {
+        this.showPopup = false;
+      }, 2500); // Hide popup after 2 seconds
+      return; // Prevent form submission
+    }
+
     if (this.orgForm.valid) {
       const formData = this.orgForm.value;
-      const bloodGroupsData = formData.bloodGroups.map((group: { bloodGroup: string; quantity: number }) => ({
-        bloodGroup: group.bloodGroup,
-        quantity: group.quantity
-      }));
+      const bloodGroupsData = formData.bloodGroups.map(
+        (group: { bloodGroup: string; quantity: number }) => ({
+          bloodGroup: group.bloodGroup,
+          quantity: group.quantity,
+        })
+      );
+      if (bloodGroupsData.length === 0) {
+        this.showPopup = true;
+        this.popupMessage = `Please add at least one blood group.`;
+        setTimeout(() => {
+          this.showPopup = false;
+        }, 2500); // Hide popup after 2 seconds
+        return;
+      }
 
       // Include blood groups in the data sent to the backend
       const dataToSend = {
@@ -57,57 +119,35 @@ export class SignupComponent {
         phone: formData.phone,
         address: formData.address,
         bloodGroups: bloodGroupsData,
-<<<<<<< HEAD
-=======
-        // userId: this.userId // Send all blood groups
->>>>>>> 9e4d55ee586b2b5dcf3e607709041862bf4eb13d
       };
-
       const res = this.orgform.OrgSignUp(dataToSend).subscribe({
         next: (response: any) => {
-          console.log("response.data", response);
+          console.log('response.data', response);
           if (response.error) {
-            alert("User already registered with the email.");
             this.orgForm.reset();
             this.currentStep = 1;
+            this.showPopup = true;
+            this.popupMessage = `User already registered with the email.`;
+            setTimeout(() => {
+              this.showPopup = false;
+            }, 2500); // Hide popup after 2 seconds
+            return;
           } else {
-<<<<<<< HEAD
-            console.log("organisation signup response", response);
+            console.log('organisation signup response', response);
             this.userId = response.data.user.id;
             localStorage.setItem('userId', this.userId);
-            this.formInsert(formData, bloodGroupsData); 
-=======
-            this.orgForm.reset();
-            //this.router.navigate(['/org-dashboard']);
-          }
-        }
-      });
-
-      const dataToInsert = {
-        orgName: formData.orgName,
-        password: formData.password,
-        email: formData.email,
-        phone: formData.phone,
-        address: formData.address,
-        bloodGroups: bloodGroupsData,
-       userId: this.userId // Send all blood groups
-      };
-
-
-      const res1 = this.orgform.Orginsert(dataToInsert).subscribe({
-        next: (response: any) => {
-          console.log("response.data", response);
-          if (response.error) {
-            alert("User already registered with the email.");
-            this.orgForm.reset();
-            this.currentStep = 1;
-          } else {
-            this.orgForm.reset();
->>>>>>> 9e4d55ee586b2b5dcf3e607709041862bf4eb13d
+            this.formInsert(formData, bloodGroupsData);
             this.router.navigate(['/org-dashboard']);
           }
-        }
+        },
       });
+    } else {
+      this.showPopup = true;
+      this.popupMessage = `Please fill in all required fields.`;
+      setTimeout(() => {
+        this.showPopup = false;
+      }, 2500); // Hide popup after 2 seconds
+      return;
     }
   }
 
@@ -119,28 +159,38 @@ export class SignupComponent {
       phone: formData.phone,
       address: formData.address,
       bloodGroups: bloodGroupsData,
-      userId: this.userId, 
+      userId: this.userId,
     };
 
-    console.log("this.userId ", dataToInsert.userId);
+    console.log('this.userId ', dataToInsert.userId);
 
     const res1 = this.orgform.Orginsert(dataToInsert).subscribe({
       next: (response: any) => {
-        console.log("organisation insert data", response);
+        console.log('organisation insert data', response);
         if (response.error) {
-          console.log("User already registered with the email. or data not inserted properly");
+          console.log(
+            'User already registered with the email. or data not inserted properly'
+          );
         } else {
           this.orgForm.reset();
         }
-      }
+      },
     });
   }
 
   goToNextStep() {
-    if (this.orgForm.get('orgName')?.valid && this.orgForm.get('email')?.valid) {
+    if (
+      this.orgForm.get('orgName')?.valid &&
+      this.orgForm.get('email')?.valid
+    ) {
       this.currentStep = 2; // Move to the next step
     } else {
-      alert('Please fill in all required fields before proceeding.');
+      this.showPopup = true;
+      this.popupMessage = `Please fill in all required fields before proceeding.`;
+      setTimeout(() => {
+        this.showPopup = false;
+      }, 2500); // Hide popup after 2 seconds
+      return;
     }
   }
 
