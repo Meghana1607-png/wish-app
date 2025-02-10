@@ -68,4 +68,8 @@ export class RequestsService {
         });
     });
   }
+
+  async createRequest1(requestData: any) {
+    return await this. supabase.from('request').insert([requestData]);
+  }
 }

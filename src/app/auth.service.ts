@@ -27,6 +27,10 @@ export class AuthService {
     })
     return res;
 }
+setAuthId(userId: string) {
+  localStorage.setItem('authId', userId);
+  console.log('Auth ID Set:', localStorage.getItem('authId')); // Check if it's correctly set
+}
 
 
 signIn(email: string, password: string) {

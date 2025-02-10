@@ -6,7 +6,7 @@ import { AwarenessComponent } from './awareness/awareness.component';
 
 const routes: Routes = [
 {
-  path:'dashboard', 
+  path:'donor-dashboard', 
   component: DashboardComponent
 },
 {

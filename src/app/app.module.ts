@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { OrgListComponent } from './org-list/org-list.component';
 import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
+import { DonorSigninComponent } from './donor-signin/donor-signin.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { SigninComponent } from './signin/signin.component';
     OrgListComponent,
     SignupComponent,
     SigninComponent,
+    DonorSigninComponent,
   ],
   imports: [
     BrowserModule,

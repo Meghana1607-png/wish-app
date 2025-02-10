@@ -7,26 +7,28 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DashboardComponent {
 
-  is_slidebar: boolean;
+  showDropdown = false;
+
+ is_slidebar: boolean;
   isclick:boolean=false;
   selectedPage = 'Blood-Hub'
-  roles: any[];
+  // roles: any[];
   det:any=[];
   c_role:any;
   menu = [
     { path: 'admin/dashboard', label: 'dashboard', icon: 'pi pi-home' },
-    { path: 'admin/org-tree', label: 'organisation tree', icon: 'pi pi-sitemap' },
-    { path: 'admin/user-table', label: 'users', icon: 'pi pi-user-plus' },
-    { path: 'admin/teams-table', label: 'teams', icon: 'pi pi-users' },
-    { path: 'admin/create-org', label: 'organisation', icon: 'pi pi-globe' },
-    { path: 'admin/profile', label: 'profile', icon: 'pi pi-id-card' },
+    { path: 'receiver/rec-awareness', label: 'awareness', icon: 'pi pi-sitemap' },
+    { path: 'receiver/rprofile', label: 'profile', icon: 'pi pi-user-plus' },
+    // { path: 'admin/teams-table', label: 'teams', icon: 'pi pi-users' },
+    // { path: 'admin/create-org', label: 'organisation', icon: 'pi pi-globe' },
+    // { path: 'admin/profile', label: 'profile', icon: 'pi pi-id-card' },
   ]
 
   constructor(private router: Router, private activeroute: ActivatedRoute ) {
     this.is_slidebar = false;
-    this.roles = this.activeroute.snapshot.queryParams['roles']
-    console.log(this.roles)
-    this.c_role = this.activeroute.snapshot.queryParams['currentrole']
+    // this.roles = this.activeroute.snapshot.queryParams['roles']
+    // console.log(this.roles)
+    // this.c_role = this.activeroute.snapshot.queryParams['currentrole']
   }
   ngOnInit(): void {
     // this.fetchuser();
@@ -49,6 +51,23 @@ export class DashboardComponent {
   hide_slidebar() {
     this.is_slidebar = false;
   }
+  switchRole(){
+    console.log("Button clicked!")
+  }
+
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  selectRole(role: string) {
+    console.log(`Selected role: ${role}`);
+
+    // Handle role selection logic here
+
+    this.showDropdown = false; 
+    // Close dropdown after selection
+  }
   // fetchuser(){
   //   console.log('called')
   //  const id= localStorage.getItem('userid');
@@ -61,16 +80,5 @@ export class DashboardComponent {
     // });
   // }
 
-  isRoleCardVisible = false;
-
-  toggleRoleCard() {
-    this.isRoleCardVisible = !this.isRoleCardVisible;
-  }
-
-  selectRole(role: string) {
-    console.log(`${role} selected`);
-    // Handle role selection logic
-    this.isRoleCardVisible = false; // Close the card after selecting a role
-  }
-
 }
+

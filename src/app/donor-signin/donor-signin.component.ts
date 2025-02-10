@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-FormBuilder
+import { AuthService } from '../auth.service';
+
 
 
 @Component({
-  selector: 'app-signin',
-  templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.css']
+  selector: 'app-donor-signin',
+  templateUrl: './donor-signin.component.html',
+  styleUrls: ['./donor-signin.component.css']
 })
-export class SigninComponent {
-  signinForm: FormGroup;
+export class DonorSigninComponent {
+
+
+signinForm: FormGroup;
 
   constructor(private fb: FormBuilder, private router: Router ,private auth:AuthService) {
     this.signinForm = this.fb.group({
@@ -25,7 +27,7 @@ export class SigninComponent {
     if (this.signinForm.valid) {
       console.log('Form Submitted', this.signinForm.value);
       // Perform login logic here
-      this.router.navigate(['/rec-dashboard']);
+      this.router.navigate(['/donor-dashboard'])
     }
   }
 
@@ -33,3 +35,6 @@ export class SigninComponent {
     this.router.navigate(['/Sign-up']);
   }
 }
+
+
+
