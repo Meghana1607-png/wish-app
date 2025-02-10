@@ -8,31 +8,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./org-profile.component.css']
 })
 // export class OrgProfileComponent implements OnInit {
-//   organizationProfile: any; 
-//   userId : any;
-//   bloodGroupsArray: any[];
-
-//   constructor(private orgService: OrgService, private route: ActivatedRoute) {
-//     this.userId = localStorage.getItem('userId');
-//     this.bloodGroupsArray = JSON.parse(this.organizationProfile.blood_groups);
-//   }
-
-//   ngOnInit(): void {
-//     this.fetchOrganizationProfile(this.userId); 
-//   }
-
-//   fetchOrganizationProfile(userId: string): void {
-//     this.orgService.fetchProfileByOrg(userId).subscribe({
-//       next: (data) => {
-//         this.organizationProfile = data[0];
-//         console.log('OrganizationProfile:', this.organizationProfile);
-//       },
-//       error: (err) => {
-//         console.error('Error fetching organization profile:', err);
-//       }
-//     });
-//   }
-// }
 
 export class OrgProfileComponent implements OnInit {
   organizationProfile: any;

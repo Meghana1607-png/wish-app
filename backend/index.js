@@ -294,42 +294,35 @@ app.post("/orgforminsert", async (req, res) => {
 app.post("/userforminsert", async (req, res) => {
   console.log("API called with body:", req.body);
 
-  const {
-    gender,
-    phno,
-    name,
-    address,
-    blood_quantity,
-    password,
-    date,
-    purpose,
-    email,
-  } = req.body;
   try {
-    console.log("Inserting into Supabase...");
-    const { data, error } = await supabase.from("users").insert({
-      gender,
-      phno,
-      name,
-      address,
-      date,
-      purpose,
-      email,
-      password,
-    });
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({ message: "Request body is missing" });
+    }
+
+    const { gender, phno,  address   } = req.body;
+
+    console.log("Inserting into Supabase...",req.body);
+    const { data, error } = await supabase.from("users").insert(
+      { gender:gender, 
+        phno:phno,  
+        address:address
+       }
+    );
 
     if (error) {
       console.error("Supabase Error:", error.message);
-      throw error;
+      console.log(error)
+      return res.status(500).json({ message: "Database error", error });
     }
 
     console.log("Data inserted successfully:", data);
     res.status(200).json({ message: "User form submitted", data });
   } catch (error) {
     console.error("Error during insertion:", error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
+
 
 // app.post("/orgformfetch", async (req, res) => {
 //   const { orgId } = req.body;

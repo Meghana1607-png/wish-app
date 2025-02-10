@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { from, Observable, Subscriber } from 'rxjs';
+import { AuthService } from 'src/app/auth.service';
 import { OrgService } from 'src/app/org.service';
 import { ProfileService } from 'src/app/profile.service';
 import { ReceiverService } from 'src/app/receiver.service';
@@ -19,21 +21,21 @@ export class ViewOrgFormComponent {
   org_id:any    // Store logged-in user ID
   orgId: string | null = null;
   orgData: any = {};
+  selectedOrgId: any;
+  userId: any;
 
 
-  constructor(private supabase:OrgService,private receiver:ReceiverService, private user:ProfileService,private request:RequestsService, private router:Router, private active:ActivatedRoute){
+  constructor(private supabase:OrgService,private receiver:ReceiverService, private user:ProfileService,private request:RequestsService, private router:Router, private active:ActivatedRoute,private authservice:AuthService){
 
-  //   this.orgform.fetchorgform().subscribe({
-  //     next: (data) => {
-  //       this.orgDetails=data;
-  //     },
-  // });
-  // this.fetchorg();
-  // this.getUserId();
+    this.selectedOrgId = this.supabase.fetchorgform('id');
+    this.userId = this.user.form(); 
+  
  
   }
 
   async ngOnInit() {
+    this.authservice.setAuthId(this.userid);  // Assuming user.id is fetched correctly
+
    
     this.active.queryParams.subscribe((params) => {
       this.organization = {org_id: params['org_id'] || '',
@@ -45,30 +47,7 @@ export class ViewOrgFormComponent {
  };
     });
   }
-  // id:any
-  // fetchorg() {
-  //   this.supabase.getOrgId().subscribe({
-  //     next: (response:any) => {
-  //       if (response.error) {
-  //         console.error('Error fetching organization:', response.error);
-  //       } else if (response.data && response.data.length > 0) {
-  //         this.organization = response.data[0];  // Assigning the first object
-  //         console.log('Organizations fetched successfully:', this.organization);
-  //       } else {
-  //         console.warn('No data received');
-  //       }
-  //     },
-  //     error: (error:any) => {
-  //       console.error('Failed to fetch organization:', error);
-  //     },
-  //   });
-  // }
-  
-      // error: (error) => {
-      //   console.error('Failed to fetch organization:', error);
-      // },
    
-  
   organization : {
     org_id: string,
     name: string;
@@ -84,12 +63,28 @@ export class ViewOrgFormComponent {
     address: '',
     bloodDetails: [],
   };
-  getUserId() {
-    // Assume the user is already authenticated
-    this.request.createRequest(this.userid,this.org_id).subscribe((user:any) => {
-      this.userid = user.id;  
+  
+  users: any[] = [];
+  async getUserID() {
+    this.users = await this.user.form();
+    console.log(this.users);
+  }
+
+  getOrgid(): void {
+    this.supabase.fetchorgform('id').subscribe({
+      next: (data: string) => {  
+        this.selectedOrgId = data;
+        console.log(this.selectedOrgId);
+      },
+      error: (error: any) => {
+        console.error('Error fetching org details:', error);
+      }
     });
   }
+  
+  // setAuthId(authId: string) {
+  //   console.log(localStorage.setItem('authId', this.userId));
+  // }
 
   makeRequest() {
     if (!this.userid || !this.organization?.org_id) {
@@ -102,6 +97,7 @@ export class ViewOrgFormComponent {
       org_id: this.organization?.org_id,
       status: 'pending'
     };
+    console.log(this.org_id)
 
     this.receiver.submitReceiverForm(requestData).subscribe({
       next: (response: any) => {
@@ -116,11 +112,50 @@ export class ViewOrgFormComponent {
     });
     
   }
+ async requestBlood() {
+  // Retrieve authId from localStorage
+  this.userId = localStorage.getItem('authId');
+  console.log('Retrieved User ID from localStorage:', this.userId);
 
-  requestBlood() {
-    alert(`Blood requested from organization ID: `);
+  // Check if selectedOrgId is an observable
+  console.log('Selected Org ID (before subscription):', this.selectedOrgId);
+
+  // Handle Observable case properly
+  if (this.selectedOrgId && typeof this.selectedOrgId.subscribe === 'function') {
+    this.selectedOrgId.subscribe((orgId: string) => {
+      console.log('Selected Org ID (after subscription):', orgId);
+      console.log('User ID:', this.userId);
+
+      if (!orgId || !this.userId) {
+        alert('Missing organization or user details!');
+        return;
+      }
+
+      const requestData = {
+        org_id: orgId,
+        user_id: this.userId,
+        status: 'Pending'
+      };
+
+      this.request.createRequest1(requestData)
+        .then(({ error }) => {
+          if (error) {
+            console.error('Error sending request:', error);
+            alert('Failed to send request. Please try again.');
+          } else {
+            alert('Request sent successfully!');
+          }
+        })
+        .catch(err => {
+          console.error('Request error:', err);
+          alert('Something went wrong. Please try again later.');
+        });
+    });
+  } else {
+    console.error('selectedOrgId is null or not an observable:', this.selectedOrgId);
+    alert('Organization selection error. Please try again.');
   }
-  
-
+}
 
 }
+  

@@ -23,12 +23,13 @@ export class ProfileComponent {
   submitForm() {
     if (this.receiverForm.valid) {
       console.log('Form is valid');
+      console.log(this.receiverForm);
       this.profile.profileinsert(this.receiverForm.value).subscribe({
         next: (response) => {
           console.log('API Response:', response);
           alert(response.message);
           this.receiverForm.reset();
-          this.router.navigate(['/success']);
+          // this.router.navigate(['/success']);
         },
         error: (error) => {
           console.error('Error:', error);

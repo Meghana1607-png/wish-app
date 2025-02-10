@@ -31,5 +31,8 @@ export class ProfileService {
     console.log('Fetched users:', data);
     return data;
   }
-  
+  // setAuthId(authId: string) {
+  //   localStorage.setItem('authId', authId);
+  //   console.log('setitem',authId)
+  // }
 }
