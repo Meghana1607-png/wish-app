@@ -14,15 +14,6 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzdXpxcHdpYmZueWN3bWVpcnRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5NjA1MTQsImV4cCI6MjA1MDUzNjUxNH0.FUL9viBXkN2Q44hhdFKPj8uKBT0SkJqcSfbjPV2oExc"
 );
 
-// app.post("/signup", async (req, res) => {
-// const { email, password } = req.body;
-// console.log("Received email:", email);
-// console.log("Received password:", password);
-
-//   if (!email || !password) {
-//     return res.status(400).json({ message: "Email and password are required" });
-//   }
-// Sign-Up Route
 app.post("/signup", async (req, res) => {
   const { email, password } = req.body;
   console.log("Received email:", email);
@@ -589,6 +580,135 @@ app.get("/api/organization/:id", async (req, res) => {
     }
     res.json(data);
     console.log("id", data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// app.put("/blood-groups/update/:id", async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     console.log("id in update blood group quantity - ", id);
+//     const { data, error } = await supabase
+//       .from("organization")
+//       .select("*")
+//       .eq("userId", id);
+
+//     if (error) {
+//       console.log(error);
+//       return res.status(400).json({ error: error.message });
+//     }
+
+//     const bloodGroupData = JSON.parse(data[0].blood_groups);
+//     const FilterBloodGroup = bloodGroupData.filter(
+//       (group) =>
+//         group.bloodGroup.toLowerCase() !== req.body.bloodGroup.toLowerCase()
+//     );
+//     const updatedBloodGroup = bloodGroupData.find(
+//       (group) =>
+//         group.bloodGroup.toLowerCase() === req.body.bloodGroup.toLowerCase()
+//     );
+
+//     updatedBloodGroup.quantity = req.body.quantity;
+
+//     FilterBloodGroup.push(updatedBloodGroup);
+//     const updatedBloodGroupData = JSON.stringify(FilterBloodGroup);
+//     const { data: updatedData, error: updateError } = await supabase
+//       .from("organization")
+//       .update({ blood_groups: updatedBloodGroupData })
+//       .eq("userId", id);
+//     if (updateError) {
+//       console.log(updateError);
+//       return res.status(400).json({ error: updateError.message });
+//     }
+//     res.json(updatedData);
+//   } catch (err) {
+//     console.error("Unexpected error:", err);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
+app.put("/blood-groups/update/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in update blood group quantity - ", id);
+    const { data, error } = await supabase
+      .from("organization")
+      .select("*")
+      .eq("userId", id);
+
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    const bloodGroupData = JSON.parse(data[0].blood_groups);
+
+    const index = bloodGroupData.findIndex(
+      (group) =>
+        group.bloodGroup.toLowerCase() === req.body.bloodGroup.toLowerCase()
+    );
+
+    if (index === -1) {
+      return res.status(404).json({ error: "Blood group not found" });
+    }
+
+    bloodGroupData[index].quantity = req.body.quantity;
+
+    const updatedBloodGroupData = JSON.stringify(bloodGroupData);
+
+    const { data: updatedData, error: updateError } = await supabase
+      .from("organization")
+      .update({ blood_groups: updatedBloodGroupData })
+      .eq("userId", id);
+
+    if (updateError) {
+      console.log(updateError);
+      return res.status(400).json({ error: updateError.message });
+    }
+
+    res.json(updatedData);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.put("/blood-groups/addBloodGroup/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in add blood group - ", id);
+    const { data, error } = await supabase
+      .from("organization")
+      .select("*")
+      .eq("userId", id);
+
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    const bloodGroupData = JSON.parse(data[0].blood_groups);
+    const newBloodGroup = {
+      bloodGroup: req.body.bloodGroup,
+      quantity: req.body.quantity,
+    };
+
+    bloodGroupData.push(newBloodGroup);
+
+    const updatedBloodGroupData = JSON.stringify(bloodGroupData);
+
+    const { data: updatedData, error: updateError } = await supabase
+      .from("organization")
+      .update({ blood_groups: updatedBloodGroupData })
+      .eq("userId", id);
+
+    if (updateError) {
+      console.log(updateError);
+      return res.status(400).json({ error: updateError.message });
+    }
+    res.json(updatedData);
   } catch (err) {
     console.error("Unexpected error:", err);
     res.status(500).json({ error: "Internal Server Error" });

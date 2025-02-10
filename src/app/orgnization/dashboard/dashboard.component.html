@@ -15,6 +15,7 @@
         (click)="openProfile(userId)">
         profile
       </button>
+      <button class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-600 transition-colors duration-300" (click)="openAddBloodGroupModal()">Add Blood Group</button>
       <!-- Switch Role Button -->
       <button
         class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-600 transition-colors duration-300"
@@ -70,35 +71,59 @@
     </div> -->
 
     <div class="flex flex-wrap gap-4 ml-44 mt-6">
-       <!-- <app-org-card bloodGroup="'A+'" units="5"></app-org-card>
-      <app-org-card bloodGroup="'B+'" units="3"></app-org-card>
-      <app-org-card bloodGroup="'O+'" units="10"></app-org-card>
-      <app-org-card bloodGroup="'AB+'" units="2"></app-org-card> -->
-      <div class="card bg-white shadow-lg flex justify-center items-center" style="width: 5cm; height: 4cm;">
-        <div class="p-4">
-          <h3 class="text-2xl text-red-700 font-semibold">A+</h3>
-          <p class="text-2xl text-red-700">5</p>
-        </div>
+      <div *ngFor="let bloodGroup of bloodGroups" class="card bg-white shadow-lg flex justify-center items-center" (click)="modifyBloodGroup(bloodGroup)" style="width: 5cm; height: 4cm;">
+      <div class="p-4">
+      <h3 class="text-2xl text-red-700 font-semibold">{{ bloodGroup.bloodGroup.toUpperCase() }}</h3>
+      <p class="text-2xl text-red-700">{{ bloodGroup.quantity }} ml</p>
       </div>
-      <div class="card bg-white shadow-lg flex justify-center items-center" style="width: 5cm; height: 4cm;">
-        <div class="p-4">
-          <h3 class="text-2xl text-red-700 font-semibold">A+</h3>
-          <p class="text-2xl text-red-700">5</p>
-        </div>
       </div>
-      <div class="card bg-white shadow-lg flex justify-center items-center" style="width: 5cm; height: 4cm;">
-        <div class="p-4">
-          <h3 class="text-2xl text-red-700 font-semibold">A+</h3>
-          <p class="text-2xl text-red-700">5</p>
-        </div>
+      </div> 
+      
+      <!-- Modify Blood Group Quantity Modal -->
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" *ngIf="modifyBloodGroupModal">
+  <div class="bg-white w-80 p-6 rounded-lg shadow-lg">
+    <button class="text-gray-500 hover:text-gray-700 transition duration-300 ml-64" (click)="closeModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <h2 class="text-lg font-semibold mb-4">Modify Blood Group Quantity</h2>
+
+    <form>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Blood Group:</label>
+        <input type="text" name="bloodGroup" [(ngModel)]="selectedBloodGroup.bloodGroup" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
       </div>
-      <div class="card bg-white shadow-lg flex justify-center items-center" style="width: 5cm; height: 4cm;">
-        <div class="p-4">
-          <h3 class="text-2xl text-red-700 font-semibold">A+</h3>
-          <p class="text-2xl text-red-700">5</p>
-        </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Quantity:</label>
+        <input type="number" name="quantity" [(ngModel)]="selectedBloodGroup.quantity" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Enter quantity" />
       </div>
-                  
-    </div>
+      <button class="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors duration-300" (click)="updateBloodGroupQuantity()">Update Quantity</button>
+    </form>
+  </div>
+</div>
+
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" *ngIf="addBloodGroupModal">
+  <div class="bg-white w-80 p-6 rounded-lg shadow-lg">
+    <button class="text-gray-500 hover:text-gray-700 transition duration-300 ml-64" (click)="closeAddBloodGroupModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <h2 class="text-lg font-semibold mb-4">Add Blood Group</h2>
+    <form >
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Blood Group:</label>
+        <input type="text" name="bloodGroup" [(ngModel)]="newBloodGroup.bloodGroup" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2 text-red-700">Quantity:</label>
+        <input type="number" name="quantity" [(ngModel)]="newBloodGroup.quantity" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Enter quantity" />
+      </div>
+      <button class="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors duration-300" (click)="addBloodGroup()">Add Blood Group</button>
+    </form>
+  </div>
+ </div>
+
   </div>
 </div>
