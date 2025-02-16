@@ -30,6 +30,11 @@ export class OrgService {
   private fetchAllDonorsApi = 'http://localhost:3000/org/donors';
   private updateBloodGroupApi = 'http://localhost:3000/blood-groups/update';
   private addBloodGroupApi = 'http://localhost:3000/blood-groups/addBloodGroup';
+  private fetchReceiverDetailsApi = 'http://localhost:3000/org/ReceiverDetails';
+  private acceptReceiverApi = 'http://localhost:3000/org/acceptReceiver';
+  private acceptDonorApi = 'http://localhost:3000/org/acceptDonor'
+  private rejectReceiverApi = 'http://localhost:3000/org/rejectReceiver';
+  private fetchDonorDetailsApi = 'http://localhost:3000/org/DonorDetails';
 
   constructor(private http: HttpClient) {
     auth: {
@@ -107,6 +112,14 @@ export class OrgService {
     return this.http.get(`${this.profileFetchUrl}/${orgId}`); // Call to backend API
   }
 
+  acceptReceiver(userId: string): Observable<any> {
+    return this.http.put(`${this.acceptReceiverApi}/${userId}`, {}); // Call to backend API
+  }
+
+  acceptDonor(userId: string): Observable<any> {
+    return this.http.put(`${this.acceptDonorApi}/${userId}`, {}); // Call to backend API
+  }
+
   fetchPendingReceivers(orgId: string): Observable<any> {
     return this.http.get(`${this.fetchPendingReceiversApi}/${orgId}`); // Call to backend API
   }
@@ -114,6 +127,15 @@ export class OrgService {
   fetchApprovedReceivers(orgId: string): Observable<any> {
     return this.http.get(`${this.fetchApprovedReceiversApi}/${orgId}`); // Call to backend API
   }
+
+  fetchReceiverDetails(userId: string): Observable<any> {
+    return this.http.get(`${this.fetchReceiverDetailsApi}/${userId}`);
+  }
+
+  fetchDonorDetails(userId: string): Observable<any> {
+    return this.http.get(`${this.fetchDonorDetailsApi}/${userId}`);
+  }
+
 
   fetchRejectedReceivers(orgId: string): Observable<any> {
     return this.http.get(`${this.fetchRejectedReceiversApi}/${orgId}`); // Call to backend API
@@ -152,6 +174,10 @@ export class OrgService {
       bloodGroup: bloodGroup,
       quantity: quantity,
     });
+  }
+
+  rejectReceiver(userId: string): Observable<any> {
+    return this.http.put(`${this.rejectReceiverApi}/${userId}`, {}); // Call to backend API
   }
 
   updateBloodGroupQuantity(

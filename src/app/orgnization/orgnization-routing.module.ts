@@ -15,31 +15,33 @@ import { PendingDonorListComponent } from './donorRequests/pending-donor-list/pe
 import { ApprovedDonorListComponent } from './donorRequests/approved-donor-list/approved-donor-list.component';
 import { AllDonorListComponent } from './donorRequests/all-donor-list/all-donor-list.component';
 import { RejectedDonorsListComponent } from './donorRequests/rejected-donors-list/rejected-donors-list.component';
+import { ViewReceiverComponent } from './view-receiver/view-receiver.component';
 
 const routes: Routes = [
-  {path:'signin',component:SigninComponent},
+  { path: 'signin', component: SigninComponent },
   {
-    path:'org-dashboard',
-    component:DashboardComponent
+    path: 'org-dashboard',
+    component: DashboardComponent,
   },
-  {path:'signup',component:SignupComponent},
-  {path:'view_org',component:ViewOrgFormComponent},
-  {path:'req',component:RequestsComponent},
-  {path:'org/Profile',component:OrgProfileComponent},
-  {path:'org-request',component:OrgRequestsComponent},
-  {path:'org-form',component:ViewOrgFormComponent},
-  {path:'org/receiversList/pending',component:PendingReceiversComponent},
-  {path:'org/receiversList/approved',component:ApprovedReceiversComponent},
-  {path:'org/receiversList/rejected',component:RejectedReceiversComponent},
-  {path:'org/receiversList',component:AllReceiversListComponent},
-  {path:'org/donorsList/pending',component:PendingDonorListComponent},
-  {path:'org/donorsList/approved',component:ApprovedDonorListComponent},
-  {path:'org/donorsList/rejected',component:RejectedDonorsListComponent},
-  {path:'org/donorsList',component:AllDonorListComponent},
+  { path: 'signup', component: SignupComponent },
+  { path: 'view_org', component: ViewOrgFormComponent },
+  { path: 'org/view_receiver', component: ViewReceiverComponent },
+  { path: 'req', component: RequestsComponent },
+  { path: 'org/Profile', component: OrgProfileComponent },
+  { path: 'org-request', component: OrgRequestsComponent },
+  { path: 'org-form', component: ViewOrgFormComponent },
+  { path: 'org/receiversList/pending', component: PendingReceiversComponent },
+  { path: 'org/receiversList/approved', component: ApprovedReceiversComponent },
+  { path: 'org/receiversList/rejected', component: RejectedReceiversComponent },
+  { path: 'org/receiversList', component: AllReceiversListComponent },
+  { path: 'org/donorsList/pending', component: PendingDonorListComponent },
+  { path: 'org/donorsList/approved', component: ApprovedDonorListComponent },
+  { path: 'org/donorsList/rejected', component: RejectedDonorsListComponent },
+  { path: 'org/donorsList', component: AllDonorListComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class OrgnizationRoutingModule { }
+export class OrgnizationRoutingModule {}

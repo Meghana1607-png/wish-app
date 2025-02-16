@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './approved-donor-list.component.html',
   styleUrls: ['./approved-donor-list.component.css']
 })
+
 export class ApprovedDonorListComponent {
   approvedDonor: any; 
   userId : any;
