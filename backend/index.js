@@ -283,36 +283,48 @@ app.post("/orgforminsert", async (req, res) => {
 });
 
 app.post("/userforminsert", async (req, res) => {
-  console.log("API called with body:", req.body);
+  console.log(" API called with body:", JSON.stringify(req.body, null, 2));
 
   try {
     if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({ message: "Request body is missing" });
     }
 
-    const { gender, phno,  address   } = req.body;
+    const { userid, name, email, phno, address, gender } = req.body;
+    console.log("Extracted userid:", userid);
 
-    console.log("Inserting into Supabase...",req.body);
-    const { data, error } = await supabase.from("users").insert(
-      { gender:gender, 
-        phno:phno,  
-        address:address
-       }
-    );
-
-    if (error) {
-      console.error("Supabase Error:", error.message);
-      console.log(error)
-      return res.status(500).json({ message: "Database error", error });
+    if (!userid) {
+      console.error(" User ID is missing in request body:", req.body);
+      return res.status(400).json({ message: "User ID is required" });
     }
 
-    console.log("Data inserted successfully:", data);
-    res.status(200).json({ message: "User form submitted", data });
-  } catch (error) {
-    console.error("Error during insertion:", error);
+    console.log("Inserting into Supabase...", req.body);
+  
+
+    const { data, error, count } = await supabase
+  .from("users")
+  .update({ name, email, phno, address, gender })
+  .eq("userid", userid)
+  .select();
+
+if (error) {
+  console.error(" Supabase Update Error:", error.message, error);
+  return res.status(500).json({ message: "Database error", error });
+}
+
+if (!data || data.length === 0) {
+  console.warn(" No rows updated. Check if userid exists:", userid);
+  return res.status(404).json({ message: "User ID not found or no changes made" });
+}
+    }
+  
+  catch (error) {
+    console.error(" Error during insertion:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
+
+
 
 
 // app.post("/orgformfetch", async (req, res) => {

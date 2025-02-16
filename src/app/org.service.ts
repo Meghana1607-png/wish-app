@@ -65,17 +65,6 @@ export class OrgService {
     );
   }
 
-  // fetchorg(id:any): Observable<any> {
-  //   return from(
-  //     this.supabase
-  //       .from('organization')
-  //       .select('*')
-  //       .eq('org_id','6323145f-303e-4fb6-a23e-d8b299eb85ae')
-  //       .then((response) => {
-  //         return response;
-  //       })
-  //   );
-  // }
   async getAuthId(): Promise<string | null> {
     const { data, error } = await this.supabase.auth.getUser();
     if (error) {
@@ -93,7 +82,7 @@ export class OrgService {
       .from('organization')
       .select()
       .eq('auth_id', UID)
-      .single(); // Assuming one org per user
+      .single(); 
 
     if (error) {
       console.error('Error fetching org_id:', error);
@@ -104,15 +93,15 @@ export class OrgService {
   }
 
   fetchProfileByOrg(orgId: string): Observable<any> {
-    return this.http.get(`${this.profileFetchUrl}/${orgId}`); // Call to backend API
+    return this.http.get(`${this.profileFetchUrl}/${orgId}`);
   }
 
   fetchPendingReceivers(orgId: string): Observable<any> {
-    return this.http.get(`${this.fetchPendingReceiversApi}/${orgId}`); // Call to backend API
+    return this.http.get(`${this.fetchPendingReceiversApi}/${orgId}`); 
   }
 
   fetchApprovedReceivers(orgId: string): Observable<any> {
-    return this.http.get(`${this.fetchApprovedReceiversApi}/${orgId}`); // Call to backend API
+    return this.http.get(`${this.fetchApprovedReceiversApi}/${orgId}`); 
   }
 
   fetchRejectedReceivers(orgId: string): Observable<any> {

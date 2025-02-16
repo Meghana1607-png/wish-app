@@ -13,6 +13,8 @@ import { OrgListComponent } from './org-list/org-list.component';
 import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
 import { DonorSigninComponent } from './donor-signin/donor-signin.component';
+import { SearchComponentComponent } from './search-component/search-component.component';
+
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { DonorSigninComponent } from './donor-signin/donor-signin.component';
     SignupComponent,
     SigninComponent,
     DonorSigninComponent,
+    SearchComponentComponent,
   ],
   imports: [
     BrowserModule,

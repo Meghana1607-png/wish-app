@@ -53,21 +53,26 @@ export class RequestsService {
   //   });
   // }
 
-  // Method to submit the request
+  
   submitRequest(requestData: any): Observable<any> {
+    console.log('Submitting request with data:', requestData); // Debugging
     return new Observable(observer => {
       this.supabase
-        .from('request')  // Assuming 'org_requests' is your request table
-        .insert([requestData])  // Insert request into the table
-        .then(response => {
-          if (response.error) {
-            observer.error(response.error.message);
+        .from('request')
+        .insert([requestData])
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Supabase Error:', error);
+            observer.error(error.message);
           } else {
-            observer.next(response.data);
+            observer.next(data);
+            observer.complete();
           }
-        });
+        })
+        // .catch(err => observer.error(err));
     });
   }
+  
 
   async createRequest1(requestData: any) {
     return await this. supabase.from('request').insert([requestData]);

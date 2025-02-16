@@ -12,7 +12,7 @@ import { AuthService } from '../auth.service';
 })
 export class SignupComponent {
 
-
+userId:any
   constructor( private authentication:AuthService,private router:Router)
   {
   }
@@ -39,18 +39,18 @@ export class SignupComponent {
    const confirmpassword:string=this.signupForm.value.confirmPassword || '';
    this.authentication.signUp(username,email,password,confirmpassword).then((res:any)=>
       {
-       console.log(res);
+       console.log('signup returned data',res);
         if(res.error==null)
           {
+            // this.userId = res.user.id;
+            // localStorage.setItem('authId', this.userId);
             alert('Successfully registered ,now you can login');
-           this.router.navigateByUrl('rprofile');
+           this.router.navigateByUrl('/Sign-In');
           }
      else{
       alert(res.error.message);
      }
    }
-
-  )
-
+   )
 }
 }

@@ -23,18 +23,19 @@ export class ViewOrgFormComponent {
   orgData: any = {};
   selectedOrgId: any;
   userId: any;
+email:any
 
-
-  constructor(private supabase:OrgService,private receiver:ReceiverService, private user:ProfileService,private request:RequestsService, private router:Router, private active:ActivatedRoute,private authservice:AuthService){
+  constructor(private supabase:OrgService,private auth:AuthService,private receiver:ReceiverService, private user:ProfileService,private request:RequestsService, private router:Router, private active:ActivatedRoute,private authservice:AuthService){
 
     this.selectedOrgId = this.supabase.fetchorgform('id');
     this.userId = this.user.form(); 
-  
- 
+    this.userId = localStorage.getItem('authId');
+    this.userId = localStorage.getItem('userId');
+    this.getUserID();
   }
 
   async ngOnInit() {
-    this.authservice.setAuthId(this.userid);  // Assuming user.id is fetched correctly
+    // this.authservice.setAuthId(this.userid);  // Assuming user.id is fetched correctly
 
    
     this.active.queryParams.subscribe((params) => {
@@ -81,81 +82,36 @@ export class ViewOrgFormComponent {
       }
     });
   }
-  
-  // setAuthId(authId: string) {
-  //   console.log(localStorage.setItem('authId', this.userId));
-  // }
-
-  makeRequest() {
-    if (!this.userid || !this.organization?.org_id) {
-      console.error('Missing user or organization details');
-      return;
+  async getUserId() {
+    const { data: { user } } = await this.auth.getUser();
+    if (user) {
+      this.userId = user.id; // Assign the correct user ID
+      this.email = user.email; // Assign the correct user email
+    } else {
+      console.error('User not logged in');
     }
-
+  }
+  
+  async requestBlood() {
     const requestData = {
-      user_id: this.userid,
-      org_id: this.organization?.org_id,
-      status: 'pending'
+      org_id: this.orgId, // Organization ID selected
+      userid: this.userId, // User ID sending the request
+      email: this.email,
+      status: 'Pending'
     };
-    console.log(this.org_id)
-
-    this.receiver.submitReceiverForm(requestData).subscribe({
-      next: (response: any) => {
-        console.log('Request submitted successfully:', response);
+  
+    this.request.submitRequest(requestData).subscribe({
+      next: (data) => {
         alert('Request sent successfully!');
       },
-      error: (error: any) => {
-        console.error('Error submitting request:', error);
-        console.log('Error details:', error.message); // Log error details
-        alert('Failed to send request. Check console for details.');
+      error: (err) => {
+        console.error('Error sending request:', err);
+        alert('Failed to send request. Please try again.');
       }
     });
-    
   }
- async requestBlood() {
-  // Retrieve authId from localStorage
-  this.userId = localStorage.getItem('authId');
-  console.log('Retrieved User ID from localStorage:', this.userId);
-
-  // Check if selectedOrgId is an observable
-  console.log('Selected Org ID (before subscription):', this.selectedOrgId);
-
-  // Handle Observable case properly
-  if (this.selectedOrgId && typeof this.selectedOrgId.subscribe === 'function') {
-    this.selectedOrgId.subscribe((orgId: string) => {
-      console.log('Selected Org ID (after subscription):', orgId);
-      console.log('User ID:', this.userId);
-
-      if (!orgId || !this.userId) {
-        alert('Missing organization or user details!');
-        return;
-      }
-
-      const requestData = {
-        org_id: orgId,
-        user_id: this.userId,
-        status: 'Pending'
-      };
-
-      this.request.createRequest1(requestData)
-        .then(({ error }) => {
-          if (error) {
-            console.error('Error sending request:', error);
-            alert('Failed to send request. Please try again.');
-          } else {
-            alert('Request sent successfully!');
-          }
-        })
-        .catch(err => {
-          console.error('Request error:', err);
-          alert('Something went wrong. Please try again later.');
-        });
-    });
-  } else {
-    console.error('selectedOrgId is null or not an observable:', this.selectedOrgId);
-    alert('Organization selection error. Please try again.');
-  }
-}
-
-}
   
+  }
+  
+
+

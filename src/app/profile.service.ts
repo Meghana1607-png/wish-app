@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Observable,from } from 'rxjs';
@@ -17,11 +17,11 @@ export class ProfileService {
     this.supabase = createClient('https://esuzqpwibfnycwmeirtg.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzdXpxcHdpYmZueWN3bWVpcnRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5NjA1MTQsImV4cCI6MjA1MDUzNjUxNH0.FUL9viBXkN2Q44hhdFKPj8uKBT0SkJqcSfbjPV2oExc')
   }
 
-   profileinsert(data: any): Observable<any> {
-    console.log('Sending data to API:', data); 
+  //  profileinsert(data: any): Observable<any> {
+  //   console.log('Sending data to API:', data); 
 
-    return this.http.post(this.apiurl, data);
-  }
+  //   return this.http.post(this.apiurl, data);
+  // }
   async form(): Promise<any> {
     const { data, error } = await this.supabase.from('users').select('*');
     if (error) {
@@ -35,4 +35,16 @@ export class ProfileService {
   //   localStorage.setItem('authId', authId);
   //   console.log('setitem',authId)
   // }
+   profilefetch(uid:any){
+    const res=this.supabase.from('users').select().eq('userid',uid)
+  return from(res)
+  }
+
+  profileinsert(userFormData: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(this.apiurl, userFormData, { headers });
+  }
+  async getUser() {
+    return await this.supabase.auth.getUser();
+  }
 }
