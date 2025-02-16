@@ -21,12 +21,14 @@ export class DashboardComponent {
   modifyBloodGroupModal: boolean = false;
   addBloodGroupModal = false;
   newBloodGroup: any = {};
-
+  showPopup: boolean = false; // Declare showPopup variable
+  popupMessage: string = '';
+  validBloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
   menu = [
     { path: 'org/dashboard', label: 'Blood Hub', icon: 'pi pi-users' },
     { path: 'org/donorsList', label: 'Donors list', icon: 'pi pi-users' },
-    { path: 'org/receiversList', label: 'Receivers list', icon: 'pi pi-users' },
+    //{ path: 'org/receiversList', label: 'Receivers list', icon: 'pi pi-users' },
     {
       path: 'org/donorsList/pending',
       label: 'Donor pending list',
@@ -58,7 +60,7 @@ export class DashboardComponent {
       icon: 'pi pi-users',
     },
     { path: 'org/teams-table', label: 'feedbacks', icon: 'pi pi-users' },
-  ]; 
+  ];
 
   newUnits: number = 0; // Property for new units input, initialized to 0
   feedbackMessage: string = ''; // Property for user feedback message
@@ -136,50 +138,105 @@ export class DashboardComponent {
   }
 
   addBloodGroup() {
-    this.orgService
-      .addBloodGroup(
-        this.newBloodGroup.bloodGroup.toUpperCase(),
-        this.newBloodGroup.quantity,
-        this.userId
+    console.log('bloodGroups  ', this.bloodGroups);
+    const existingBloodGroup = this.bloodGroups.find(
+      (group) =>
+        group.bloodGroup.toUpperCase() ===
+        this.newBloodGroup.bloodGroup.toUpperCase()
+    );
+
+    if (existingBloodGroup) {
+      this.addBloodGroupModal = false;
+      this.showPopup = true;
+      this.popupMessage = `Blood group already exists!`;
+      setTimeout(() => {
+        this.showPopup = false;
+      }, 2500);
+      return;
+    }
+
+    if (
+      this.validBloodGroups.includes(
+        this.newBloodGroup.bloodGroup.toUpperCase()
       )
-      .subscribe({
-        next: (data: any) => {
-          console.log('Blood group added successfully:', data);
-          this.addBloodGroupModal = false;
-          this.fetchBloodGroups(this.userId);
-        },
-        error: (err: any) => {
-          console.error('Error adding blood group:', err);
-        },
-      });
-      
+    ) {
+      console.log(
+        'newBloodGroup ',
+        this.newBloodGroup.bloodGroup.toUpperCase()
+      );
+      this.orgService
+        .addBloodGroup(
+          this.newBloodGroup.bloodGroup.toUpperCase(),
+          this.newBloodGroup.quantity,
+          this.userId
+        )
+        .subscribe({
+          next: (data: any) => {
+            console.log('Blood group added successfully:', data);
+            this.addBloodGroupModal = false;
+            this.fetchBloodGroups(this.userId);
+          },
+          error: (err: any) => {
+            console.error('Error adding blood group:', err);
+          },
+        });
+    } else {
+      this.addBloodGroupModal = false;
+      this.showPopup = true;
+      this.popupMessage = `Invalid blood group!`;
+      setTimeout(() => {
+        this.showPopup = false;
+      }, 2500);
+      return;
+    }
   }
-  
+
   openAddBloodGroupModal() {
     this.addBloodGroupModal = true;
   }
-  
+
   closeAddBloodGroupModal() {
     this.addBloodGroupModal = false;
   }
-  
 
   updateBloodGroupQuantity() {
-    this.orgService
-      .updateBloodGroupQuantity(
-        this.selectedBloodGroup.bloodGroup.toUpperCase(),
-        this.selectedBloodGroup.quantity,
-        this.userId
+    if (
+      this.validBloodGroups.includes(
+        this.selectedBloodGroup.bloodGroup.toUpperCase()
       )
-      .subscribe({
-        next: (data: any) => {
-          console.log('Blood group quantity updated successfully:', data);
-          this.modifyBloodGroupModal = false;
-          this.fetchBloodGroups(this.userId);
-        },
-        error: (err: any) => {
-          console.error('Error updating blood group quantity:', err);
-        },
-      });
+    ) {
+      if (this.selectedBloodGroup.quantity >= 0) {
+        this.orgService
+          .updateBloodGroupQuantity(
+            this.selectedBloodGroup.bloodGroup.toUpperCase(),
+            this.selectedBloodGroup.quantity,
+            this.userId
+          )
+          .subscribe({
+            next: (data: any) => {
+              console.log('Blood group quantity updated successfully:', data);
+              this.modifyBloodGroupModal = false;
+              this.fetchBloodGroups(this.userId);
+            },
+            error: (err: any) => {
+              console.error('Error updating blood group quantity:', err);
+            },
+          });
+      } else {
+        this.showPopup = true;
+        this.popupMessage = `Invalid blood quantity!`;
+        setTimeout(() => {
+          this.showPopup = false;
+        }, 2500);
+        return;
+      }
+    } else {
+      this.showPopup = true;
+      this.popupMessage = `Invalid blood group!`;
+      setTimeout(() => {
+        this.showPopup = false;
+      }, 2500);
+      return;
+    }
   }
 }

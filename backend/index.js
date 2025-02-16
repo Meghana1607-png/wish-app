@@ -320,7 +320,9 @@ if (!data || data.length === 0) {
   
   catch (error) {
     console.error(" Error during insertion:", error);
-    res.status(500).json({ message: "Internal Server Error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 });
 
@@ -411,7 +413,7 @@ app.get("/org/receivers/:id", async (req, res) => {
     const { data, error } = await supabase
       .from("request")
       .select("*")
-      .eq("auth_id", id);
+      .eq("org_id", id);
 
     if (error) {
       console.log(error);
@@ -431,7 +433,7 @@ app.get("/org/receivers/approved/:id", async (req, res) => {
     const { data, error } = await supabase
       .from("request")
       .select("*")
-      .eq("auth_id", id)
+      .eq("org_id", id)
       .eq("status", "approved");
 
     if (error) {
@@ -452,7 +454,7 @@ app.get("/org/receivers/rejected/:id", async (req, res) => {
     const { data, error } = await supabase
       .from("request")
       .select("*")
-      .eq("auth_id", id)
+      .eq("org_id", id)
       .eq("status", "rejected");
 
     if (error) {
@@ -473,13 +475,14 @@ app.get("/org/receivers/pending/:id", async (req, res) => {
     const { data, error } = await supabase
       .from("request")
       .select("*")
-      .eq("auth_id", id)
+      .eq("org_id", id)
       .eq("status", "pending");
 
     if (error) {
       console.log(error);
       return res.status(400).json({ error: error.message });
     }
+    console.log(data);
     res.json(data);
   } catch (err) {
     console.error("Unexpected error:", err);
@@ -494,7 +497,7 @@ app.get("/org/donors/:id", async (req, res) => {
     const { data, error } = await supabase
       .from("donorRequests")
       .select("*")
-      .eq("auth-id", id);
+      .eq("org_id", id);
 
     if (error) {
       console.log(error);
@@ -514,7 +517,7 @@ app.get("/org/donors/approved/:id", async (req, res) => {
     const { data, error } = await supabase
       .from("donorRequests")
       .select("*")
-      .eq("auth-id", id)
+      .eq("org_id", id)
       .eq("status", "approved");
 
     if (error) {
@@ -535,7 +538,7 @@ app.get("/org/donors/rejected/:id", async (req, res) => {
     const { data, error } = await supabase
       .from("donorRequests")
       .select("*")
-      .eq("auth-id", id)
+      .eq("org_id", id)
       .eq("status", "rejected");
 
     if (error) {
@@ -556,7 +559,7 @@ app.get("/org/donors/pending/:id", async (req, res) => {
     const { data, error } = await supabase
       .from("donorRequests")
       .select("*")
-      .eq("auth-id", id)
+      .eq("org_id", id)
       .eq("status", "pending");
 
     if (error) {
@@ -564,6 +567,7 @@ app.get("/org/donors/pending/:id", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
     res.json(data);
+    console.log("data in pending donors - ", data);
   } catch (err) {
     console.error("Unexpected error:", err);
     res.status(500).json({ error: "Internal Server Error" });
@@ -573,7 +577,7 @@ app.get("/org/donors/pending/:id", async (req, res) => {
 app.get("/api/organization/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    console.log("id", id);
+    console.log("id in organisation profile fetch ", id);
     const { data, error } = await supabase
       .from("organization")
       .select("*")
@@ -591,48 +595,47 @@ app.get("/api/organization/:id", async (req, res) => {
   }
 });
 
-// app.put("/blood-groups/update/:id", async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     console.log("id in update blood group quantity - ", id);
-//     const { data, error } = await supabase
-//       .from("organization")
-//       .select("*")
-//       .eq("userId", id);
+app.get("/org/DonorDetails/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id donor details fetch", id);
+    const { data, error } = await supabase
+      .from("donors")
+      .select("*")
+      .eq("user_id", id);
 
-//     if (error) {
-//       console.log(error);
-//       return res.status(400).json({ error: error.message });
-//     }
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+    console.log("id", data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
-//     const bloodGroupData = JSON.parse(data[0].blood_groups);
-//     const FilterBloodGroup = bloodGroupData.filter(
-//       (group) =>
-//         group.bloodGroup.toLowerCase() !== req.body.bloodGroup.toLowerCase()
-//     );
-//     const updatedBloodGroup = bloodGroupData.find(
-//       (group) =>
-//         group.bloodGroup.toLowerCase() === req.body.bloodGroup.toLowerCase()
-//     );
+app.get("/org/ReceiverDetails/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id", id);
+    const { data, error } = await supabase
+      .from("receivers")
+      .select("*")
+      .eq("userid", id);
 
-//     updatedBloodGroup.quantity = req.body.quantity;
-
-//     FilterBloodGroup.push(updatedBloodGroup);
-//     const updatedBloodGroupData = JSON.stringify(FilterBloodGroup);
-//     const { data: updatedData, error: updateError } = await supabase
-//       .from("organization")
-//       .update({ blood_groups: updatedBloodGroupData })
-//       .eq("userId", id);
-//     if (updateError) {
-//       console.log(updateError);
-//       return res.status(400).json({ error: updateError.message });
-//     }
-//     res.json(updatedData);
-//   } catch (err) {
-//     console.error("Unexpected error:", err);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+    console.log("id", data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 app.put("/blood-groups/update/:id", async (req, res) => {
   const { id } = req.params;
@@ -713,6 +716,99 @@ app.put("/blood-groups/addBloodGroup/:id", async (req, res) => {
       console.log(updateError);
       return res.status(400).json({ error: updateError.message });
     }
+    res.json(updatedData);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.put("/org/rejectReceiver/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in update rejecting status - ", id);
+    const { data, error } = await supabase
+      .from("request")
+      .select("*")
+      .eq("userid", id);
+
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    const { data: updatedData, error: updateError } = await supabase
+      .from("request")
+      .update({ status: "rejected" })
+      .eq("userid", id);
+
+    if (updateError) {
+      console.log(updateError);
+      return res.status(400).json({ error: updateError.message });
+    }
+
+    res.json(updatedData);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.put("/org/acceptReceiver/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in update accepting status - ", id);
+    const { data, error } = await supabase
+      .from("request")
+      .select("*")
+      .eq("userid", id);
+
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    const { data: updatedData, error: updateError } = await supabase
+      .from("request")
+      .update({ status: "approved" })
+      .eq("userid", id);
+
+    if (updateError) {
+      console.log(updateError);
+      return res.status(400).json({ error: updateError.message });
+    }
+
+    res.json(updatedData);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.put("/org/acceptDonor/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in update accepting status - ", id);
+    const { data, error } = await supabase
+      .from("donorRequests")
+      .select("*")
+      .eq("userid", id);
+
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    const { data: updatedData, error: updateError } = await supabase
+      .from("donorRequests")
+      .update({ status: "approved" })
+      .eq("userid", id);
+
+    if (updateError) {
+      console.log(updateError);
+      return res.status(400).json({ error: updateError.message });
+    }
+
     res.json(updatedData);
   } catch (err) {
     console.error("Unexpected error:", err);

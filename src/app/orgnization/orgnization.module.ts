@@ -18,6 +18,8 @@ import { AllDonorListComponent } from './donorRequests/all-donor-list/all-donor-
 import { PendingDonorListComponent } from './donorRequests/pending-donor-list/pending-donor-list.component';
 import { ApprovedDonorListComponent } from './donorRequests/approved-donor-list/approved-donor-list.component';
 import { RejectedDonorsListComponent } from './donorRequests/rejected-donors-list/rejected-donors-list.component';
+import { ViewReceiverComponent } from './view-receiver/view-receiver.component';
+import { ViewDonorComponent } from './view-donor/view-donor.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { RejectedDonorsListComponent } from './donorRequests/rejected-donors-lis
     PendingDonorListComponent,
     ApprovedDonorListComponent,
     RejectedDonorsListComponent,
+    ViewReceiverComponent,
+    ViewDonorComponent,
   ],
   imports: [
     CommonModule,

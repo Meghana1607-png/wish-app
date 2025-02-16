@@ -7,6 +7,7 @@ import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
 import { DonorSigninComponent } from './donor-signin/donor-signin.component';
 import { SearchComponentComponent } from './search-component/search-component.component';
+import { ViewDonorComponent } from './orgnization/view-donor/view-donor.component';
 
 const routes: Routes = [
   {path: 'donor', loadChildren: () => import('./donor/donor.module').then(m => m.DonorModule) }, 
@@ -15,18 +16,15 @@ const routes: Routes = [
   {path:'receiver',loadChildren:() => import('./receiver/receiver.module').then(m => m.ReceiverModule)},
   {path:'app',component:AppComponent },
   {path:'landing',component:LandingPageComponent},
-  {path:'search',component:SearchComponentComponent},
   {path:'org-list',component:OrgListComponent},
   {path:'Sign-up',component:SignupComponent},
   {path:'Sign-In',component:SigninComponent},
   {path:'donor-SignIn',component:DonorSigninComponent}
   // {path:'org-list',component:OrgListComponent}
-  ];
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { 
-
-}
+export class AppRoutingModule {}

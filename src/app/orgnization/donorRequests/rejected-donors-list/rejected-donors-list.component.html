@@ -1,1 +1,29 @@
-<p>rejected-donors-list works!</p>
+<div class="max-w-3xl mx-auto p-6 bg-gray-100 min-h-screen">
+  <h1 class="text-2xl font-semibold text-center mb-6">Receivers</h1>
+
+  <div *ngIf="rejectedDonor?.length; else noData" class="space-y-4">
+    <div
+      *ngFor="let donor of rejectedDonor"
+      class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md"
+    >
+      <!-- donor Details -->
+      <div class="flex items-center">
+        <div class="flex-shrink-0 mr-4">
+          <img
+            [src]="donor.logo || 'https://via.placeholder.com/50'"
+            alt="donor Logo"
+            class="w-12 h-12 rounded-full object-cover"
+          />
+        </div>
+        <div>
+          <p class="text-sm text-black-600">{{ donor.email }}</p>
+          <p class="text-sm text-black-600">{{ donor.status }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <p class="text-center text-gray-600">No donors found.</p>
+  </ng-template>
+</div>
