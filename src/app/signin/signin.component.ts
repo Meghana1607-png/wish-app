@@ -65,17 +65,17 @@ export class SigninComponent {
 
   this.service.profilefetch(localStorage.getItem('authId')).subscribe({
     next: (res: any) => {
-      console.log("🔍 API Response:", res); // Log the entire response
+      console.log(" API Response:", res); // Log the entire response
   
       if (!res || !res.data || res.data.length === 0) {
-        console.error("❌ Error: No user data received");
+        console.error(" Error: No user data received");
         alert("Profile fetch error: No user data found.");
         return;
       }
   
       const userProfile = res.data[0]; // First object in the array
   
-      console.log("🟢 User Profile:", userProfile); // Log the fetched user profile
+      console.log(" User Profile:", userProfile); // Log the fetched user profile
   
       if (userProfile.gender == null) {
         this.router.navigateByUrl('/rprofile');
@@ -84,7 +84,7 @@ export class SigninComponent {
       }
     },
     error: (err) => {
-      console.error("❌ API Fetch Error:", err);
+      console.error("API Fetch Error:", err);
       alert("Profile fetch error");
     }
   });
