@@ -73,9 +73,9 @@ export class SigninComponent {
         return;
       }
   
-      const userProfile = res.data[0]; // First object in the array
+      const userProfile = res.data[0]; 
   
-      console.log(" User Profile:", userProfile); // Log the fetched user profile
+      console.log(" User Profile:", userProfile); 
   
       if (userProfile.gender == null) {
         this.router.navigateByUrl('/rprofile');
