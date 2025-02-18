@@ -44,7 +44,20 @@ export class ProfileService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(this.apiurl, userFormData, { headers });
   }
-  async getUser() {
-    return await this.supabase.auth.getUser();
+  async getuser() {
+    try {
+      const { data, error } = await this.supabase.auth.getUser();
+      console.log("getUser() - Supabase Response:", data);
+      if (error) {
+        console.error("Error in getUser:", error.message);
+        return { data: null, error };
+      }
+      return { data, error: null };
+    } catch (e) {
+      console.error("Exception in getUser:", e);
+      return { data: null, error: e };
+    }
   }
-}
+  
+   }
+

@@ -7,6 +7,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AwarenessComponent } from './awareness/awareness.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { AwarenessComponent } from './awareness/awareness.component';
     DonorComponent,
     DashboardComponent,
     ProfileComponent,
-    AwarenessComponent
+    AwarenessComponent,
+    SignUpComponent
   ],
   imports: [
     CommonModule,
