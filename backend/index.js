@@ -282,8 +282,9 @@ app.post("/orgforminsert", async (req, res) => {
   }
 });
 
+
 app.post("/userforminsert", async (req, res) => {
-  console.log(" API called with body:", JSON.stringify(req.body, null, 2));
+  console.log("API called with body:", JSON.stringify(req.body, null, 2));
 
   try {
     if (!req.body || Object.keys(req.body).length === 0) {
@@ -291,40 +292,61 @@ app.post("/userforminsert", async (req, res) => {
     }
 
     const { userid, name, email, phno, address, gender } = req.body;
-    console.log("Extracted userid:", userid);
 
     if (!userid) {
-      console.error(" User ID is missing in request body:", req.body);
+      console.error("User ID is missing in request body:", req.body);
       return res.status(400).json({ message: "User ID is required" });
     }
 
-    console.log("Inserting into Supabase...", req.body);
-  
+    // Check if the user exists
+    const { data: existingUser, error: fetchError } = await supabase
+      .from("users")
+      .select("userid")
+      .eq("userid", userid);
 
-    const { data, error, count } = await supabase
-  .from("users")
-  .update({ name, email, phno, address, gender })
-  .eq("userid", userid)
-  .select();
-
-if (error) {
-  console.error(" Supabase Update Error:", error.message, error);
-  return res.status(500).json({ message: "Database error", error });
-}
-
-if (!data || data.length === 0) {
-  console.warn(" No rows updated. Check if userid exists:", userid);
-  return res.status(404).json({ message: "User ID not found or no changes made" });
-}
+    if (fetchError) {
+      console.error("Error checking user existence:", fetchError);
+      return res.status(500).json({ message: "Database error", error: fetchError });
     }
-  
-  catch (error) {
-    console.error(" Error during insertion:", error);
-    res
-      .status(500)
-      .json({ message: "Internal Server Error", error: error.message });
+
+    if (!existingUser || existingUser.length === 0) {
+      // User does not exist, insert them
+      console.log("User does not exist, inserting into Supabase...");
+      const { data: insertData, error: insertError } = await supabase
+        .from("users")
+        .insert([{ userid, name, email, phno, address, gender }])
+        .select();
+
+      if (insertError) {
+        console.error("Supabase Insert Error:", insertError);
+        return res.status(500).json({ message: "Failed to insert user", error: insertError });
+      }
+
+      console.log("User inserted successfully:", insertData);
+      return res.status(201).json({ message: "User inserted successfully", data: insertData });
+    }
+
+    // If user exists, update their data
+    console.log("User exists, updating details...");
+    const { data, error } = await supabase
+      .from("users")
+      .update({ name, email, phno, address, gender })
+      .eq("userid", userid)
+      .select();
+
+    if (error) {
+      console.error("Supabase Update Error:", error);
+      return res.status(500).json({ message: "Database error", error });
+    }
+
+    return res.status(200).json({ message: "User updated successfully", data });
+
+  } catch (error) {
+    console.error("Error during insertion:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
+
 
 
 
