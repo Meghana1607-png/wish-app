@@ -20,6 +20,7 @@ import { ApprovedDonorListComponent } from './donorRequests/approved-donor-list/
 import { RejectedDonorsListComponent } from './donorRequests/rejected-donors-list/rejected-donors-list.component';
 import { ViewReceiverComponent } from './view-receiver/view-receiver.component';
 import { ViewDonorComponent } from './view-donor/view-donor.component';
+import { HeaderSideBarComponent } from './header-side-bar/header-side-bar.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ViewDonorComponent } from './view-donor/view-donor.component';
     RejectedDonorsListComponent,
     ViewReceiverComponent,
     ViewDonorComponent,
+    HeaderSideBarComponent,
   ],
   imports: [
     CommonModule,

@@ -32,9 +32,11 @@ export class OrgService {
   private addBloodGroupApi = 'http://localhost:3000/blood-groups/addBloodGroup';
   private fetchReceiverDetailsApi = 'http://localhost:3000/org/ReceiverDetails';
   private acceptReceiverApi = 'http://localhost:3000/org/acceptReceiver';
-  private acceptDonorApi = 'http://localhost:3000/org/acceptDonor'
+  private acceptDonorApi = 'http://localhost:3000/org/acceptDonor';
   private rejectReceiverApi = 'http://localhost:3000/org/rejectReceiver';
   private fetchDonorDetailsApi = 'http://localhost:3000/org/DonorDetails';
+  private rejectDonorApi = 'http://localhost:3000/org/rejectDonor';
+  private requestDonorapi = 'http://localhost:3000/org/requestDonor';
 
   constructor(private http: HttpClient) {
     auth: {
@@ -50,6 +52,11 @@ export class OrgService {
   Orginsert(org: any): Observable<any> {
     return this.http.post(this.apiurl, org);
   }
+
+  requestDonor(user: any, data: any): Observable<any> {
+    return this.http.post(`${this.requestDonorapi}/${user}`, data);
+  }
+
   OrgSignIn(data: any): Observable<any> {
     return this.http.post(this.api, data);
   }
@@ -87,7 +94,7 @@ export class OrgService {
       .from('organization')
       .select()
       .eq('auth_id', UID)
-      .single(); 
+      .single();
 
     if (error) {
       console.error('Error fetching org_id:', error);
@@ -110,11 +117,11 @@ export class OrgService {
   }
 
   fetchPendingReceivers(orgId: string): Observable<any> {
-    return this.http.get(`${this.fetchPendingReceiversApi}/${orgId}`); 
+    return this.http.get(`${this.fetchPendingReceiversApi}/${orgId}`);
   }
 
   fetchApprovedReceivers(orgId: string): Observable<any> {
-    return this.http.get(`${this.fetchApprovedReceiversApi}/${orgId}`); 
+    return this.http.get(`${this.fetchApprovedReceiversApi}/${orgId}`);
   }
 
   fetchReceiverDetails(userId: string): Observable<any> {
@@ -124,7 +131,6 @@ export class OrgService {
   fetchDonorDetails(userId: string): Observable<any> {
     return this.http.get(`${this.fetchDonorDetailsApi}/${userId}`);
   }
-
 
   fetchRejectedReceivers(orgId: string): Observable<any> {
     return this.http.get(`${this.fetchRejectedReceiversApi}/${orgId}`); // Call to backend API
@@ -167,6 +173,10 @@ export class OrgService {
 
   rejectReceiver(userId: string): Observable<any> {
     return this.http.put(`${this.rejectReceiverApi}/${userId}`, {}); // Call to backend API
+  }
+
+  rejectDonor(userId: string): Observable<any> {
+    return this.http.put(`${this.rejectDonorApi}/${userId}`, {}); // Call to backend API
   }
 
   updateBloodGroupQuantity(

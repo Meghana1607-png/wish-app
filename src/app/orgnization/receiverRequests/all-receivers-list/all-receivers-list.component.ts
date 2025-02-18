@@ -12,7 +12,11 @@ export class AllReceiversListComponent {
   allReceiver: any;
   userId: any;
 
-  constructor(private orgService: OrgService, private route: ActivatedRoute,  private router:Router) {
+  constructor(
+    private orgService: OrgService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.userId = localStorage.getItem('userId');
   }
 
@@ -32,12 +36,12 @@ export class AllReceiversListComponent {
     });
   }
 
-  viewDetails(receiver: any): void {
-    this.router.navigate(['org/view_receiver'], {
+  viewDetails(donor: any): void {
+    this.router.navigate(['org/view_donor'], {
       queryParams: {
-        id: receiver.id,
-        status : receiver.status,
-        email: receiver.email,
+        id: donor.id,
+        status: donor.status,
+        email: donor.email,
         // phone: org.phone,
         // name: org.name,
         // address: org.address,

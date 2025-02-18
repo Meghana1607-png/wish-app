@@ -14,25 +14,51 @@ export class ViewDonorComponent {
   bloodGroups: any[] = [];
   showPopup: boolean = false; // Declare showPopup variable
   popupMessage: string = '';
-  rejectReceiverData: any;
+  rejectDonorData: any;
+  currentPath: any;
+  presentPath: any;
+  requestDonorData: any;
+  organization: any;
+  dataToSend: any;
+
   constructor(
     private orgService: OrgService,
     private router: Router,
     private active: ActivatedRoute
   ) {
+    this.presentPath = this.router.url;
+    console.log('presentPath', this.presentPath);
+    this.currentPath = this.presentPath.split('?')[0].trim();
+    console.log('currentPath', this.currentPath);
     this.userId = localStorage.getItem('userId');
   }
   async ngOnInit() {
     this.active.queryParams.subscribe((params) => {
       this.donor = {
-        id: params['userid'],
+        id: params['id'],
         org_id: params['org_id'],
         email: params['email'] || '',
         status: params['status'] || '',
       };
     });
 
+    console.log('userId in fetching details:', this.donor.id);
+
     this.fetchDonorDetails(this.donor.id);
+    this.fetchProfileByOrg(this.userId);
+  }
+
+  rejectDonor(userId: any): void {
+    this.orgService.rejectDonor(userId).subscribe({
+      next: (data: any) => {
+        this.rejectDonorData = data;
+        console.log('rejectDonorData:', this.rejectDonorData);
+        this.router.navigate(['/org-dashboard']);
+      },
+      error: (err: any) => {
+        console.error('error in rejecting the donor', err);
+      },
+    });
   }
 
   fetchDonorDetails(userId: string): void {
@@ -59,6 +85,37 @@ export class ViewDonorComponent {
     // name: '',
     email: '',
   };
+
+  fetchProfileByOrg(userId: string): void {
+    this.orgService.fetchProfileByOrg(userId).subscribe({
+      next: (data) => {
+        this.organization = data[0];
+        console.log('organization:', this.organization);
+        this.dataToSend = {
+          email: this.organization.email,
+          org_id: this.organization.userId,
+          status: 'pending',
+          donor_id: this.donor.id,
+        };
+      },
+      error: (err) => {
+        console.error('Error fetching organization profile:', err);
+      },
+    });
+  }
+
+  requestDonor(userId: string): void {
+    this.orgService.requestDonor(userId, this.dataToSend).subscribe({
+      next: (data: any) => {
+        this.requestDonorData = data;
+        this.router.navigate(['/org-dashboard']);
+        console.log('requestDonorData:', this.requestDonorData);
+      },
+      error: (err: any) => {
+        console.error('error in requesting the donor', err);
+      },
+    });
+  }
 
   acceptDonor(userId: any): void {
     this.orgService.getBloodGroups(this.userId).subscribe({

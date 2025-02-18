@@ -8,36 +8,44 @@
     <!-- Receiver Details Section -->
     <div class="px-8 py-6">
       <h2 class="text-3xl font-semibold text-red-700 text-center">Donor Details</h2>
-      
       <div class="mt-5 mb-6 text-gray-700">
         <p class="text-sm"><strong class="text-black-900">Username:</strong> {{ donorDetails[0].Username }}</p>
         <p class="text-sm"><strong class="text-black-900">Email:</strong> {{ donor.email }}</p>
         <p class="text-sm"><strong class="text-black-900">BloodGroup Required:</strong> {{ donorDetails[0].BloodGroup}}</p>
-        <p class="text-sm"><strong class="text-black-900">Age:</strong> {{ donorDetails[0].Age}}</p>
+        <p class="text-sm"><strong class="text-black-900">Age:</strong> {{ donorDetails[0].age
+        }}</p>
         <p class="text-sm"><strong class="text-black-900">Gender:</strong> {{ donorDetails[0].Gender}}</p>
         <p class="text-sm"><strong class="text-black-900">HealthIssues:</strong> {{ donorDetails[0].HealthIssues}}</p>
-        <p class="text-sm"><strong class="text-black-900">HealthIssues:</strong> {{ donorDetails[0].MobileNumber}}</p>
+        <p class="text-sm"><strong class="text-black-900">MobileNumber:</strong> {{ donorDetails[0].
+          Mobile_Number}}</p>
         <p class="text-sm"><strong class="text-black-900">Blood Quantity:</strong> {{ donorDetails[0].
           blood_quantity
            }}</p>
         <p class="text-sm"><strong class="text-black-900">last Date:</strong> {{ donorDetails[0].LastDonatedDate
         }}</p>
-        <p class="text-sm"><strong class="text-black-900">location:</strong> {{ donorDetails[0].Address }}</p>
+        <p class="text-sm"><strong class="text-black-900">location:</strong> {{ donorDetails[0].
+          location }}</p>
       </div>
 
     <!-- Request Button Section -->
-    <div class="px-8 py-6 bg-red-50 border-t border-red-300">
-  
+    <div class="px-8 py-6 bg-red-50 border-t border-red-300" *ngIf="currentPath == '/org/view_donor'">
       <button  (click)="acceptDonor(donor.id)"
             class="bg-green-500 text-white px-3 py-1 rounded mr-2"
           >
             Accept
           </button>
-          <!-- <button  (click)="rejectReceiver(receiver.id)" -->
-           <button
+          <button  (click)="rejectDonor(donor.id)"
             class="bg-red-500 text-white px-3 py-1 rounded"
           >
             Reject
+          </button>
+    </div>
+
+    <div class="px-8 py-6 bg-red-50 border-t border-red-300" *ngIf="currentPath == '/org/view_donor_requests'">
+      <button  (click)="requestDonor(donor.id)"
+            class="bg-green-500 text-white px-3 py-1 rounded ml-40"
+          >
+            request
           </button>
     </div>
   </div>

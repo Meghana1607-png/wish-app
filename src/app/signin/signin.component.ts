@@ -1,24 +1,33 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { ProfileService } from '../profile.service';
-FormBuilder
-
+FormBuilder;
 
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.css']
+  styleUrls: ['./signin.component.css'],
 })
 export class SigninComponent {
   signinForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService, private service: ProfileService) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private auth: AuthService,
+    private service: ProfileService
+  ) {
     this.signinForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -29,11 +38,10 @@ export class SigninComponent {
       const { email, password } = this.signinForm.value;
       this.auth.signIn(email, password).subscribe({
         next: (res: any) => {
-
           if (res.error) {
-            alert('user login failed')
+            alert('user login failed');
           } else {
-            console.log(res)
+            console.log(res);
             const authId = res.data.user.id;
             localStorage.setItem('authId', authId);
             console.log('Auth ID stored:', authId);
@@ -54,48 +62,44 @@ export class SigninComponent {
             //   }
             // })
 
+            //         }
 
+            //       }
+            //     });
+            //   }
+            // }
 
-  //         }
+            this.service.profilefetch(authId).subscribe({
+              next: (res: any) => {
+                console.log(' API Response:', res); // Log the entire response
 
-  //       }
-  //     });
-  //   }
-  // }
+                if (!res || !res.data || res.data.length === 0) {
+                  console.error(' Error: No user data received');
+                  alert('Profile fetch error: No user data found.');
+                  return;
+                }
 
-  this.service.profilefetch(localStorage.getItem('authId')).subscribe({
-    next: (res: any) => {
-      console.log(" API Response:", res); // Log the entire response
-  
-      if (!res || !res.data || res.data.length === 0) {
-        console.error(" Error: No user data received");
-        alert("Profile fetch error: No user data found.");
-        return;
-      }
-  
-      const userProfile = res.data[0]; 
-  
-      console.log(" User Profile:", userProfile); 
-  
-      if (userProfile.gender == null) {
-        this.router.navigateByUrl('/rprofile');
-      } else {
-        this.router.navigateByUrl('/rec-dashboard');
-      }
-    },
-    error: (err) => {
-      console.error("API Fetch Error:", err);
-      alert("Profile fetch error");
+                const userProfile = res.data[0];
+
+                console.log(' User Profile:', userProfile);
+
+                if (userProfile.gender == null) {
+                  this.router.navigateByUrl('/rprofile');
+                } else {
+                  this.router.navigateByUrl('/rec-dashboard');
+                }
+              },
+              error: (err) => {
+                console.error('API Fetch Error:', err);
+                alert('Profile fetch error');
+              },
+            });
+          }
+        },
+      });
     }
-  });
-  
-}
+  }
 
-}
-});
-}
-}
-  
   navigateToSignup() {
     this.router.navigate(['/Sign-up']);
   }

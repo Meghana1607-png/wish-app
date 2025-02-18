@@ -38,7 +38,7 @@ export class PendingDonorListComponent {
   viewDetails(donor: any): void {
     this.router.navigate(['org/view_donor'], {
       queryParams: {
-        userid: donor.userid,
+        id: donor.userid,
         status: donor.status,
         email: donor.email,
         org_id: donor.org_id,
