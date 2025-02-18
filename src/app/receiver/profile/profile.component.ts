@@ -74,7 +74,7 @@ export class ProfileComponent {
   
       if (sessionError || !sessionData || !sessionData.session) {
         console.error("No active session found:", sessionError);
-        alert("No active session. Please log in again.");
+        // alert("No active session. Please log in again.");
         return;
       }
   
@@ -82,11 +82,11 @@ export class ProfileComponent {
       const { data, error } = await this.supabase.getUser();
       console.log("Fetched User Data:", data);
   
-      if (error || !data || !data.user) {
-        console.error("User not authenticated or fetch error:", error);
-        alert("User not authenticated. Please log in.");
-        return;
-      }
+      // if (error || !data || !data.user) {
+      //   console.error("User not authenticated or fetch error:", error);
+      //   alert("User not authenticated. Please log in.");
+      //   return;
+      // }
   
       console.log("Fetched User ID (authid):", data.user.id);
   

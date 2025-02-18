@@ -32,7 +32,7 @@ signinForm: FormGroup;
   }
 
   navigateToSignup() {
-    this.router.navigate(['/Sign-up']);
+    this.router.navigate(['/dsign-up']);
   }
 }
 
