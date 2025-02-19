@@ -10,7 +10,7 @@ import { SearchComponentComponent } from './search-component/search-component.co
 import { ViewDonorComponent } from './orgnization/view-donor/view-donor.component';
 
 const routes: Routes = [
-  {path: 'donor', loadChildren: () => import('./donor/donor.module').then(m => m.DonorModule) }, 
+  {path: 'donor1', loadChildren: () => import('./donor/donor.module').then(m => m.DonorModule) }, 
   //{ path: 'receiver', loadChildren: () => import('./receiver/receiver.module').then(m => m.ReceiverModule) }, 
   {path: 'org', loadChildren: () => import('./orgnization/orgnization.module').then(m => m.OrgnizationModule) },
   {path:'receiver',loadChildren:() => import('./receiver/receiver.module').then(m => m.ReceiverModule)},

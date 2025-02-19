@@ -68,7 +68,7 @@ app.post("/donorforminsert", async (req, res) => {
     gender,
     ph_no,
     address,
-    name,
+    username,
     email,
     bloodgroup,
     health_issues,
@@ -78,14 +78,13 @@ app.post("/donorforminsert", async (req, res) => {
   try {
     console.log("xcvbnm", name);
 
-    const { data, error } = await supabase.from("donors").insert({
+    const { data, error } = await supabase.from("donor").insert({
       // gender: gender,
       // ph_no: ph_no,
-      // bloodgroup: bloodgroup,
       health_issues: health_issues,
       last_donated: last_donated,
       // address: address,
-      // name: name,
+      username: username,
       // email: email,
       bloodgroup: bloodgroup,
     });

@@ -12,7 +12,7 @@ export class DonorserveiceService {
   constructor(private http: HttpClient) { }
 
   Donorinsert(donor: any): Observable<any> {
-    console.log('Sending data to API:', donor); // Debugging log
+    console.log('Sending data to API:', donor); 
 
     return this.http.post(this.apiUrl, donor);
   }
