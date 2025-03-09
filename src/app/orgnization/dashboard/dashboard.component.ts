@@ -10,7 +10,6 @@ import { OrgService } from '../../org.service'; // Correct import path as per us
 export class DashboardComponent {
   is_slidebar: boolean;
   isclick: boolean = false;
-  selectedPage = 'Blood Hub';
   roles: any[];
   det: any = [];
   c_role: any;
@@ -25,45 +24,11 @@ export class DashboardComponent {
   popupMessage: string = '';
   validBloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-  menu = [
-    { path: 'org/dashboard', label: 'Blood Hub', icon: 'pi pi-users' },
-    { path: 'org/donorsList', label: 'Donors list', icon: 'pi pi-users' },
-    //{ path: 'org/receiversList', label: 'Receivers list', icon: 'pi pi-users' },
-    {
-      path: 'org/donorsList/pending',
-      label: 'Donor pending list',
-      icon: 'pi pi-users',
-    },
-    {
-      path: 'org/donorsList/approved',
-      label: 'Donor approved list',
-      icon: 'pi pi-users',
-    },
-    {
-      path: 'org/donorsList/rejected',
-      label: 'Donor rejected list',
-      icon: 'pi pi-users',
-    },
-    {
-      path: 'org/receiversList/pending',
-      label: 'Receiver pending list',
-      icon: 'pi pi-users',
-    },
-    {
-      path: 'org/receiversList/approved',
-      label: 'Receiver approved list',
-      icon: 'pi pi-users',
-    },
-    {
-      path: 'org/receiversList/rejected',
-      label: 'Receiver rejected list',
-      icon: 'pi pi-users',
-    },
-    { path: 'org/teams-table', label: 'feedbacks', icon: 'pi pi-users' },
-  ];
-
   newUnits: number = 0; // Property for new units input, initialized to 0
   feedbackMessage: string = ''; // Property for user feedback message
+  organizationProfile: any;
+  bloodGroupsArray: any[] = [];
+  org: any;
 
   constructor(
     private router: Router,
@@ -78,6 +43,25 @@ export class DashboardComponent {
 
   ngOnInit(): void {
     this.fetchBloodGroups(this.userId);
+    this.fetchOrganizationProfile(this.userId);
+  }
+
+  fetchOrganizationProfile(userId: string): void {
+    this.orgService.fetchProfileByOrg(userId).subscribe({
+      next: (data) => {
+        this.organizationProfile = data[0];
+        localStorage.setItem('organisation', JSON.stringify(this.organizationProfile));
+        console.log('OrganizationProfile:', this.organizationProfile);
+        if (this.organizationProfile && this.organizationProfile.blood_groups) {
+          this.bloodGroupsArray = JSON.parse(
+            this.organizationProfile.blood_groups
+          );
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching organization profile:', err);
+      },
+    });
   }
 
   fetchBloodGroups(userId: any) {
@@ -94,34 +78,6 @@ export class DashboardComponent {
         console.error('Error fetching bloodGroups:', err);
       },
     });
-  }
-
-  NavToPage(path: any) {
-    this.router.navigate(['/' + path]);
-    this.is_slidebar = false;
-  }
-
-  onPageChange(page: string) {
-    this.selectedPage = page;
-  }
-
-  show_slidebar() {
-    this.is_slidebar = true;
-  }
-
-  hide_slidebar() {
-    this.is_slidebar = false;
-  }
-
-  isRoleCardVisible = false;
-
-  toggleRoleCard() {
-    this.isRoleCardVisible = !this.isRoleCardVisible;
-  }
-
-  selectRole(role: string) {
-    console.log(`${role} selected`);
-    this.isRoleCardVisible = false; // Close the card after selecting a role
   }
 
   openProfile(orgId: string): void {

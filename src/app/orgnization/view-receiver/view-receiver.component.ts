@@ -58,15 +58,10 @@ export class ViewReceiverComponent {
     email: '',
   };
 
-  rejectReceiver(userId: any): void {
-    this.orgService.rejectReceiver(userId).subscribe({
-      next: (data: any) => {
-        this.rejectReceiverData = data;
-        console.log('rejectReceiverData:', this.rejectReceiverData);
-        this.router.navigate(['/org-dashboard']);
-      },
-      error: (err: any) => {
-        console.error('error in rejecting the receiver', err);
+  rejectReceiver(userId : any): void {
+    this.router.navigate(['/org/receiver/MessageToReject'],{
+      queryParams: {
+        userid: userId,
       },
     });
   }

@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { createClient } = require("@supabase/supabase-js");
+const nodemailer = require("nodemailer");
 
 const app = express();
 const PORT = 3000;
@@ -173,22 +174,25 @@ app.post("/receiverforminsert", async (req, res) => {
 });
 
 app.post("/org/requestDonor/:id", async (req, res) => {
-  console.log("request body", req.body);
-  const { email, org_id, status, donor_id } = req.body;
+  console.log("request body in donor request", req.body);
+  const { message, data } = req.body;
   try {
-    const { data, error } = await supabase.from("org_request").insert({
-      email: email,
-      org_id: org_id,
-      status: status,
-      donor_id: donor_id,
-    });
+    const { data1, error } = await supabase.from("org_request").insert([
+      {
+        email: data.email,
+        org_id: data.org_id,
+        status: data.status,
+        donor_id: data.donor_id,
+        message: message,
+      },
+    ]);
     if (error) {
       console.log("supabase error", error.message);
       throw error;
     } else {
       res.status(200).json({
         message: "request submitted successfully",
-        data,
+        data1,
       });
     }
   } catch (error) {
@@ -283,6 +287,7 @@ app.post("/orgforminsert", async (req, res) => {
         blood_groups: bloodGroupsJson,
         address: address,
         userId: userId,
+        password: password,
       },
     ]);
 
@@ -669,6 +674,7 @@ app.put("/blood-groups/addBloodGroup/:id", async (req, res) => {
 
 app.put("/org/rejectReceiver/:id", async (req, res) => {
   const { id } = req.params;
+  const { message } = req.body;
   try {
     console.log("id in update rejecting status - ", id);
     const { data, error } = await supabase
@@ -683,7 +689,7 @@ app.put("/org/rejectReceiver/:id", async (req, res) => {
 
     const { data: updatedData, error: updateError } = await supabase
       .from("request")
-      .update({ status: "rejected" })
+      .update({ status: "rejected", messageToReject: message })
       .eq("userid", id);
 
     if (updateError) {
@@ -700,6 +706,12 @@ app.put("/org/rejectReceiver/:id", async (req, res) => {
 
 app.put("/org/rejectDonor/:id", async (req, res) => {
   const { id } = req.params;
+  const { message } = req.body;
+  const { donorEmail } = req.body;
+  const { organisation } = req.body;
+  console.log("message", message);
+  console.log("organisation", organisation);
+  console.log("donoremail", donorEmail);
   try {
     console.log("id in update rejecting status - ", id);
     const { data, error } = await supabase
@@ -712,9 +724,48 @@ app.put("/org/rejectDonor/:id", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      secure: false,
+      auth: {
+        user: organisation.email,
+        pass: organisation.password,
+      },
+    });
+
+    const mailOptions = {
+      from: `"${organisation.email}"`,
+      to: donorEmail,
+      subject: "Donation Request Rejected",
+      html: `
+        <div>
+          <h2>Donation Request Rejected</h2>
+          <p>Here is the reason: ${message}</p>
+          <form action="http://localhost:3000/org/giveFeedback${id}?orgId=${organisation.id}&donorReceiverEmail=${donorEmail}" method="post">
+            <label for="feedback">Please provide feedback:</label>
+            <textarea id="feedback" name="feedback" rows="5" cols="50"></textarea>
+            <button type="submit">Submit Feedback</button>
+            <input type="hidden" name="donorEmail" value="${donorEmail}">
+          </form>
+        </div>
+      `,
+    };
+
+    try {
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log("Error sending email:", error);
+        } else {
+          console.log("Email sent successfully!");
+        }
+      });
+    } catch (error) {
+      console.log("Error sending email:", error);
+    }
+
     const { data: updatedData, error: updateError } = await supabase
       .from("donorRequests")
-      .update({ status: "rejected" })
+      .update({ status: "rejected", messageToReject: message })
       .eq("userid", id);
 
     if (updateError) {
@@ -729,8 +780,40 @@ app.put("/org/rejectDonor/:id", async (req, res) => {
   }
 });
 
+app.post("/org/giveFeedback/:id", async (req, res) => {
+  const { id } = req.params;
+  const { orgId } = req.query;
+  const { feedback } = req.body;
+  const { donorReceiverEmail } = req.body;
+
+  try {
+    const { data, error } = await supabase.from("feedback").insert([
+      {
+        orgId: orgId,
+        feedbackMessage: feedback,
+        userId: id,
+        donorReceiverEmail: donorReceiverEmail,
+      },
+    ]);
+
+    if (error) {
+      console.error("Supabase Error Details:", error);
+      throw new Error(error.message || "Unknown Supabase Error");
+    }
+
+    res.status(200).json({ message: "Feedback submitted successfully", data });
+  } catch (error) {
+    console.error("Error during giving feedback", error);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error: " + error.message });
+  }
+});
+
 app.put("/org/acceptReceiver/:id", async (req, res) => {
   const { id } = req.params;
+  message =
+    "Dear receiver, Your request has been approved. Now, you can collect blood !!";
   try {
     console.log("id in update accepting status - ", id);
     const { data, error } = await supabase
@@ -745,7 +828,7 @@ app.put("/org/acceptReceiver/:id", async (req, res) => {
 
     const { data: updatedData, error: updateError } = await supabase
       .from("request")
-      .update({ status: "approved" })
+      .update({ status: "approved", messageToReject: message })
       .eq("userid", id);
 
     if (updateError) {
@@ -762,6 +845,8 @@ app.put("/org/acceptReceiver/:id", async (req, res) => {
 
 app.put("/org/acceptDonor/:id", async (req, res) => {
   const { id } = req.params;
+  message =
+    "Dear receiver, Your request has been approved. Now, you can collect blood !!";
   try {
     console.log("id in update accepting status - ", id);
     const { data, error } = await supabase
@@ -776,7 +861,7 @@ app.put("/org/acceptDonor/:id", async (req, res) => {
 
     const { data: updatedData, error: updateError } = await supabase
       .from("donorRequests")
-      .update({ status: "approved" })
+      .update({ status: "approved", messageToReject: message })
       .eq("userid", id);
 
     if (updateError) {

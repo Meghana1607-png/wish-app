@@ -48,19 +48,6 @@ export class ViewDonorComponent {
     this.fetchProfileByOrg(this.userId);
   }
 
-  rejectDonor(userId: any): void {
-    this.orgService.rejectDonor(userId).subscribe({
-      next: (data: any) => {
-        this.rejectDonorData = data;
-        console.log('rejectDonorData:', this.rejectDonorData);
-        this.router.navigate(['/org-dashboard']);
-      },
-      error: (err: any) => {
-        console.error('error in rejecting the donor', err);
-      },
-    });
-  }
-
   fetchDonorDetails(userId: string): void {
     this.orgService.fetchDonorDetails(userId).subscribe({
       next: (data: any) => {
@@ -86,6 +73,15 @@ export class ViewDonorComponent {
     email: '',
   };
 
+  rejectDonor(userId: string): void {
+    this.router.navigate(['/org/donor/MessageToReject'], {
+      queryParams: {
+        userid: userId,
+        email: this.donor.email,
+      },
+    });
+  }
+
   fetchProfileByOrg(userId: string): void {
     this.orgService.fetchProfileByOrg(userId).subscribe({
       next: (data) => {
@@ -105,14 +101,12 @@ export class ViewDonorComponent {
   }
 
   requestDonor(userId: string): void {
-    this.orgService.requestDonor(userId, this.dataToSend).subscribe({
-      next: (data: any) => {
-        this.requestDonorData = data;
-        this.router.navigate(['/org-dashboard']);
-        console.log('requestDonorData:', this.requestDonorData);
-      },
-      error: (err: any) => {
-        console.error('error in requesting the donor', err);
+    const dataToSendJson = JSON.stringify(this.dataToSend);
+    this.router.navigate(['/org/donor/MessageToRequest'], {
+      queryParams: {
+        userid: userId,
+        email: this.donor.email,
+        dataToSend: dataToSendJson,
       },
     });
   }
