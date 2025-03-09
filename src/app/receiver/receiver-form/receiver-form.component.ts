@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { OrgService } from 'src/app/org.service';
 import { ReceiverService } from 'src/app/receiver.service';
 
@@ -17,13 +18,13 @@ export class ReceiverFormComponent {
 
   patientForm: FormGroup;
 
-  constructor(private fb: FormBuilder,private receiverFormService:ReceiverService,private orgform:OrgService) {
+  constructor(private fb: FormBuilder,private receiverFormService:ReceiverService,private orgform:OrgService,private router:Router) {
     this.patientForm = this.fb.group({
-      lastDate: ['', [Validators.required]],
+      date: ['', [Validators.required]],
       purpose: ['', [Validators.required]],
-      bloodGroup: ['', [Validators.required]],
-      bloodQuantity: ['', [Validators.required, Validators.min(1)]], // New field with validation
-      emergencyLevel: ['', [Validators.required]],
+      blood_group: ['', [Validators.required]],
+      blood_quatity: ['', [Validators.required, Validators.min(1)]], // New field with validation
+      emergency: ['', [Validators.required]],
     });
   }
 
@@ -35,10 +36,13 @@ export class ReceiverFormComponent {
     if (this.patientForm.valid) {
       this.receiverFormService.submitReceiverForm(this.patientForm.value).subscribe({
         next: (response) => {
+          console.log("user insersion success")
           alert(response.message);
+          this.router.navigateByUrl('/org-list');
           this.patientForm.reset();
         },
         error: (error) => {
+          console.log('Form is invalid!');
           console.error('Error submitting the form:', error.message);
           alert('An error occurred while submitting the form.');
         },

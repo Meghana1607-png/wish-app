@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AwarenessComponent } from './awareness/awareness.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { DonorComponent } from './donor.component';
 
 const routes: Routes = [
 {
@@ -16,7 +17,8 @@ const routes: Routes = [
 },
 {path:'awareness',component:AwarenessComponent},
 
-{path:'dsign-up',component:SignUpComponent}
+{path:'dsign-up',component:SignUpComponent},
+{path:'d',component:DonorComponent}
 ];
 
 @NgModule({

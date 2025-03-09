@@ -56,7 +56,13 @@ async insertUserIntoDatabase(userid: string, username: string, email: string) {
         error: (err) => console.error("Insert error:", err)
     });
 }
+get auth() {
+  return this.supabase.auth;
+}
 
+async getUser1() {
+  return this.supabase.auth.getSession();
+}
 signIn(email: string, password: string) {
   const res =  this.supabase.auth.signInWithPassword({
     email: email,
