@@ -11,39 +11,42 @@ import { DonorserveiceService } from '../donorserveice.service';
 export class DonorComponent {
 
   donorForm: FormGroup;
-  // currentStep = 1;
   bloodGroups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
   constructor(private fb: FormBuilder,private donor:DonorserveiceService) {
     this.donorForm = this.fb.group({
-      username: ['', Validators.required],
-      age: ['', [Validators.required, Validators.min(18), Validators.max(65)]],
-      bloodGroup: ['', Validators.required],
-      healthIssues: ['',Validators.required],
-      lastDonatedDate: ['',Validators.required]
+      Name: ['', Validators.required],
+      Age: ['', [Validators.required, Validators.min(18), Validators.max(65)]],
+      BloodGroup: ['', Validators.required],
+      HealthIssues: ['',Validators.required],
+      // LastDonatedDate: ['',Validators.required]
     });
 }
 get f() {
   return this.donorForm.controls;
 }
-submitForm() {
-  console.log("button clicked!")
-  if (this.donorForm.valid) {
-    this.donor.Donorinsert(this.donorForm.value).subscribe({
-      next: (res:any)=>
-        {
-        console.log("mecfgtrgvsd")
-        alert(res.message);
-        this.donorForm.reset();
-      },
-      error:(error:any)=>{
-        console.error('error submiting the form:',error.message);
-        alert('an error occurred while submitting the form')
-      }
 
-    })
-    console.log('Donor Form Submitted', this.donorForm.value);
-    
-  }
+onSubmit() {
+  if (this.donorForm) {
+    console.log("Form Values:", this.donorForm.value);
+    console.log("Form Valid:", this.donorForm.valid);
+
+    if (this.donorForm.valid) {
+      console.log("Donor Form Submitted", this.donorForm.value)
+      this.donor.Donorinsert(this.donorForm.value).subscribe({
+        next: (res: any) => {
+          console.log("success:", res)
+          alert(res.message);
+          this.donorForm.reset();
+        },
+        error: (error: any) => {
+          console.error('Error submitting form:', error);
+          alert('An error occurred while submitting the form. Please try again later.');
+        }
+      });
+    } else {
+      alert("Please fill all required fields!");
+    }
+    }
 }
 }

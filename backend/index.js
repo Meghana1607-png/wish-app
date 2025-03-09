@@ -61,115 +61,70 @@ app.post("/signin", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 app.post("/donorforminsert", async (req, res) => {
-  console.log("request body", req.body);
+  console.log("Received request body:", req.body);
+  const { Name, Age, BloodGroup, HealthIssues } = req.body;
 
-  const {
-    gender,
-    ph_no,
-    address,
-    username,
-    email,
-    bloodgroup,
-    health_issues,
-    last_donated,
-  } = req.body;
+  if (!Name || !Age || !BloodGroup || !HealthIssues) {
+    console.log("Missing fields:", { Name, Age, BloodGroup, HealthIssues });
+    return res.status(400).json({ message: "Missing required fields" });
+  }
 
   try {
-    console.log("xcvbnm", name);
+    console.log("Submitting donor form for:", Name);
 
-    const { data, error } = await supabase.from("donor").insert({
-      // gender: gender,
-      // ph_no: ph_no,
-      health_issues: health_issues,
-      last_donated: last_donated,
-      // address: address,
-      username: username,
-      // email: email,
-      bloodgroup: bloodgroup,
-    });
-
+    const { data, error } = await supabase.from("donors").insert([
+      {
+        Name,
+        Age, 
+        BloodGroup,
+        HealthIssues,
+      }
+    ]);
     if (error) {
-      console.log("supabase error", error.message);
-      throw error;
-    } else {
-      res.status(200).json({
-        message: "donorform submitted ",
-        data,
-      });
+      console.error("Supabase Insert Error:", error);
+      return res.status(500).json({ message: error.message });
     }
+
+    res.status(200).json({ message: "Donor form submitted", data });
   } catch (error) {
-    console.error("error during donor form submission", error);
-    res.status(500).json({ message: error.message });
+    console.error("Unexpected Error during donor form submission:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
-app.post("/profileinsert", async (req, res) => {
-  console.log("request body", req.body);
-  const { age, phone, address, name, email } = req.body.profile;
-  try {
-    console.log("njmknfkj", name);
-    const { data, error } = await supabase.from("users").insert({
-      age: age,
-      name: name,
-      email: email,
-      phno: phone,
-      address: address,
-    });
-    if (error) {
-      console.log("supabase error", error.message);
-      throw error;
-    } else {
-      res.sendStatus(200).json({
-        message: "profile submitted",
-        data,
-      });
-    }
-  } catch (error) {
-    console.error("eroor during profile submission ", error);
-    res.status(500).json({ message: error.message });
-  }
-});
+
+
 
 app.post("/receiverforminsert", async (req, res) => {
-  console.log("request body", req.body);
+  console.log(" Received Request Body:", req.body);
 
-  const {
-    gender,
-    ph_no,
-    // name,
-    location,
-    blood_quantity,
-    date,
-    purpose,
-    email,
-    blood_group,
-    health_issues,
-    last_donated,
-    emergency,
-  } = req.body;
-  console.log("body", req.body);
+  if (!req.body || Object.keys(req.body).length === 0) {
+    console.log(" req.body is EMPTY!");
+    return res.status(400).json({ message: "No data received" });
+  }
+
+  const { date, purpose, blood_group, blood_quatity, emergency } = req.body;
+
+  if (!date || !purpose || !blood_group || !blood_quatity || !emergency) {
+    console.log(" Missing fields:", { date, purpose, blood_group, blood_quatity, emergency });
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
   try {
-    console.log("xcvbnm", name);
-    const { data, error } = await supabase.from("receivers").insert({
-      purpose: purpose,
-      blood_group: blood_group,
-      date: date,
-      emergency: emergency,
-    });
-    if (error) {
-      console.log("supabase error", error.message);
-      throw error;
-    } else {
-      res.status(200).json({
-        message: "receiverform submitted ",
-        data,
-      });
-    }
+    const { data, error } = await supabase.from("receivers").insert([
+      { purpose, blood_group: blood_group, blood_quatity: blood_quatity, date: date, emergency: emergency }
+    ]);
+
+    if (error) throw error;
+
+    res.status(200).json({ message: "Receiver form submitted", data });
   } catch (error) {
-    console.error("error during receiver form submission", error);
-    res.status(500).json({ message: error.message });
+    console.error(" Supabase Error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 app.post("/orgSignIn", async (req, res) => {
   console.log("Request Body:", req.body);
@@ -284,20 +239,15 @@ app.post("/orgforminsert", async (req, res) => {
 
 app.post("/userforminsert", async (req, res) => {
   console.log("API called with body:", JSON.stringify(req.body, null, 2));
-
   try {
     if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({ message: "Request body is missing" });
     }
-
     const { userid, name, email, phno, address, gender } = req.body;
-
     if (!userid) {
       console.error("User ID is missing in request body:", req.body);
       return res.status(400).json({ message: "User ID is required" });
     }
-
-    // Check if the user exists
     const { data: existingUser, error: fetchError } = await supabase
       .from("users")
       .select("userid")
@@ -311,35 +261,29 @@ app.post("/userforminsert", async (req, res) => {
     if (!existingUser || existingUser.length === 0) {
       // User does not exist, insert them
       console.log("User does not exist, inserting into Supabase...");
+
       const { data: insertData, error: insertError } = await supabase
         .from("users")
         .insert([{ userid, name, email, phno, address, gender }])
         .select();
-
       if (insertError) {
         console.error("Supabase Insert Error:", insertError);
         return res.status(500).json({ message: "Failed to insert user", error: insertError });
       }
-
       console.log("User inserted successfully:", insertData);
       return res.status(201).json({ message: "User inserted successfully", data: insertData });
     }
-
-    // If user exists, update their data
     console.log("User exists, updating details...");
     const { data, error } = await supabase
       .from("users")
       .update({ name, email, phno, address, gender })
       .eq("userid", userid)
       .select();
-
     if (error) {
       console.error("Supabase Update Error:", error);
       return res.status(500).json({ message: "Database error", error });
     }
-
     return res.status(200).json({ message: "User updated successfully", data });
-
   } catch (error) {
     console.error("Error during insertion:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
@@ -676,7 +620,7 @@ app.put("/blood-groups/update/:id", async (req, res) => {
 
     const index = bloodGroupData.findIndex(
       (group) =>
-        group.bloodGroup.toLowerCase() === req.body.bloodGroup.toLowerCase()
+        group.blood_group.toLowerCase() === req.body.blood_group.toLowerCase()
     );
 
     if (index === -1) {
@@ -720,7 +664,7 @@ app.put("/blood-groups/addBloodGroup/:id", async (req, res) => {
 
     const bloodGroupData = JSON.parse(data[0].blood_groups);
     const newBloodGroup = {
-      bloodGroup: req.body.bloodGroup,
+      blood_group: req.body.blood_group,
       quantity: req.body.quantity,
     };
 

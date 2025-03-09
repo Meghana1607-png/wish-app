@@ -1,26 +1,20 @@
-<!-- <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg border-2 border-red-500">
-  <h2 class="text-red-600 text-xl font-semibold mb-4">Blood Donor Details</h2>
 
-  <form [formGroup]="donorForm" (ngSubmit)="submitForm()" class="space-y-4">
-    
-    Name
-    <div>
+
+<div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-md border-2 border-red-500">
+  <h2 class="text-2xl font-bold text-red-600 text-center mb-4">Donor Form</h2>
+  <form [formGroup]="donorForm" (ngSubmit)="onSubmit()" class="max-w-md mx-auto p-2 rounded-lg mt-6">
+    <div class="mb-4">
       <label class="block text-red-700 font-medium">Name</label>
-      <input type="text" formControlName="name" class="w-full p-2 border border-red-500 rounded focus:ring-2 focus:ring-red-300">
-      <p *ngIf="f['name'].invalid && f['name'].touched" class="text-red-500 text-sm">Name is required (min 3 chars).</p>
+      <input type="text" formControlName="Name" class="w-full p-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
     </div>
-
-    Age
-    <div>
+    <div class="mb-4">
+      
       <label class="block text-red-700 font-medium">Age</label>
-      <input type="number" formControlName="age" class="w-full p-2 border border-red-500 rounded focus:ring-2 focus:ring-red-300">
-      <p *ngIf="f['age'].invalid && f['age'].touched" class="text-red-500 text-sm">Age must be between 18 and 65.</p>
+      <input type="number" formControlName="Age" class="w-full p-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
     </div>
-
-    Blood Group
-    <div>
-      <label class="block text-red-700 font-medium">Blood Group</label>
-      <select formControlName="bloodGroup" class="w-full p-2 border border-red-500 rounded focus:ring-2 focus:ring-red-300">
+    <div class="mb-4">
+      <label class="block text-red-700 font-medium">BloodGroup</label>
+      <select formControlName="BloodGroup" class="w-full p-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
         <option value="">Select Blood Group</option>
         <option value="A+">A+</option>
         <option value="A-">A-</option>
@@ -31,73 +25,16 @@
         <option value="AB+">AB+</option>
         <option value="AB-">AB-</option>
       </select>
-      <p *ngIf="f['bloodGroup'].invalid && f['bloodGroup'].touched" class="text-red-500 text-sm">Blood group is required.</p>
     </div>
-
-    Last Donated
-    <div>
-      <label class="block text-red-700 font-medium">Last Donated Date</label>
-      <input type="date" formControlName="lastDonated" class="w-full p-2 border border-red-500 rounded focus:ring-2 focus:ring-red-300">
-      <p *ngIf="f['lastDonated'].invalid && f['lastDonated'].touched" class="text-red-500 text-sm">Last donated date is required.</p>
-    </div>
-
-    Health Issues
-    <div>
-      <label class="block text-red-700 font-medium">Health Issues</label>
-      <textarea formControlName="healthIssues" class="w-full p-2 border border-red-500 rounded focus:ring-2 focus:ring-red-300"></textarea>
-    </div>
-
-    Submit Button
-    <button type="submit" [disabled]="donorForm.invalid" class="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition">
-      Submit
-    </button>
-
-  </form>
-</div> -->
-
-
-
-
-
-<div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-md border-2 border-red-500">
-  <h2 class="text-2xl font-bold text-red-600 text-center mb-4">Donor Form</h2>
-  <form>
+    <!-- <div class="mb-4">
+      <label class="block text-red-700 font-medium">LastDonatedDate</label>
+      <input type="date" formControlName="LastDonatedDate" class="w-full p-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+    </div> -->
     <div class="mb-4">
-      <label class="block text-red-700 font-medium">Name</label>
-      <input type="text" class="w-full p-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+      <label class="block text-red-700 font-medium">HealthIssues</label>
+      <textarea formControlName="HealthIssues" class="w-full p-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" rows="3"></textarea>
     </div>
-    
-    <div class="mb-4">
-      <label class="block text-red-700 font-medium">Age</label>
-      <input type="number" class="w-full p-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
-    </div>
-    
-    <div class="mb-4">
-      <label class="block text-red-700 font-medium">Blood Group</label>
-      <select class="w-full p-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
-        <option>A+</option>
-        <option>A-</option>
-        <option>B+</option>
-        <option>B-</option>
-        <option>O+</option>
-        <option>O-</option>
-        <option>AB+</option>
-        <option>AB-</option>
-      </select>
-    </div>
-    
-    <div class="mb-4">
-      <label class="block text-red-700 font-medium">Last Donated Date</label>
-      <input type="date" class="w-full p-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
-    </div>
-    
-    <div class="mb-4">
-      <label class="block text-red-700 font-medium">Health Issues</label>
-      <textarea class="w-full p-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" rows="3"></textarea>
-    </div>
-    
-    <button type="submit" class="w-full bg-red-600 text-white font-bold py-2 rounded-md hover:bg-red-700">Submit</button>
-    
+    <button type="submit" class="w-full bg-red-600 text-white font-bold py-2 rounded-md hover:bg-red-700"
+    routerLink="/org-list">Submit</button>
   </form>
 </div>
-

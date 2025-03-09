@@ -8,10 +8,10 @@ import { SigninComponent } from './signin/signin.component';
 import { DonorSigninComponent } from './donor-signin/donor-signin.component';
 import { SearchComponentComponent } from './search-component/search-component.component';
 import { ViewDonorComponent } from './orgnization/view-donor/view-donor.component';
+import { VeiwpComponent } from './viewp/veiwp.component';
 
 const routes: Routes = [
   {path: 'donor1', loadChildren: () => import('./donor/donor.module').then(m => m.DonorModule) }, 
-  //{ path: 'receiver', loadChildren: () => import('./receiver/receiver.module').then(m => m.ReceiverModule) }, 
   {path: 'org', loadChildren: () => import('./orgnization/orgnization.module').then(m => m.OrgnizationModule) },
   {path:'receiver',loadChildren:() => import('./receiver/receiver.module').then(m => m.ReceiverModule)},
   {path:'app',component:AppComponent },
@@ -19,8 +19,8 @@ const routes: Routes = [
   {path:'org-list',component:OrgListComponent},
   {path:'Sign-up',component:SignupComponent},
   {path:'Sign-In',component:SigninComponent},
-  {path:'donor-SignIn',component:DonorSigninComponent}
-  // {path:'org-list',component:OrgListComponent}
+  {path:'donor-SignIn',component:DonorSigninComponent},
+  {path:'vp',component:VeiwpComponent}
 ];
 
 @NgModule({
