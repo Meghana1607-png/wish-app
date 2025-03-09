@@ -10,6 +10,12 @@ const PORT = 3000;
 app.use(cors({}));
 app.use(bodyParser.json());
 
+// Specify the view engine
+app.set("view engine", "ejs");
+
+// Specify the views directory
+app.set("views", "./views");
+
 const supabase = createClient(
   "https://esuzqpwibfnycwmeirtg.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzdXpxcHdpYmZueWN3bWVpcnRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5NjA1MTQsImV4cCI6MjA1MDUzNjUxNH0.FUL9viBXkN2Q44hhdFKPj8uKBT0SkJqcSfbjPV2oExc"
@@ -63,6 +69,44 @@ app.post("/signin", async (req, res) => {
   }
 });
 
+function sendingMail(
+  organisation,
+  donorReceiverEmail,
+  donorReceiverId,
+  message,
+  subject
+) {
+  console.log("emain", organisation);
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    secure: false,
+    auth: {
+      user: organisation.email,
+      pass: organisation.password,
+    },
+  });
+
+  const mailOptions = {
+    from: `"${organisation.email}"`,
+    to: donorReceiverEmail,
+    subject: `${subject}.Here is the reason...
+    ${message}`,
+    text: `Please provide feedback to our organisation: http://localhost:3000/org/giveFeedback/${donorReceiverId}?orgId=${organisation.id}&donorReceiverEmail=${donorReceiverEmail}`,
+  };
+
+  try {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Error sending email:", error);
+      } else {
+        console.log("Email sent successfully!");
+      }
+    });
+  } catch (error) {
+    console.log("Error sending email:", error);
+  }
+}
+
 app.post("/donorforminsert", async (req, res) => {
   console.log("Received request body:", req.body);
   const { Name, Age, BloodGroup, HealthIssues } = req.body;
@@ -78,10 +122,10 @@ app.post("/donorforminsert", async (req, res) => {
     const { data, error } = await supabase.from("donors").insert([
       {
         Name,
-        Age, 
+        Age,
         BloodGroup,
         HealthIssues,
-      }
+      },
     ]);
     if (error) {
       console.error("Supabase Insert Error:", error);
@@ -95,8 +139,6 @@ app.post("/donorforminsert", async (req, res) => {
   }
 });
 
-
-
 app.post("/receiverforminsert", async (req, res) => {
   console.log(" Received Request Body:", req.body);
 
@@ -108,13 +150,25 @@ app.post("/receiverforminsert", async (req, res) => {
   const { date, purpose, blood_group, blood_quatity, emergency } = req.body;
 
   if (!date || !purpose || !blood_group || !blood_quatity || !emergency) {
-    console.log(" Missing fields:", { date, purpose, blood_group, blood_quatity, emergency });
+    console.log(" Missing fields:", {
+      date,
+      purpose,
+      blood_group,
+      blood_quatity,
+      emergency,
+    });
     return res.status(400).json({ message: "Missing required fields" });
   }
 
   try {
     const { data, error } = await supabase.from("receivers").insert([
-      { purpose, blood_group: blood_group, blood_quatity: blood_quatity, date: date, emergency: emergency }
+      {
+        purpose,
+        blood_group: blood_group,
+        blood_quatity: blood_quatity,
+        date: date,
+        emergency: emergency,
+      },
     ]);
 
     if (error) throw error;
@@ -129,6 +183,7 @@ app.post("/receiverforminsert", async (req, res) => {
 app.post("/org/requestDonor/:id", async (req, res) => {
   console.log("request body in donor request", req.body);
   const { message, data } = req.body;
+  console.log("data in requestDonor", req.body);
   try {
     const { data1, error } = await supabase.from("org_request").insert([
       {
@@ -143,6 +198,14 @@ app.post("/org/requestDonor/:id", async (req, res) => {
       console.log("supabase error", error.message);
       throw error;
     } else {
+      console.log("req.body.organisation", req.body.organistaion);
+      sendingMail(
+        req.body.organistaion,
+        req.body.donorEmail,
+        req.body.data.donor_id,
+        message,
+        "We request you to donate blood"
+      );
       res.status(200).json({
         message: "request submitted successfully",
         data1,
@@ -287,7 +350,9 @@ app.post("/userforminsert", async (req, res) => {
 
     if (fetchError) {
       console.error("Error checking user existence:", fetchError);
-      return res.status(500).json({ message: "Database error", error: fetchError });
+      return res
+        .status(500)
+        .json({ message: "Database error", error: fetchError });
     }
 
     if (!existingUser || existingUser.length === 0) {
@@ -300,11 +365,15 @@ app.post("/userforminsert", async (req, res) => {
 
       if (insertError) {
         console.error("Supabase Insert Error:", insertError);
-        return res.status(500).json({ message: "Failed to insert user", error: insertError });
+        return res
+          .status(500)
+          .json({ message: "Failed to insert user", error: insertError });
       }
 
       console.log("User inserted successfully:", insertData);
-      return res.status(201).json({ message: "User inserted successfully", data: insertData });
+      return res
+        .status(201)
+        .json({ message: "User inserted successfully", data: insertData });
     }
 
     // If user exists, update their data
@@ -320,7 +389,6 @@ app.post("/userforminsert", async (req, res) => {
     }
 
     return res.status(200).json({ message: "User updated successfully", data });
-
   } catch (error) {
     console.error(" Error during insertion:", error);
     res
@@ -574,11 +642,13 @@ app.put("/blood-groups/update/:id", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    console.log("data in updating blood", req.body);
+
     const bloodGroupData = JSON.parse(data[0].blood_groups);
 
     const index = bloodGroupData.findIndex(
       (group) =>
-        group.blood_group.toLowerCase() === req.body.blood_group.toLowerCase()
+        group.bloodGroup.toLowerCase() === req.body.bloodGroup.toLowerCase()
     );
 
     if (index === -1) {
@@ -629,6 +699,7 @@ app.put("/blood-groups/addBloodGroup/:id", async (req, res) => {
     bloodGroupData.push(newBloodGroup);
 
     const updatedBloodGroupData = JSON.stringify(bloodGroupData);
+    console.log("updatedBloodGroups", updatedBloodGroupData);
 
     const { data: updatedData, error: updateError } = await supabase
       .from("organization")
@@ -683,9 +754,11 @@ app.put("/org/rejectDonor/:id", async (req, res) => {
   const { message } = req.body;
   const { donorEmail } = req.body;
   const { organisation } = req.body;
+
   console.log("message", message);
   console.log("organisation", organisation);
   console.log("donoremail", donorEmail);
+
   try {
     console.log("id in update rejecting status - ", id);
     const { data, error } = await supabase
@@ -711,18 +784,7 @@ app.put("/org/rejectDonor/:id", async (req, res) => {
       from: `"${organisation.email}"`,
       to: donorEmail,
       subject: "Donation Request Rejected",
-      html: `
-        <div>
-          <h2>Donation Request Rejected</h2>
-          <p>Here is the reason: ${message}</p>
-          <form action="http://localhost:3000/org/giveFeedback${id}?orgId=${organisation.id}&donorReceiverEmail=${donorEmail}" method="post">
-            <label for="feedback">Please provide feedback:</label>
-            <textarea id="feedback" name="feedback" rows="5" cols="50"></textarea>
-            <button type="submit">Submit Feedback</button>
-            <input type="hidden" name="donorEmail" value="${donorEmail}">
-          </form>
-        </div>
-      `,
+      text: `Please provide feedback to our organisation: http://localhost:3000/org/giveFeedback/${id}?orgId=${organisation.id}&donorReceiverEmail=${donorEmail}`,
     };
 
     try {
@@ -754,6 +816,14 @@ app.put("/org/rejectDonor/:id", async (req, res) => {
   }
 });
 
+app.get("/org/giveFeedback/:id", async (req, res) => {
+  const { id } = req.params;
+  const { orgId } = req.query;
+  const { donorReceiverEmail } = req.query;
+
+  res.render("feedback", { id, orgId, donorReceiverEmail });
+});
+
 app.post("/org/giveFeedback/:id", async (req, res) => {
   const { id } = req.params;
   const { orgId } = req.query;
@@ -772,15 +842,14 @@ app.post("/org/giveFeedback/:id", async (req, res) => {
 
     if (error) {
       console.error("Supabase Error Details:", error);
-      throw new Error(error.message || "Unknown Supabase Error");
+      return res.status(500).json({ message: "Failed to submit feedback" });
     }
 
-    res.status(200).json({ message: "Feedback submitted successfully", data });
+    // Render the feedback success page
+    res.render("feedback-success", { message: "Thank you for your feedback!" });
   } catch (error) {
     console.error("Error during giving feedback", error);
-    res
-      .status(500)
-      .json({ message: "Internal Server Error: " + error.message });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
@@ -818,6 +887,7 @@ app.put("/org/acceptReceiver/:id", async (req, res) => {
 });
 
 app.put("/org/acceptDonor/:id", async (req, res) => {
+  console.log("appect donor req.body", req.body);
   const { id } = req.params;
   message =
     "Dear receiver, Your request has been approved. Now, you can collect blood !!";
@@ -832,6 +902,14 @@ app.put("/org/acceptDonor/:id", async (req, res) => {
       console.log(error);
       return res.status(400).json({ error: error.message });
     }
+
+    sendingMail(
+      req.body.organistaion,
+      req.body.donorEmail,
+      req.body.data.donor_id,
+      message,
+      "We request you to donate blood"
+    );
 
     const { data: updatedData, error: updateError } = await supabase
       .from("donorRequests")

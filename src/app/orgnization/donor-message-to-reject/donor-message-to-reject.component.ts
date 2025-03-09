@@ -68,7 +68,7 @@ export class DonorMessageToRejectComponent {
     });
     console.log('dataToSend in donor message ', this.donor.dataToSend);
     this.orgService
-      .requestDonor(userId, message, this.donor.dataToSend, this.organisation)
+      .requestDonor(userId, message,this.donor.email, this.donor.dataToSend, this.organisation)
       .subscribe({
         next: (data: any) => {
           this.requestDonorData = data;

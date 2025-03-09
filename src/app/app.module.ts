@@ -14,9 +14,7 @@ import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
 import { DonorSigninComponent } from './donor-signin/donor-signin.component';
 import { SearchComponentComponent } from './search-component/search-component.component';
-import { VeiwpComponent } from './viewp/veiwp.component';
-ReactiveFormsModule
-
+ReactiveFormsModule;
 
 @NgModule({
   declarations: [
@@ -27,8 +25,6 @@ ReactiveFormsModule
     SigninComponent,
     DonorSigninComponent,
     SearchComponentComponent,
-    VeiwpComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -41,6 +37,6 @@ ReactiveFormsModule
     HttpClientModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

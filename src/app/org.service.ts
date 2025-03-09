@@ -63,13 +63,15 @@ export class OrgService {
   requestDonor(
     user: any,
     message: any,
+    donorEmail: any,
     data: any,
     organistaion: any
   ): Observable<any> {
-    console.log('data in org.service', data.org_id);
+    console.log('data in org.service', data, user, message, organistaion);
     return this.http.post(`${this.requestDonorapi}/${user}`, {
       data,
       message,
+      donorEmail,
       organistaion,
     });
   }

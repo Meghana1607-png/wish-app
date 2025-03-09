@@ -19,7 +19,11 @@ export class DashboardComponent {
   selectedBloodGroup: any;
   modifyBloodGroupModal: boolean = false;
   addBloodGroupModal = false;
-  newBloodGroup: any = {};
+  newBloodGroup = {
+    bloodGroup: '',
+    quantity: 0,
+  };
+
   showPopup: boolean = false; // Declare showPopup variable
   popupMessage: string = '';
   validBloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -50,7 +54,10 @@ export class DashboardComponent {
     this.orgService.fetchProfileByOrg(userId).subscribe({
       next: (data) => {
         this.organizationProfile = data[0];
-        localStorage.setItem('organisation', JSON.stringify(this.organizationProfile));
+        localStorage.setItem(
+          'organisation',
+          JSON.stringify(this.organizationProfile)
+        );
         console.log('OrganizationProfile:', this.organizationProfile);
         if (this.organizationProfile && this.organizationProfile.blood_groups) {
           this.bloodGroupsArray = JSON.parse(
@@ -93,8 +100,20 @@ export class DashboardComponent {
     this.modifyBloodGroupModal = false;
   }
 
+  logMessage(message: string, event: InputEvent) {
+    console.log(message, event.data);
+    // this.newBloodGroup.bloodGroup = event.data;
+    // this.newBloodGroup.quantity = event.data;
+  }
+
   addBloodGroup() {
     console.log('bloodGroups  ', this.bloodGroups);
+    console.log('newBloodGroup:', this.newBloodGroup);
+    console.log(
+      'Form Data:',
+      this.newBloodGroup.bloodGroup,
+      this.newBloodGroup.quantity
+    );
     const existingBloodGroup = this.bloodGroups.find(
       (group) =>
         group.bloodGroup.toUpperCase() ===
@@ -117,7 +136,7 @@ export class DashboardComponent {
       )
     ) {
       console.log(
-        'newBloodGroup ',
+        'newBloodGro   up ',
         this.newBloodGroup.bloodGroup.toUpperCase()
       );
       this.orgService

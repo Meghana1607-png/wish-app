@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Feedback</title>
+  </head>
+  <body>
+    <h1>Feedback</h1>
+    <form action="/org/giveFeedback/<%= id %>" method="post">
+      <label for="feedback">Please provide feedback:</label>
+      <textarea id="feedback" name="feedback" rows="5" cols="50"></textarea>
+      <button type="submit">Submit Feedback</button>
+      <input
+        type="hidden"
+        name="donorEmail"
+        value="<%= donorReceiverEmail %>"
+      />
+    </form>
+  </body>
+</html>
