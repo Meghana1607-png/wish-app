@@ -125,6 +125,30 @@ app.post("/receiverforminsert", async (req, res) => {
   }
 });
 
+app.post("/org/requestDonor/:id", async (req, res) => {
+  console.log("request body", req.body);
+  const { email, org_id, status, donor_id } = req.body;
+  try {
+    const { data, error } = await supabase.from("org_request").insert({
+      email: email,
+      org_id: org_id,
+      status: status,
+      donor_id: donor_id,
+    });
+    if (error) {
+      console.log("supabase error", error.message);
+      throw error;
+    } else {
+      res.status(200).json({
+        message: "request submitted successfully",
+        data,
+      });
+    }
+  } catch (error) {
+    console.error("error during submission of request to donor", error);
+    res.status(500).json({ message: error.message });
+  }
+});
 
 app.post("/orgSignIn", async (req, res) => {
   console.log("Request Body:", req.body);
@@ -236,18 +260,21 @@ app.post("/orgforminsert", async (req, res) => {
   }
 });
 
-
 app.post("/userforminsert", async (req, res) => {
   console.log("API called with body:", JSON.stringify(req.body, null, 2));
+
   try {
     if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({ message: "Request body is missing" });
     }
     const { userid, name, email, phno, address, gender } = req.body;
+
     if (!userid) {
-      console.error("User ID is missing in request body:", req.body);
+      console.error(" User ID is missing in request body:", req.body);
       return res.status(400).json({ message: "User ID is required" });
     }
+
+    // Check if the user exists
     const { data: existingUser, error: fetchError } = await supabase
       .from("users")
       .select("userid")
@@ -261,18 +288,21 @@ app.post("/userforminsert", async (req, res) => {
     if (!existingUser || existingUser.length === 0) {
       // User does not exist, insert them
       console.log("User does not exist, inserting into Supabase...");
-
       const { data: insertData, error: insertError } = await supabase
         .from("users")
         .insert([{ userid, name, email, phno, address, gender }])
         .select();
+
       if (insertError) {
         console.error("Supabase Insert Error:", insertError);
         return res.status(500).json({ message: "Failed to insert user", error: insertError });
       }
+
       console.log("User inserted successfully:", insertData);
       return res.status(201).json({ message: "User inserted successfully", data: insertData });
     }
+
+    // If user exists, update their data
     console.log("User exists, updating details...");
     const { data, error } = await supabase
       .from("users")
@@ -280,96 +310,19 @@ app.post("/userforminsert", async (req, res) => {
       .eq("userid", userid)
       .select();
     if (error) {
-      console.error("Supabase Update Error:", error);
+      console.error(" Supabase Update Error:", error.message, error);
       return res.status(500).json({ message: "Database error", error });
     }
+
     return res.status(200).json({ message: "User updated successfully", data });
+
   } catch (error) {
-    console.error("Error during insertion:", error);
-    res.status(500).json({ message: "Internal Server Error", error: error.message });
+    console.error(" Error during insertion:", error);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 });
-
-
-
-
-
-// app.post("/orgformfetch", async (req, res) => {
-//   const { orgId } = req.body;
-
-//   try {
-//     const { data, error } = await supabase
-//       .from("organization")
-//       .select("*")
-//       .eq("id", orgId);
-//     console.log(data);
-
-//     if (error) {
-//       console.error("Error fetching organization:", error.message);
-//       return res.status(400).json({ error: error.message });
-//     }
-
-//     if (data.length === 0) {
-//       return res.status(404).json({ message: "Organization not found" });
-//     }
-
-//     res.status(200).json(data[0]);
-//   } catch (err) {
-//     console.error("Unexpected error:", err);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
-// app.post("/requests", async (req, res) => {
-//   const { userid, org_id } = req.body;
-//   try{
-
-//   const { data, error } = await supabase
-//     .from("request")
-//     .insert([{ userid, org_id, status: "pending" }]);
-
-//     if (error) {
-//       console.error("Error fetching organization:", error.message);
-//       return res.status(400).json({ error: error.message });
-//     }
-
-//     if (data.length === 0) {
-//       return res.status(404).json({ message: "Organization not found" });
-//     }
-
-//     res.status(200).json(data[0]);
-//   }catch (err) {
-//     console.error("Unexpected error:", err);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-
-// });
-
-// app.get("/requests/:org_id", async (req, res) => {
-//   const { org_id } = req.body;
-
-//   const { data, error } = await supabase
-//     .from("request")
-//     .select("id, userid, status, users(email)")
-//     .eq("org_id", org_id)
-//     .eq("status", "pending")
-//     .innerJoin("users", "request.userid", "users.id");
-
-//   if (error) return res.status(500).json(error);
-//   res.json(data);
-// });
-
-// app.put("/requests/:id", async (req, res) => {
-//   const { id,status } = req.body;
-
-//   const { data, error } = await supabase
-//     .from("request")
-//     .update({ status })
-//     .eq("id", id);
-
-//   if (error) return res.status(500).json(error);
-//   res.json(data);
-// });
 
 app.get("/org/receivers/:id", async (req, res) => {
   const { id } = req.params;
@@ -704,6 +657,37 @@ app.put("/org/rejectReceiver/:id", async (req, res) => {
 
     const { data: updatedData, error: updateError } = await supabase
       .from("request")
+      .update({ status: "rejected" })
+      .eq("userid", id);
+
+    if (updateError) {
+      console.log(updateError);
+      return res.status(400).json({ error: updateError.message });
+    }
+
+    res.json(updatedData);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.put("/org/rejectDonor/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in update rejecting status - ", id);
+    const { data, error } = await supabase
+      .from("donorRequests")
+      .select("*")
+      .eq("userid", id);
+
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    const { data: updatedData, error: updateError } = await supabase
+      .from("donorRequests")
       .update({ status: "rejected" })
       .eq("userid", id);
 

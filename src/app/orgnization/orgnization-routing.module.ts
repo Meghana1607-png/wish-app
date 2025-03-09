@@ -16,6 +16,7 @@ import { ApprovedDonorListComponent } from './donorRequests/approved-donor-list/
 import { AllDonorListComponent } from './donorRequests/all-donor-list/all-donor-list.component';
 import { RejectedDonorsListComponent } from './donorRequests/rejected-donors-list/rejected-donors-list.component';
 import { ViewReceiverComponent } from './view-receiver/view-receiver.component';
+import { ViewDonorComponent } from './view-donor/view-donor.component';
 
 const routes: Routes = [
   { path: 'signin', component: SigninComponent },
@@ -23,6 +24,8 @@ const routes: Routes = [
     path: 'org-dashboard',
     component: DashboardComponent,
   },
+  { path: 'org/view_donor', component: ViewDonorComponent },
+  { path: 'org/view_donor_requests', component: ViewDonorComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'view_org', component: ViewOrgFormComponent },
   { path: 'org/view_receiver', component: ViewReceiverComponent },
