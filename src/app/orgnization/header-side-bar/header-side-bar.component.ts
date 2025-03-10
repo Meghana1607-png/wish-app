@@ -51,7 +51,7 @@ export class HeaderSideBarComponent {
       label: 'Receiver rejected list',
       icon: 'pi pi-users',
     },
-    { path: 'org/teams-table', label: 'feedbacks', icon: 'pi pi-users' },
+    { path: 'org/feedbacks', label: 'feedbacks', icon: 'pi pi-users' },
   ];
 
   show_slidebar() {

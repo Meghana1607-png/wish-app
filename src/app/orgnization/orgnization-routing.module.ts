@@ -19,6 +19,7 @@ import { ViewReceiverComponent } from './view-receiver/view-receiver.component';
 import { ViewDonorComponent } from './view-donor/view-donor.component';
 import { MessageToRejectComponent } from './message-to-reject/message-to-reject.component';
 import { DonorMessageToRejectComponent } from './donor-message-to-reject/donor-message-to-reject.component';
+import { FeedbacksComponent } from './feedbacks/feedbacks.component';
 
 const routes: Routes = [
   { path: 'signin', component: SigninComponent },
@@ -52,6 +53,7 @@ const routes: Routes = [
     path: 'org/donor/MessageToReject',
     component: DonorMessageToRejectComponent,
   },
+  { path: 'org/feedbacks', component:FeedbacksComponent},
 ];
 
 @NgModule({

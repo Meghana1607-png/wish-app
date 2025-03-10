@@ -19,10 +19,6 @@ export class DashboardComponent {
   selectedBloodGroup: any;
   modifyBloodGroupModal: boolean = false;
   addBloodGroupModal = false;
-  newBloodGroup = {
-    bloodGroup: '',
-    quantity: 0,
-  };
 
   showPopup: boolean = false; // Declare showPopup variable
   popupMessage: string = '';
@@ -100,24 +96,12 @@ export class DashboardComponent {
     this.modifyBloodGroupModal = false;
   }
 
-  logMessage(message: string, event: InputEvent) {
-    console.log(message, event.data);
-    // this.newBloodGroup.bloodGroup = event.data;
-    // this.newBloodGroup.quantity = event.data;
-  }
-
-  addBloodGroup() {
+  addBloodGroup(newBloodGroup: any, newBloodQuantity: any) {
     console.log('bloodGroups  ', this.bloodGroups);
-    console.log('newBloodGroup:', this.newBloodGroup);
-    console.log(
-      'Form Data:',
-      this.newBloodGroup.bloodGroup,
-      this.newBloodGroup.quantity
-    );
-    const existingBloodGroup = this.bloodGroups.find(
-      (group) =>
-        group.bloodGroup.toUpperCase() ===
-        this.newBloodGroup.bloodGroup.toUpperCase()
+    console.log('newBloodGroup:', newBloodGroup);
+    console.log('Form Data:', newBloodGroup, newBloodQuantity);
+    const existingBloodGroup = this.bloodGroups.find((group) =>
+      console.log(newBloodGroup)
     );
 
     if (existingBloodGroup) {
@@ -130,19 +114,12 @@ export class DashboardComponent {
       return;
     }
 
-    if (
-      this.validBloodGroups.includes(
-        this.newBloodGroup.bloodGroup.toUpperCase()
-      )
-    ) {
-      console.log(
-        'newBloodGro   up ',
-        this.newBloodGroup.bloodGroup.toUpperCase()
-      );
+    if (this.validBloodGroups.includes(newBloodGroup.toUpperCase())) {
+      console.log('newBloodGro   up ', newBloodGroup.toUpperCase());
       this.orgService
         .addBloodGroup(
-          this.newBloodGroup.bloodGroup.toUpperCase(),
-          this.newBloodGroup.quantity,
+          newBloodGroup.toUpperCase(),
+          newBloodQuantity,
           this.userId
         )
         .subscribe({

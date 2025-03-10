@@ -59,6 +59,7 @@ export class DonorMessageToRejectComponent {
 
   requestDonor(userId: any, message: string, donorEmail: string): void {
     this.active.queryParams.subscribe((params) => {
+      console.log("params['dataToSend']", JSON.parse(params['dataToSend']));
       this.donor = {
         id: params['userid'],
         email: params['email'],
@@ -68,7 +69,13 @@ export class DonorMessageToRejectComponent {
     });
     console.log('dataToSend in donor message ', this.donor.dataToSend);
     this.orgService
-      .requestDonor(userId, message,this.donor.email, this.donor.dataToSend, this.organisation)
+      .requestDonor(
+        userId,
+        message,
+        this.donor.email,
+        this.donor.dataToSend,
+        this.organisation
+      )
       .subscribe({
         next: (data: any) => {
           this.requestDonorData = data;

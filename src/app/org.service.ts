@@ -37,6 +37,7 @@ export class OrgService {
   private fetchDonorDetailsApi = 'http://localhost:3000/org/DonorDetails';
   private rejectDonorApi = 'http://localhost:3000/org/rejectDonor';
   private requestDonorapi = 'http://localhost:3000/org/requestDonor';
+  private fetchFeedbacksApi = 'http://localhost:3000/org/feedbacks';
   showPopup: boolean = false;
   is_slidebar: boolean = false;
   addBloodGroupModal = false;
@@ -123,16 +124,32 @@ export class OrgService {
     return data?.org_id ?? null;
   }
 
+  fetchFeedbacks(orgId: any): Observable<any> {
+    return this.http.get(`${this.fetchFeedbacksApi}/${orgId}`);
+  }
+
   fetchProfileByOrg(orgId: string): Observable<any> {
     return this.http.get(`${this.profileFetchUrl}/${orgId}`);
   }
 
-  acceptReceiver(userId: string): Observable<any> {
-    return this.http.put(`${this.acceptReceiverApi}/${userId}`, {}); // Call to backend API
+  acceptReceiver(
+    userId: string,
+    receiverEmail: any,
+    organisation: any,
+    receiverName: any
+  ): Observable<any> {
+    return this.http.put(`${this.acceptReceiverApi}/${userId}`, {
+      receiverEmail,
+      organisation,
+      receiverName,
+    }); // Call to backend API
   }
 
-  acceptDonor(userId: string): Observable<any> {
-    return this.http.put(`${this.acceptDonorApi}/${userId}`, {}); // Call to backend API
+  acceptDonor(userId: string, donor: any, organisation: any): Observable<any> {
+    return this.http.put(`${this.acceptDonorApi}/${userId}`, {
+      donor,
+      organisation,
+    }); // Call to backend API
   }
 
   fetchPendingReceivers(orgId: string): Observable<any> {
@@ -184,14 +201,28 @@ export class OrgService {
     quantity: number,
     userId: any
   ): Observable<any> {
+    console.log(
+      'blood group and blood quantity in org.service',
+      bloodGroup,
+      quantity
+    );
     return this.http.put(`${this.addBloodGroupApi}/${userId}`, {
       bloodGroup: bloodGroup,
       quantity: quantity,
     });
   }
 
-  rejectReceiver(userId: string, message: string): Observable<any> {
-    return this.http.put(`${this.rejectReceiverApi}/${userId}`, { message }); // Call to backend API
+  rejectReceiver(
+    userId: string,
+    message: string,
+    receiverEmail: any,
+    organisation: any
+  ): Observable<any> {
+    return this.http.put(`${this.rejectReceiverApi}/${userId}`, {
+      message,
+      receiverEmail,
+      organisation,
+    }); // Call to backend API
   }
 
   rejectDonor(
