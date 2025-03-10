@@ -17,6 +17,9 @@ import { AllDonorListComponent } from './donorRequests/all-donor-list/all-donor-
 import { RejectedDonorsListComponent } from './donorRequests/rejected-donors-list/rejected-donors-list.component';
 import { ViewReceiverComponent } from './view-receiver/view-receiver.component';
 import { ViewDonorComponent } from './view-donor/view-donor.component';
+import { MessageToRejectComponent } from './message-to-reject/message-to-reject.component';
+import { DonorMessageToRejectComponent } from './donor-message-to-reject/donor-message-to-reject.component';
+import { FeedbacksComponent } from './feedbacks/feedbacks.component';
 
 const routes: Routes = [
   { path: 'signin', component: SigninComponent },
@@ -41,6 +44,16 @@ const routes: Routes = [
   { path: 'org/donorsList/approved', component: ApprovedDonorListComponent },
   { path: 'org/donorsList/rejected', component: RejectedDonorsListComponent },
   { path: 'org/donorsList', component: AllDonorListComponent },
+  { path: 'org/receiver/MessageToReject', component: MessageToRejectComponent },
+  {
+    path: 'org/donor/MessageToRequest',
+    component: DonorMessageToRejectComponent,
+  },
+  {
+    path: 'org/donor/MessageToReject',
+    component: DonorMessageToRejectComponent,
+  },
+  { path: 'org/feedbacks', component:FeedbacksComponent},
 ];
 
 @NgModule({

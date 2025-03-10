@@ -2,12 +2,23 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { createClient } = require("@supabase/supabase-js");
+const nodemailer = require("nodemailer");
+const { name } = require("ejs");
 
 const app = express();
 const PORT = 3000;
 
 app.use(cors({}));
 app.use(bodyParser.json());
+
+// Specify the view engine
+app.set("view engine", "ejs");
+
+// Specify the views directory
+app.set("views", "./views");
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const supabase = createClient(
   "https://esuzqpwibfnycwmeirtg.supabase.co",
@@ -62,6 +73,45 @@ app.post("/signin", async (req, res) => {
   }
 });
 
+function sendingMail(
+  organisation,
+  donorReceiverEmail,
+  donorReceiverId,
+  message,
+  subject,
+  donorReceiverName
+) {
+  console.log("emain", organisation);
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    secure: false,
+    auth: {
+      user: organisation.email,
+      pass: organisation.password,
+    },
+  });
+
+  const mailOptions = {
+    from: `"${organisation.email}"`,
+    to: donorReceiverEmail,
+    subject: `${subject}
+    ${message}`,
+    text: `Please provide feedback to our organisation: http://localhost:3000/org/giveFeedback/${donorReceiverId}?orgId=${organisation.userId}&donorReceiverEmail=${donorReceiverEmail}&donorReceiverName=${donorReceiverName}`,
+  };
+
+  try {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Error sending email:", error);
+      } else {
+        console.log("Email sent successfully!");
+      }
+    });
+  } catch (error) {
+    console.log("Error sending email:", error);
+  }
+}
+
 app.post("/donorforminsert", async (req, res) => {
   console.log("Received request body:", req.body);
   const { Name, Age, BloodGroup, HealthIssues ,LastDonatedDate, Mobile_number, Gender,location} = req.body;
@@ -75,7 +125,7 @@ app.post("/donorforminsert", async (req, res) => {
     const { data, error } = await supabase.from("donors").insert([
       {
         Name,
-        Age, 
+        Age,
         BloodGroup,
         HealthIssues,
         LastDonatedDate,
@@ -96,7 +146,28 @@ app.post("/donorforminsert", async (req, res) => {
   }
 });
 
+app.get("/org/feedbacks/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("id in fetching all feedbacks - ", id);
+    const { data, error } = await supabase
+      .from("feedback")
+      .select("*")
+      .eq("orgId", id);
 
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    console.log("data in fetching all feedbacks - ", data);
+
+    res.json(data);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 app.post("/receiverforminsert", async (req, res) => {
   console.log(" Received Request Body:", req.body);
@@ -124,22 +195,34 @@ app.post("/receiverforminsert", async (req, res) => {
 });
 
 app.post("/org/requestDonor/:id", async (req, res) => {
-  console.log("request body", req.body);
-  const { email, org_id, status, donor_id } = req.body;
+  console.log("request body in donor request", req.body);
+  const { message, data } = req.body;
+  console.log("data in requestDonor", req.body);
   try {
-    const { data, error } = await supabase.from("org_request").insert({
-      email: email,
-      org_id: org_id,
-      status: status,
-      donor_id: donor_id,
-    });
+    const { data1, error } = await supabase.from("org_request").insert([
+      {
+        email: data.email,
+        org_id: data.org_id,
+        status: data.status,
+        donor_id: data.donor_id,
+        message: message,
+      },
+    ]);
     if (error) {
       console.log("supabase error", error.message);
       throw error;
     } else {
+      console.log("req.body.organisation", req.body.organistaion);
+      sendingMail(
+        req.body.organistaion,
+        req.body.donorEmail,
+        req.body.data.donor_id,
+        message,
+        "We request you to donate blood.Because "
+      );
       res.status(200).json({
         message: "request submitted successfully",
-        data,
+        data1,
       });
     }
   } catch (error) {
@@ -234,6 +317,7 @@ app.post("/orgforminsert", async (req, res) => {
         blood_groups: bloodGroupsJson,
         address: address,
         userId: userId,
+        password: password,
       },
     ]);
 
@@ -280,7 +364,9 @@ app.post("/userforminsert", async (req, res) => {
 
     if (fetchError) {
       console.error("Error checking user existence:", fetchError);
-      return res.status(500).json({ message: "Database error", error: fetchError });
+      return res
+        .status(500)
+        .json({ message: "Database error", error: fetchError });
     }
 
     if (!existingUser || existingUser.length === 0) {
@@ -293,11 +379,15 @@ app.post("/userforminsert", async (req, res) => {
 
       if (insertError) {
         console.error("Supabase Insert Error:", insertError);
-        return res.status(500).json({ message: "Failed to insert user", error: insertError });
+        return res
+          .status(500)
+          .json({ message: "Failed to insert user", error: insertError });
       }
 
       console.log("User inserted successfully:", insertData);
-      return res.status(201).json({ message: "User inserted successfully", data: insertData });
+      return res
+        .status(201)
+        .json({ message: "User inserted successfully", data: insertData });
     }
 
     console.log("User exists, updating details...");
@@ -312,7 +402,6 @@ app.post("/userforminsert", async (req, res) => {
     }
 
     return res.status(200).json({ message: "User updated successfully", data });
-
   } catch (error) {
     console.error(" Error during insertion:", error);
     res
@@ -566,11 +655,13 @@ app.put("/blood-groups/update/:id", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    console.log("data in updating blood", req.body);
+
     const bloodGroupData = JSON.parse(data[0].blood_groups);
 
     const index = bloodGroupData.findIndex(
       (group) =>
-        group.blood_group.toLowerCase() === req.body.blood_group.toLowerCase()
+        group.bloodGroup.toLowerCase() === req.body.bloodGroup.toLowerCase()
     );
 
     if (index === -1) {
@@ -612,15 +703,20 @@ app.put("/blood-groups/addBloodGroup/:id", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    console.log("req.body", req.body);
+
     const bloodGroupData = JSON.parse(data[0].blood_groups);
     const newBloodGroup = {
-      blood_group: req.body.blood_group,
+      bloodGroup: req.body.bloodGroup,
       quantity: req.body.quantity,
     };
+
+    console.log("newBloodGroup", newBloodGroup);
 
     bloodGroupData.push(newBloodGroup);
 
     const updatedBloodGroupData = JSON.stringify(bloodGroupData);
+    console.log("updatedBloodGroups", updatedBloodGroupData);
 
     const { data: updatedData, error: updateError } = await supabase
       .from("organization")
@@ -640,6 +736,8 @@ app.put("/blood-groups/addBloodGroup/:id", async (req, res) => {
 
 app.put("/org/rejectReceiver/:id", async (req, res) => {
   const { id } = req.params;
+  const { message } = req.body;
+  console.log("req.body in rejecting receiver", req.body);
   try {
     console.log("id in update rejecting status - ", id);
     const { data, error } = await supabase
@@ -652,9 +750,17 @@ app.put("/org/rejectReceiver/:id", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    sendingMail(
+      req.body.organisation,
+      req.body.receiverEmail,
+      id,
+      message,
+      "Blood request rejected.."
+    );
+
     const { data: updatedData, error: updateError } = await supabase
       .from("request")
-      .update({ status: "rejected" })
+      .update({ status: "rejected", messageToReject: message })
       .eq("userid", id);
 
     if (updateError) {
@@ -671,6 +777,14 @@ app.put("/org/rejectReceiver/:id", async (req, res) => {
 
 app.put("/org/rejectDonor/:id", async (req, res) => {
   const { id } = req.params;
+  const { message } = req.body;
+  const { donorEmail } = req.body;
+  const { organisation } = req.body;
+
+  console.log("message", message);
+  console.log("organisation", organisation);
+  console.log("donoremail", donorEmail);
+
   try {
     console.log("id in update rejecting status - ", id);
     const { data, error } = await supabase
@@ -683,9 +797,17 @@ app.put("/org/rejectDonor/:id", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    sendingMail(
+      organisation,
+      donorEmail,
+      id,
+      message,
+      "Donation Request Rejected.Here is the reason.."
+    );
+
     const { data: updatedData, error: updateError } = await supabase
       .from("donorRequests")
-      .update({ status: "rejected" })
+      .update({ status: "rejected", messageToReject: message })
       .eq("userid", id);
 
     if (updateError) {
@@ -700,8 +822,52 @@ app.put("/org/rejectDonor/:id", async (req, res) => {
   }
 });
 
+app.get("/org/giveFeedback/:id", async (req, res) => {
+  const { id } = req.params;
+  const { orgId } = req.query;
+  const { donorReceiverEmail } = req.query;
+  const { donorReceiverName } = req.query;
+
+  res.render("feedback", { id, orgId, donorReceiverEmail, donorReceiverName });
+});
+
+app.post("/org/giveFeedback/:id", async (req, res) => {
+  const { id } = req.params;
+  const { orgId } = req.body;
+  const { feedback } = req.body;
+  const { donorEmail } = req.body;
+  const { donorReceiverName } = req.body;
+
+  console.log("req.body in feedback card", req.body);
+
+  try {
+    const { data, error } = await supabase.from("feedback").insert([
+      {
+        orgId: orgId,
+        feedbackMessage: feedback,
+        userId: id,
+        donorReceiverEmail: donorEmail,
+        name: donorReceiverName,
+      },
+    ]);
+
+    if (error) {
+      console.error("Supabase Error Details:", error);
+      return res.status(500).json({ message: "Failed to submit feedback" });
+    }
+
+    // Render the feedback success page
+    res.render("feedback-success", { message: "Thank you for your feedback!" });
+  } catch (error) {
+    console.error("Error during giving feedback", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 app.put("/org/acceptReceiver/:id", async (req, res) => {
   const { id } = req.params;
+  console.log("req body in receiver accepting", req.body);
+  const message = `Dear receiver, Your request has been approved. Now, you can collect blood in ${req.body.organisation.name} organisation which is at ${req.body.organisation.address}.`;
   try {
     console.log("id in update accepting status - ", id);
     const { data, error } = await supabase
@@ -714,9 +880,20 @@ app.put("/org/acceptReceiver/:id", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    console.log("req.log gkh", req.body);
+
+    sendingMail(
+      req.body.organisation,
+      req.body.receiverEmail,
+      id,
+      message,
+      "",
+      req.body.receiverName
+    );
+
     const { data: updatedData, error: updateError } = await supabase
       .from("request")
-      .update({ status: "approved" })
+      .update({ status: "approved", messageToReject: message })
       .eq("userid", id);
 
     if (updateError) {
@@ -732,7 +909,9 @@ app.put("/org/acceptReceiver/:id", async (req, res) => {
 });
 
 app.put("/org/acceptDonor/:id", async (req, res) => {
+  console.log("appect donor req.body", req.body);
   const { id } = req.params;
+  message = `Dear donor, Your request has been approved. Now, you can donate blood in ${req.body.organisation.name} organisation, which is located at ${req.body.organisation.address}!!`;
   try {
     console.log("id in update accepting status - ", id);
     const { data, error } = await supabase
@@ -745,9 +924,17 @@ app.put("/org/acceptDonor/:id", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    sendingMail(
+      req.body.organisation,
+      req.body.donor.email,
+      req.body.donor.id,
+      message,
+      ""
+    );
+
     const { data: updatedData, error: updateError } = await supabase
       .from("donorRequests")
-      .update({ status: "approved" })
+      .update({ status: "approved", messageToReject: message })
       .eq("userid", id);
 
     if (updateError) {

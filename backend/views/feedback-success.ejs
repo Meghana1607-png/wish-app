@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Feedback Success</title>
+  </head>
+  <body>
+    <h1><%= message %></h1>
+
+    <script>
+      // Redirect to Gmail after 3 seconds
+      setTimeout(() => {
+        window.location.replace("https://mail.google.com/mail/u/0/#inbox");
+      }, 3000);
+    </script>
+  </body>
+</html>

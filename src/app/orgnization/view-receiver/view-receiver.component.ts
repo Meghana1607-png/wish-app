@@ -15,12 +15,22 @@ export class ViewReceiverComponent {
   showPopup: boolean = false; // Declare showPopup variable
   popupMessage: string = '';
   rejectReceiverData: any;
+  org: any;
+  organisation: any;
   constructor(
     private orgService: OrgService,
     private router: Router,
     private active: ActivatedRoute
   ) {
     this.userId = localStorage.getItem('userId');
+    this.org = localStorage.getItem('organisation');
+    if (this.org) {
+      this.organisation = JSON.parse(this.org);
+    }
+    console.log(
+      'organisation details in sending message module',
+      this.organisation
+    );
   }
   async ngOnInit() {
     this.active.queryParams.subscribe((params) => {
@@ -31,7 +41,6 @@ export class ViewReceiverComponent {
         // status: params['status'] || '',
       };
     });
-
     this.fetchReceiverDetails(this.receiver.id);
   }
 
@@ -59,14 +68,10 @@ export class ViewReceiverComponent {
   };
 
   rejectReceiver(userId: any): void {
-    this.orgService.rejectReceiver(userId).subscribe({
-      next: (data: any) => {
-        this.rejectReceiverData = data;
-        console.log('rejectReceiverData:', this.rejectReceiverData);
-        this.router.navigate(['/org-dashboard']);
-      },
-      error: (err: any) => {
-        console.error('error in rejecting the receiver', err);
+    this.router.navigate(['/org/receiver/MessageToReject'], {
+      queryParams: {
+        userid: userId,
+        email: this.receiver.email,
       },
     });
   }
@@ -85,6 +90,7 @@ export class ViewReceiverComponent {
           );
 
           console.log('matchedGroup', matchedBloodGroup);
+          console.log('receiver details:', this.receiverDetails);
 
           if (matchedBloodGroup) {
             const quantity = parseInt(
@@ -103,19 +109,26 @@ export class ViewReceiverComponent {
                 )
                 .subscribe({
                   next: (data: any) => {
-                    this.orgService.acceptReceiver(userId).subscribe({
-                      next: (data: any) => {
-                        this.acceptReceiverData = data;
-                        console.log(
-                          'acceptReceiverData:',
-                          this.acceptReceiverData
-                        );
-                        this.router.navigate(['/org-dashboard']);
-                      },
-                      error: (err: any) => {
-                        console.error('error in accepting the receiver', err);
-                      },
-                    });
+                    this.orgService
+                      .acceptReceiver(
+                        userId,
+                        this.receiver.email,
+                        this.organisation,
+                        this.receiverDetails[0].name
+                      )
+                      .subscribe({
+                        next: (data: any) => {
+                          this.acceptReceiverData = data;
+                          console.log(
+                            'acceptReceiverData:',
+                            this.acceptReceiverData
+                          );
+                          this.router.navigate(['/org-dashboard']);
+                        },
+                        error: (err: any) => {
+                          console.error('error in accepting the receiver', err);
+                        },
+                      });
                   },
                   error: (err: any) => {
                     console.error('Error updating blood group quantity:', err);

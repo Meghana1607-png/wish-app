@@ -20,6 +20,8 @@ export class ViewDonorComponent {
   requestDonorData: any;
   organization: any;
   dataToSend: any;
+  org: any;
+  organisation: any;
 
   constructor(
     private orgService: OrgService,
@@ -31,34 +33,29 @@ export class ViewDonorComponent {
     this.currentPath = this.presentPath.split('?')[0].trim();
     console.log('currentPath', this.currentPath);
     this.userId = localStorage.getItem('userId');
+    this.org = localStorage.getItem('organisation');
+    if (this.org) {
+      this.organisation = JSON.parse(this.org);
+    }
+    console.log(
+      'organisation details in sending message module',
+      this.organisation
+    );
   }
   async ngOnInit() {
     this.active.queryParams.subscribe((params) => {
       this.donor = {
-        id: params['id'],
-        org_id: params['org_id'],
+        donor_id: params['id'],
+        id: params['org_id'],
         email: params['email'] || '',
         status: params['status'] || '',
       };
     });
 
-    console.log('userId in fetching details:', this.donor.id);
+    console.log('userId in fetching details:', this.donor.donor_id);
 
-    this.fetchDonorDetails(this.donor.id);
+    this.fetchDonorDetails(this.donor.donor_id);
     this.fetchProfileByOrg(this.userId);
-  }
-
-  rejectDonor(userId: any): void {
-    this.orgService.rejectDonor(userId).subscribe({
-      next: (data: any) => {
-        this.rejectDonorData = data;
-        console.log('rejectDonorData:', this.rejectDonorData);
-        this.router.navigate(['/org-dashboard']);
-      },
-      error: (err: any) => {
-        console.error('error in rejecting the donor', err);
-      },
-    });
   }
 
   fetchDonorDetails(userId: string): void {
@@ -73,18 +70,25 @@ export class ViewDonorComponent {
     });
   }
   donor: {
+    donor_id: any;
     id: any;
-    org_id: any;
     status: any;
-    //name: string;
     email: any;
   } = {
+    donor_id: '',
     id: '',
-    org_id: '',
     status: '',
-    // name: '',
     email: '',
   };
+
+  rejectDonor(userId: string): void {
+    this.router.navigate(['/org/donor/MessageToReject'], {
+      queryParams: {
+        userid: userId,
+        email: this.donor.email,
+      },
+    });
+  }
 
   fetchProfileByOrg(userId: string): void {
     this.orgService.fetchProfileByOrg(userId).subscribe({
@@ -95,7 +99,7 @@ export class ViewDonorComponent {
           email: this.organization.email,
           org_id: this.organization.userId,
           status: 'pending',
-          donor_id: this.donor.id,
+          donor_id: this.donor.donor_id,
         };
       },
       error: (err) => {
@@ -105,14 +109,12 @@ export class ViewDonorComponent {
   }
 
   requestDonor(userId: string): void {
-    this.orgService.requestDonor(userId, this.dataToSend).subscribe({
-      next: (data: any) => {
-        this.requestDonorData = data;
-        this.router.navigate(['/org-dashboard']);
-        console.log('requestDonorData:', this.requestDonorData);
-      },
-      error: (err: any) => {
-        console.error('error in requesting the donor', err);
+    const dataToSendJson = JSON.stringify(this.dataToSend);
+    this.router.navigate(['/org/donor/MessageToRequest'], {
+      queryParams: {
+        userid: userId,
+        email: this.donor.email,
+        dataToSend: dataToSendJson,
       },
     });
   }
@@ -166,16 +168,18 @@ export class ViewDonorComponent {
               )
               .subscribe({
                 next: (data: any) => {
-                  this.orgService.acceptDonor(userId).subscribe({
-                    next: (data: any) => {
-                      this.acceptDonorData = data;
-                      console.log('acceptDonorData:', this.acceptDonorData);
-                      this.router.navigate(['/org-dashboard']);
-                    },
-                    error: (err: any) => {
-                      console.error('error in accepting the donor', err);
-                    },
-                  });
+                  this.orgService
+                    .acceptDonor(userId, this.donor, this.organisation)
+                    .subscribe({
+                      next: (data: any) => {
+                        this.acceptDonorData = data;
+                        console.log('acceptDonorData:', this.acceptDonorData);
+                        this.router.navigate(['/org-dashboard']);
+                      },
+                      error: (err: any) => {
+                        console.error('error in accepting the donor', err);
+                      },
+                    });
                 },
                 error: (err: any) => {
                   console.error('Error updating blood group quantity:', err);
@@ -197,16 +201,18 @@ export class ViewDonorComponent {
               )
               .subscribe({
                 next: (data: any) => {
-                  this.orgService.acceptDonor(userId).subscribe({
-                    next: (data: any) => {
-                      this.acceptDonorData = data;
-                      console.log('acceptDonorData:', this.acceptDonorData);
-                      this.router.navigate(['/org-dashboard']);
-                    },
-                    error: (err: any) => {
-                      console.error('error in accepting the donor', err);
-                    },
-                  });
+                  this.orgService
+                    .acceptDonor(userId, this.donor, this.organisation)
+                    .subscribe({
+                      next: (data: any) => {
+                        this.acceptDonorData = data;
+                        console.log('acceptDonorData:', this.acceptDonorData);
+                        this.router.navigate(['/org-dashboard']);
+                      },
+                      error: (err: any) => {
+                        console.error('error in accepting the donor', err);
+                      },
+                    });
                 },
                 error: (err: any) => {
                   console.error('Error adding new blood group:', err);
