@@ -20,7 +20,7 @@ export class DashboardComponent {
   selectedBloodGroup: any;
   modifyBloodGroupModal: boolean = false;
   addBloodGroupModal = false;
-  newBloodGroup: any = {};
+  // newBloodGroup: any = {};
   showPopup: boolean = false; // Declare showPopup variable
   popupMessage: string = '';
   validBloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -136,15 +136,20 @@ export class DashboardComponent {
   closeModal() {
     this.modifyBloodGroupModal = false;
   }
+  newBloodGroup: { bloodGroup: string; quantity: number } = {
+    bloodGroup: '',
+    quantity: 0
+  };
 
   addBloodGroup() {
     console.log('bloodGroups  ', this.bloodGroups);
+    console.log('newBloodGroup:', this.newBloodGroup);
     const existingBloodGroup = this.bloodGroups.find(
       (group) =>
-        group.bloodGroup.toUpperCase() ===
-        this.newBloodGroup.bloodGroup.toUpperCase()
+        group?.bloodGroup?.toUpperCase() ===
+        this.newBloodGroup?.bloodGroup?.toUpperCase()  
     );
-
+    
     if (existingBloodGroup) {
       this.addBloodGroupModal = false;
       this.showPopup = true;
@@ -154,32 +159,33 @@ export class DashboardComponent {
       }, 2500);
       return;
     }
-
+    console.log('New Blood Group:', this.newBloodGroup);
+if (!this.newBloodGroup || !this.newBloodGroup.bloodGroup || !this.newBloodGroup.quantity) {
+  console.error('newBloodGroup is not properly initialized!');
+  return;
+}
     if (
       this.validBloodGroups.includes(
         this.newBloodGroup.bloodGroup.toUpperCase()
-      )
-    ) {
+      )  ) {
       console.log(
         'newBloodGroup ',
         this.newBloodGroup.bloodGroup.toUpperCase()
       );
-      this.orgService
-        .addBloodGroup(
-          this.newBloodGroup.bloodGroup.toUpperCase(),
-          this.newBloodGroup.quantity,
-          this.userId
-        )
-        .subscribe({
-          next: (data: any) => {
-            console.log('Blood group added successfully:', data);
-            this.addBloodGroupModal = false;
-            this.fetchBloodGroups(this.userId);
-          },
-          error: (err: any) => {
-            console.error('Error adding blood group:', err);
-          },
-        });
+      this.orgService.addBloodGroup(this.newBloodGroup.bloodGroup, this.newBloodGroup.quantity, this.userId)
+    .subscribe({
+      next: (data) => {
+        console.log("Blood group added successfully:", data);
+        this.fetchBloodGroups(this.userId);
+      },
+      error: (err) => {
+        console.error("Error adding blood group:", err);
+      }
+    });
+        //   error: (err: any) => {
+        //     console.error('Error adding blood group:', err);
+        //   },
+        // });
     } else {
       this.addBloodGroupModal = false;
       this.showPopup = true;
@@ -189,6 +195,9 @@ export class DashboardComponent {
       }, 2500);
       return;
     }
+  }
+  convertQuantityToNumber() {
+    this.newBloodGroup.quantity = Number(this.newBloodGroup.quantity);
   }
 
   openAddBloodGroupModal() {

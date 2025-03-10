@@ -11,14 +11,14 @@ const routes: Routes = [
   path:'donor-dashboard', 
   component: DashboardComponent
 },
-{
-  path:'donor-profile',
-  component:ProfileComponent
-},
+// {
+//   path:'donor-profile',
+//   component:ProfileComponent
+// },
 {path:'awareness',component:AwarenessComponent},
 
 {path:'dsign-up',component:SignUpComponent},
-{path:'d',component:DonorComponent}
+{path:'don',component:DonorComponent}
 ];
 
 @NgModule({

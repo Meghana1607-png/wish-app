@@ -160,13 +160,20 @@ export class OrgService {
     return this.http.get(`${this.bloodGroupFetchApi}/${userId}`); // Fetch blood group data
   }
 
-  addBloodGroup(
-    bloodGroup: any,
-    quantity: number,
-    userId: any
-  ): Observable<any> {
-    return this.http.put(`${this.addBloodGroupApi}/${userId}`, {
-      bloodGroup: bloodGroup,
+ 
+  // addBloodGroup(bloodGroup: string, quantity: number, userId: string): Observable<any> {
+  //   return this.http.put(`${this.addBloodGroupApi}/addBloodGroup/${userId}`, {
+  //     bloodGroup: bloodGroup.toLowerCase(),
+  //     quantity: quantity,
+  //   });}
+  addBloodGroup(bloodGroup: string, quantity: number, userId: string): Observable<any> {
+    if (!bloodGroup || quantity <= 0) {
+      console.error("Invalid blood group or quantity");
+      return new Observable((observer) => observer.error("Invalid input"));
+    }
+  
+    return this.http.put(`${this.addBloodGroupApi}/addBloodGroup/${userId}`, {
+      bloodGroup: bloodGroup.toUpperCase(), // Convert to uppercase
       quantity: quantity,
     });
   }
@@ -179,13 +186,10 @@ export class OrgService {
     return this.http.put(`${this.rejectDonorApi}/${userId}`, {}); // Call to backend API
   }
 
-  updateBloodGroupQuantity(
-    bloodGroup: any,
-    updatedQuantity: number,
-    userId: any
-  ): Observable<any> {
-    return this.http.put(`${this.updateBloodGroupApi}/${userId}`, {
-      bloodGroup: bloodGroup,
+  
+  updateBloodGroupQuantity(bloodGroup: string, updatedQuantity: number, userId: string): Observable<any> {
+    return this.http.put(`${this.updateBloodGroupApi}/update/${userId}`, {
+      bloodGroup: bloodGroup.toUpperCase(),
       quantity: updatedQuantity,
     });
   }

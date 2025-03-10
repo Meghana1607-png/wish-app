@@ -28,7 +28,7 @@ email:any
   constructor(private supabase:OrgService,private auth:AuthService,private receiver:ReceiverService, private user:ProfileService,private request:RequestsService, private router:Router, private active:ActivatedRoute,private authservice:AuthService){
 
     this.selectedOrgId = this.supabase.fetchorgform('id');
-    this.userId = this.user.form(); 
+    this.userId = this.user.form('userId'); 
     this.userId = localStorage.getItem('authId');
     this.userId = localStorage.getItem('userId');
     this.getUserID();
@@ -67,7 +67,7 @@ email:any
   
   users: any[] = [];
   async getUserID() {
-    this.users = await this.user.form();
+    this.users = await this.user.form(this.userId);
     console.log(this.users);
   }
 
@@ -94,11 +94,14 @@ email:any
   
   async requestBlood() {
     const requestData = {
-      org_id: this.orgId, // Organization ID selected
-      userid: this.userId, // User ID sending the request
+      org_id: this.orgId, 
+      userid: this.userId, 
       email: this.email,
-      status: 'Pending'
+      status: 'Pending',
+      created_at: new Date().toISOString() // Ensure created field is properly set
     };
+  
+    console.log('Request Data before submitting:', requestData); // Debugging
   
     this.request.submitRequest(requestData).subscribe({
       next: (data) => {
@@ -110,7 +113,7 @@ email:any
       }
     });
   }
-  
+   
   }
   
 

@@ -6,14 +6,13 @@ import { OrgListComponent } from './org-list/org-list.component';
 import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
 import { DonorSigninComponent } from './donor-signin/donor-signin.component';
-import { SearchComponentComponent } from './search-component/search-component.component';
 
 const routes: Routes = [
   {path: 'donor1', loadChildren: () => import('./donor/donor.module').then(m => m.DonorModule) }, 
   {path: 'org', loadChildren: () => import('./orgnization/orgnization.module').then(m => m.OrgnizationModule) },
   {path:'receiver',loadChildren:() => import('./receiver/receiver.module').then(m => m.ReceiverModule)},
   {path:'app',component:AppComponent },
-  {path:'landing',component:LandingPageComponent},
+  {path:'',component:LandingPageComponent},
   {path:'org-list',component:OrgListComponent},
   {path:'Sign-up',component:SignupComponent},
   {path:'Sign-In',component:SigninComponent},
